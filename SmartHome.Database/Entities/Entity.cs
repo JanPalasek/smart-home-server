@@ -1,8 +1,5 @@
 ﻿namespace SmartHome.Database.Entities
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     /// <summary>
     /// Ancestor for all entities that are used in the application.
     /// </summary>

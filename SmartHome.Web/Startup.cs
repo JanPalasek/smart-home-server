@@ -1,4 +1,7 @@
-﻿namespace SmartHome.Web
+﻿using Microsoft.EntityFrameworkCore;
+using SmartHome.Database;
+
+namespace SmartHome.Web
 {
     using System;
     using System.Collections.Generic;
@@ -34,23 +37,21 @@
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO: db context
-//            if (hostingEnvironment.IsDevelopment() || hostingEnvironment.IsStaging())
-//            {
-//                services.AddDbContext<BazaarFilterDbContext>(
-//                    options => options
-//                        .UseLazyLoadingProxies()
-//                        .UseSqlServer(configuration["ConnectionStrings:BazaarFilterDatabase"], a => a.MigrationsAssembly("BazaarFilter.Database"))
-//                        // log data to know where is the mistake
-//                        .EnableSensitiveDataLogging());
-//            }
-//            else
-//            {
-//                services.AddDbContext<BazaarFilterDbContext>(
-//                    options => options
-//                        .UseLazyLoadingProxies()
-//                        .UseSqlServer(configuration["ConnectionStrings:BazaarFilterDatabase"], a => a.MigrationsAssembly("BazaarFilter.Database")));
-//            }
+            // db context
+            if (hostingEnvironment.IsDevelopment())
+            {
+                services.AddDbContext<SmartHomeDbContext>(
+                    options => options
+                        .UseSqlServer(configuration["ConnectionStrings:SmartHomeDatabase"], a => a.MigrationsAssembly("SmartHome.Database"))
+                        // log data to know where is the mistake
+                        .EnableSensitiveDataLogging());
+            }
+            else
+            {
+                services.AddDbContext<SmartHomeDbContext>(
+                    options => options
+                        .UseSqlServer(configuration["ConnectionStrings:SmartHomeDatabase"], a => a.MigrationsAssembly("SmartHome.Database")));
+            }
 
 
             #region Repositories

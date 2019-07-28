@@ -1,4 +1,6 @@
-﻿namespace SmartHome.Database
+﻿using SmartHome.Database.Entities;
+
+namespace SmartHome.Database
 {
     using System;
     using System.Linq;
@@ -21,7 +23,48 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // TODO: add model building
+            // add model building
+            modelBuilder.Entity<BatteryPowerSourceType>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
+
+            modelBuilder.Entity<UnitType>(builder =>
+            {
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                
+                builder.HasIndex(x => x.Name).IsUnique();
+            });
+            modelBuilder.Entity<Unit>(builder => { builder.Property(x => x.UnitType).ValueGeneratedOnAdd(); });
+
+            #region Measurements
+            
+            modelBuilder.Entity<TemperatureMeasurement>(builder =>
+            {
+                builder.Property(x => x.Id)
+                    .ForSqlServerUseSequenceHiLo();
+
+                builder.HasIndex(x => x.MeasurementDateTime);
+                builder.HasIndex(x => x.UnitId);
+            });
+            
+            modelBuilder.Entity<HumidityMeasurement>(builder =>
+            {
+                builder.Property(x => x.Id)
+                    .ForSqlServerUseSequenceHiLo();
+
+                builder.HasIndex(x => x.MeasurementDateTime);
+                builder.HasIndex(x => x.UnitId);
+            });
+            
+            modelBuilder.Entity<BatteryMeasurement>(builder =>
+            {
+                builder.Property(x => x.Id)
+                    .ForSqlServerUseSequenceHiLo();
+
+                builder.HasIndex(x => x.MeasurementDateTime);
+                builder.HasIndex(x => x.UnitId);
+            });
+            
+            #endregion
+            
             base.OnModelCreating(modelBuilder);
         }
 
