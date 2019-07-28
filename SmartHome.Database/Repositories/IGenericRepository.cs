@@ -10,8 +10,6 @@ namespace SmartHome.Database.Repositories
     {
         Task<bool> AnyAsync(long entityId);
         Task<ICollection<TEntity>> GetAllEntitiesAsync();
-//        Task<ICollection<TEntity>> GetAllEntitiesAsync<TOrder>(Expression<Func<TEntity, TOrder>> sortExpression,
-//            SortDirection sortDirection = SortDirection.Ascending);
         Task<TEntity> SingleAsync(long entityId);
         Task<TEntity> SingleOrDefaultAsync(long entityId);
 
