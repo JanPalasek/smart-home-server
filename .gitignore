@@ -266,4 +266,4 @@ FakesAssemblies/
 .idea
 
 # compiled libraries by package manager
-wwwroot/lib/*
+SmartHome.Web/wwwroot/lib/
