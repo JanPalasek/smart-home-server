@@ -4,7 +4,7 @@ using SmartHome.Database.Entities;
 
 namespace SmartHome.Database.Repositories
 {
-    public interface IBatteryMeasurementRepository : IGenericRepository<BatteryMeasurement>
+    public interface IBatteryMeasurementRepository
     {
         Task<long> AddAsync(long unitId, double voltage);
     }

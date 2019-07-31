@@ -14,13 +14,13 @@ namespace SmartHome.Database.Repositories
         {
         }
 
-        public async Task<long> AddAsync(long unitId, double temperature)
+        public async Task<long> AddAsync(long unitId, double temperature, DateTime measurementDateTime)
         {
             var unit = await SmartHomeAppDbContext.SingleAsync<Unit>(unitId);
             
             var temperatureMeasurement = new TemperatureMeasurement()
             {
-                MeasurementDateTime = DateTime.Now,
+                MeasurementDateTime = measurementDateTime,
                 Temperature = temperature,
                 UnitId = unit.Id
             };
@@ -28,12 +28,27 @@ namespace SmartHome.Database.Repositories
             return await AddOrUpdateAsync(temperatureMeasurement);
         }
 
-        public async Task<IList<TemperatureMeasurement>> GetTemperatureMeasurements(MeasurementFilter filter)
+        public Task<TemperatureMeasurement> GetUnitLastTemperatureMeasurementAsync(long unitId)
+        {
+            var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>()
+                .Where(x => x.UnitId == unitId);
+
+            // take temperature measurement of given unit with maximum date time
+            return query.Where(x => x.MeasurementDateTime == query.Max(y => y.MeasurementDateTime))
+                .FirstOrDefaultAsync();
+        }
+        
+        public Task<IList<TemperatureMeasurement>> GetLastTemperatureMeasurementAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<TemperatureMeasurement>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
         {
             return await GetTemperatureMeasurementsQuery(filter).ToListAsync();
         }
 
-        public IQueryable<TemperatureMeasurement> GetTemperatureMeasurementsQuery(MeasurementFilter filter)
+        private IQueryable<TemperatureMeasurement> GetTemperatureMeasurementsQuery(MeasurementFilter filter)
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>();
 

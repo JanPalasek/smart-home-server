@@ -7,19 +7,19 @@ namespace SmartHome.Web.Controllers
     public class AdminController : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> Overview()
+        public Task<IActionResult> Overview()
         {
             throw new NotImplementedException();
         }
         
         [HttpGet]
-        public async Task<IActionResult> BatterySourceType(long id)
+        public Task<IActionResult> BatterySourceType(long id)
         {
             throw new NotImplementedException();
         }
         
         [HttpPost]
-        public async Task<IActionResult> BatterySourceType()
+        public Task<IActionResult> BatterySourceType()
         {
             throw new NotImplementedException();
         }

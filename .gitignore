@@ -264,3 +264,6 @@ FakesAssemblies/
 
 # IDEA
 .idea
+
+# compiled libraries by package manager
+wwwroot/lib/*

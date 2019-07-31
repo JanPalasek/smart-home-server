@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartHome.Database;
 using SmartHome.Database.Repositories;
+using SmartHome.Web.Filters;
 
 namespace SmartHome.Web
 {
@@ -59,13 +60,13 @@ namespace SmartHome.Web
 
             services.AddScoped<ITemperatureMeasurementRepository, TemperatureMeasurementRepository>();
             services.AddScoped<IBatteryMeasurementRepository, BatteryMeasurementRepository>();
+            services.AddScoped<IUnitRepository, UnitRepository>();
 
             #endregion
 
             #region Filters
 
-            // TODO:
-//            services.AddScoped<TransactionFilter>();
+            services.AddScoped<TransactionFilter>();
 
             #endregion
 

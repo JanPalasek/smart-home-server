@@ -14,21 +14,25 @@ namespace SmartHome.Web.Controllers.ApiControllers
     {
         private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
         private readonly IBatteryMeasurementRepository batteryMeasurementRepository;
+        private readonly IUnitRepository unitRepository;
 
         public UnitsController(
             ITemperatureMeasurementRepository temperatureMeasurementRepository,
-            IBatteryMeasurementRepository batteryMeasurementRepository)
+            IBatteryMeasurementRepository batteryMeasurementRepository,
+            IUnitRepository unitRepository)
         {
             this.temperatureMeasurementRepository = temperatureMeasurementRepository;
             this.batteryMeasurementRepository = batteryMeasurementRepository;
+            this.unitRepository = unitRepository;
         }
         
         [HttpPost]
         public async Task<IActionResult> Temperature(int unitId, double temperature, double? voltage)
         {
-            await temperatureMeasurementRepository.AddAsync(unitId, temperature);
+            await temperatureMeasurementRepository.AddAsync(unitId, temperature, DateTime.Now);
             
-            if (voltage != null)
+            // if voltage has been measured and the unit is currently on a battery source => add battery voltage measurement
+            if (voltage != null && await unitRepository.AnyAsync(x => x.Id == unitId && x.BatteryPowerSourceTypeId != null))
             {
                 await batteryMeasurementRepository.AddAsync(unitId, voltage.Value);
             }
@@ -46,15 +50,22 @@ namespace SmartHome.Web.Controllers.ApiControllers
                 UnitId = unitId
             };
 
-            var temperatureMeasurements = await temperatureMeasurementRepository.GetTemperatureMeasurements(filter);
+            var temperatureMeasurements = await temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
 
             return Json(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, x.UnitId }).ToList());
         }
 
         [HttpGet]
-        public async Task<IActionResult> LastTemperature(int unitId)
+        public async Task<IActionResult> LastUnitTemperature(int unitId)
         {
-            throw new NotImplementedException();
+            var temperatureMeasurement = await temperatureMeasurementRepository.GetUnitLastTemperatureMeasurementAsync(unitId);
+
+            if (temperatureMeasurement == null)
+            {
+                return BadRequest("Given unit does not exist or doesn't have temperature measurements.");
+            }
+
+            return Json(temperatureMeasurement.Temperature);
         }
     }
 }
