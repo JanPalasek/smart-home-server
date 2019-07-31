@@ -32,7 +32,7 @@ namespace SmartHome.Database
                 
                 builder.HasIndex(x => x.Name).IsUnique();
             });
-            modelBuilder.Entity<Unit>(builder => { builder.Property(x => x.UnitType).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Unit>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
 
             #region Measurements
             

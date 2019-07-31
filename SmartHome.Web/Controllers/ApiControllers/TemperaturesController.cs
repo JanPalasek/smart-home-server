@@ -8,15 +8,13 @@ using SmartHome.Shared;
 
 namespace SmartHome.Web.Controllers.ApiControllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UnitsController : Controller
+    public class TemperaturesController : Controller
     {
         private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
         private readonly IBatteryMeasurementRepository batteryMeasurementRepository;
         private readonly IUnitRepository unitRepository;
 
-        public UnitsController(
+        public TemperaturesController(
             ITemperatureMeasurementRepository temperatureMeasurementRepository,
             IBatteryMeasurementRepository batteryMeasurementRepository,
             IUnitRepository unitRepository)

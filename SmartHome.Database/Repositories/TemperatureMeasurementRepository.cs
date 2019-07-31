@@ -34,8 +34,8 @@ namespace SmartHome.Database.Repositories
                 .Where(x => x.UnitId == unitId);
 
             // take temperature measurement of given unit with maximum date time
-            return query.Where(x => x.MeasurementDateTime == query.Max(y => y.MeasurementDateTime))
-                .FirstOrDefaultAsync();
+            var lastDateTime = query.DefaultIfEmpty().Max(y => y.MeasurementDateTime);
+            return query.FirstOrDefaultAsync(x => x.MeasurementDateTime == lastDateTime);
         }
         
         public Task<IList<TemperatureMeasurement>> GetLastTemperatureMeasurementAsync()

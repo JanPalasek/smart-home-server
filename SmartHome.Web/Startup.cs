@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SmartHome.Database;
 using SmartHome.Database.Repositories;
 using SmartHome.Web.Filters;
@@ -44,7 +45,8 @@ namespace SmartHome.Web
             {
                 services.AddDbContext<SmartHomeDbContext>(
                     options => options
-                        .UseSqlServer(configuration["ConnectionStrings:SmartHomeDatabase"], a => a.MigrationsAssembly("SmartHome.Database"))
+                        .UseSqlServer(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
+                        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
                         // log data to know where is the mistake
                         .EnableSensitiveDataLogging());
             }
@@ -52,10 +54,11 @@ namespace SmartHome.Web
             {
                 services.AddDbContext<SmartHomeDbContext>(
                     options => options
-                        .UseSqlServer(configuration["ConnectionStrings:SmartHomeDatabase"], a => a.MigrationsAssembly("SmartHome.Database")));
+                        .UseSqlServer(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
 
-
+            services.AddScoped<SmartHomeAppDbContext>();
+            
             #region Repositories
 
             services.AddScoped<ITemperatureMeasurementRepository, TemperatureMeasurementRepository>();
@@ -120,9 +123,8 @@ namespace SmartHome.Web
             // set up route mapping
             app.UseMvc(routes =>
             {
-                // TODO: better routing
                 routes.MapRoute("default",
-                    "{controller=Cars}/{action=List}");
+                    "{controller=Home}/{action=Overview}");
             });
         }
     }
