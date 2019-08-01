@@ -39,7 +39,7 @@ namespace SmartHome.Database
             modelBuilder.Entity<TemperatureMeasurement>(builder =>
             {
                 builder.Property(x => x.Id)
-                    .ForSqlServerUseSequenceHiLo();
+                    .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
                 builder.HasIndex(x => x.UnitId);
@@ -48,7 +48,7 @@ namespace SmartHome.Database
             modelBuilder.Entity<HumidityMeasurement>(builder =>
             {
                 builder.Property(x => x.Id)
-                    .ForSqlServerUseSequenceHiLo();
+                    .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
                 builder.HasIndex(x => x.UnitId);
@@ -57,7 +57,7 @@ namespace SmartHome.Database
             modelBuilder.Entity<BatteryMeasurement>(builder =>
             {
                 builder.Property(x => x.Id)
-                    .ForSqlServerUseSequenceHiLo();
+                    .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
                 builder.HasIndex(x => x.UnitId);

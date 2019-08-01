@@ -4,20 +4,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartHome.Database.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence(
-                name: "EntityFrameworkHiLoSequence",
-                incrementBy: 10);
-
             migrationBuilder.CreateTable(
                 name: "BatteryPowerSourceType",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BatteryType = table.Column<int>(nullable: false),
                     MinimumVoltage = table.Column<double>(nullable: false),
                     MaximumVoltage = table.Column<double>(nullable: false)
@@ -32,7 +28,7 @@ namespace SmartHome.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true)
                 },
@@ -46,7 +42,7 @@ namespace SmartHome.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UnitTypeId = table.Column<long>(nullable: false),
                     BatteryPowerSourceTypeId = table.Column<long>(nullable: true)
                 },
@@ -71,7 +67,8 @@ namespace SmartHome.Database.Migrations
                 name: "BatteryMeasurement",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UnitId = table.Column<long>(nullable: false),
                     MeasurementDateTime = table.Column<DateTime>(nullable: false),
                     Voltage = table.Column<double>(nullable: false),
@@ -81,7 +78,7 @@ namespace SmartHome.Database.Migrations
                 {
                     table.PrimaryKey("PK_BatteryMeasurement", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BatteryMeasurement_BatteryPowerSourceType_BatteryPowerSourceTypeId",
+                        name: "FK_BatteryMeasurement_BatteryPowerSourceType_BatteryPowerSource~",
                         column: x => x.BatteryPowerSourceTypeId,
                         principalTable: "BatteryPowerSourceType",
                         principalColumn: "Id",
@@ -98,7 +95,8 @@ namespace SmartHome.Database.Migrations
                 name: "HumidityMeasurement",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UnitId = table.Column<long>(nullable: false),
                     MeasurementDateTime = table.Column<DateTime>(nullable: false),
                     Humidity = table.Column<double>(nullable: false)
@@ -118,7 +116,8 @@ namespace SmartHome.Database.Migrations
                 name: "TemperatureMeasurement",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UnitId = table.Column<long>(nullable: false),
                     MeasurementDateTime = table.Column<DateTime>(nullable: false),
                     Temperature = table.Column<double>(nullable: false)
@@ -183,8 +182,7 @@ namespace SmartHome.Database.Migrations
                 name: "IX_UnitType_Name",
                 table: "UnitType",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -206,9 +204,6 @@ namespace SmartHome.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "UnitType");
-
-            migrationBuilder.DropSequence(
-                name: "EntityFrameworkHiLoSequence");
         }
     }
 }

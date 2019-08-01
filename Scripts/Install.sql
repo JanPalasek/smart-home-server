@@ -1,2 +1,2 @@
-CREATE LOGIN [HomeUser] WITH PASSWORD = 'noPass1234';
-EXEC sp_addsrvrolemember 'HomeUser', 'sysadmin';
+CREATE USER ‘HomeUser’ IDENTIFIED BY ‘noPass1234’
+GRANT ALL PRIVILEGES ON *.* TO ‘HomeUser’;

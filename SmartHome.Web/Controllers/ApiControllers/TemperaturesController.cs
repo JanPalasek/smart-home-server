@@ -8,6 +8,7 @@ using SmartHome.Shared;
 
 namespace SmartHome.Web.Controllers.ApiControllers
 {
+    [ApiController]
     public class TemperaturesController : Controller
     {
         private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
@@ -24,7 +25,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
             this.unitRepository = unitRepository;
         }
         
-        [HttpPost]
+        [HttpPost("api/units/{unitId:int}/temperatures")]
+        [HttpPost("api/temperatures")]
         public async Task<IActionResult> Temperature(int unitId, double temperature, double? voltage)
         {
             await temperatureMeasurementRepository.AddAsync(unitId, temperature, DateTime.Now);
@@ -38,7 +40,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
             return Ok();
         }
         
-        [HttpGet]
+        [HttpGet("api/units/{unitId:int}/temperatures")]
+        [HttpGet("api/temperatures")]
         public async Task<IActionResult> Temperatures(int? unitId, DateTime? from, DateTime? to)
         {
             var filter = new MeasurementFilter()
@@ -53,7 +56,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             return Json(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, x.UnitId }).ToList());
         }
 
-        [HttpGet]
+        [HttpGet("api/units/{unitId:int}/temperatures/last")]
         public async Task<IActionResult> LastUnitTemperature(int unitId)
         {
             var temperatureMeasurement = await temperatureMeasurementRepository.GetUnitLastTemperatureMeasurementAsync(unitId);

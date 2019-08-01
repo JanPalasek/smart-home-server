@@ -45,7 +45,7 @@ namespace SmartHome.Web
             {
                 services.AddDbContext<SmartHomeDbContext>(
                     options => options
-                        .UseSqlServer(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
+                        .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
                         .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
                         // log data to know where is the mistake
                         .EnableSensitiveDataLogging());
@@ -54,7 +54,7 @@ namespace SmartHome.Web
             {
                 services.AddDbContext<SmartHomeDbContext>(
                     options => options
-                        .UseSqlServer(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
+                        .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
 
             services.AddScoped<SmartHomeAppDbContext>();
