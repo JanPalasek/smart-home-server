@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using SmartHome.Database;
-using SmartHome.Database.Repositories;
-using SmartHome.Repositories;
+﻿using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
-using SmartHome.Web.Filters;
+using SmartHome.ServiceLoaders;
 
 namespace SmartHome.Web
 {
@@ -43,61 +38,10 @@ namespace SmartHome.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // db context
-            if (hostingEnvironment.IsDevelopment())
-            {
-                services.AddDbContext<SmartHomeDbContext>(
-                    options => options
-                        .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
-                        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
-                        // log data to know where is the mistake
-                        .EnableSensitiveDataLogging());
-            }
-            else
-            {
-                services.AddDbContext<SmartHomeDbContext>(
-                    options => options
-                        .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
-            }
+            new WebLoader(hostingEnvironment, configuration).Load(services);
             
-            #region AutoMapper
-            
-            var config = new MapperConfiguration(cfg =>
-            {
-                // get all non-tests assemblies
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(a => a.FullName.StartsWith("SmartHome") && !a.FullName.EndsWith("Tests"));
-                
-                cfg.AddMaps(assemblies);
-            });
-            config.AssertConfigurationIsValid();
-            
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
-            
-            #endregion
-
-            services.AddScoped<SmartHomeAppDbContext>();
-            
-            #region Repositories
-
-            services.AddScoped<ITemperatureMeasurementRepository, TemperatureMeasurementRepository>();
-            services.AddScoped<IBatteryMeasurementRepository, BatteryMeasurementRepository>();
-            services.AddScoped<IUnitRepository, UnitRepository>();
-
-            #endregion
-
-            #region Filters
-
             services.AddScoped<TransactionFilter>();
 
-            #endregion
-
-            // add localization to mvc
-            services.AddLocalization(options =>
-            {
-                options.ResourcesPath = "Resources";
-            });
             services.AddMvc(options =>
             {
                 var stringLocalizerFactory = services
@@ -144,7 +88,7 @@ namespace SmartHome.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default",
-                    "{controller=Home}/{action=Overview}");
+                    "{controller=Home}/{action=Overview}/{id:int?}");
             });
         }
     }

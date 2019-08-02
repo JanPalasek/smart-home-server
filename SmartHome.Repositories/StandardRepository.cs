@@ -21,19 +21,24 @@ namespace SmartHome.Repositories
             throw new System.NotImplementedException();
         }
 
-        public Task<TModel> SingleAsync(long id)
+        public new async Task<TModel> SingleAsync(long id)
         {
-            throw new System.NotImplementedException();
+            var entity = await base.SingleAsync(id);
+
+            return Mapper.Map<TModel>(entity);
         }
 
-        public Task<TModel> SingleOrDefaultAsync(long id)
+        public new async Task<TModel> SingleOrDefaultAsync(long id)
         {
-            throw new System.NotImplementedException();
+            var entity = await base.SingleOrDefaultAsync(id);
+
+            return Mapper.Map<TModel>(entity);
         }
 
         public Task<long> AddOrUpdateAsync(TModel model)
         {
-            throw new System.NotImplementedException();
+            var entity = Mapper.Map<TEntity>(model);
+            return AddOrUpdateAsync(entity);
         }
     }
 }

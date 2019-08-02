@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SmartHome.Database.Entities;
-using SmartHome.Database.Repositories;
 using SmartHome.Repositories.Interfaces;
+using SmartHome.ServiceLoaders;
 using SmartHome.Shared.Models;
 using SmartHome.Web.Models.BatteryPowerSourceType;
 
 namespace SmartHome.Web.Controllers
 {
+    [ServiceFilter(typeof(TransactionFilter))]
     public class BatteryPowerSourceTypeController : Controller
     {
         private readonly IBatteryPowerSourceTypeRepository repository;
@@ -47,8 +47,10 @@ namespace SmartHome.Web.Controllers
                     Model = model
                 });
             }
+
+            long id = await repository.AddOrUpdateAsync(model);
             
-            return RedirectToAction("Detail");
+            return RedirectToAction("Detail", new { id });
         }
     }
 }

@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SmartHome.Database.Entities;
-using SmartHome.Database.Repositories;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared;
 

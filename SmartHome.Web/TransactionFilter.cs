@@ -1,17 +1,15 @@
-﻿namespace SmartHome.Web.Filters
-{
-    using System;
-    using System.Threading.Tasks;
-    using Database;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Filters;
+using SmartHome.Database;
 
+namespace SmartHome.Web
+{
     /// <summary>
     /// Handles beginning and ending of transaction for selected method.
     /// </summary>
     /// <remarks>
-    /// Should be applied to controller through <see cref="ServiceFilterAttribute"/>
-    /// or <see cref="TypeFilterAttribute"/>.
+    /// Should be applied to controller through <see cref="Microsoft.AspNetCore.Mvc.ServiceFilterAttribute"/>
+    /// or <see cref="Microsoft.AspNetCore.Mvc.TypeFilterAttribute"/>.
     /// </remarks>
     public class TransactionFilter : IAsyncActionFilter
     {

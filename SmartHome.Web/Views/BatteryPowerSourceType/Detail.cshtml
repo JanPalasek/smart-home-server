@@ -1,12 +1,13 @@
+@using SmartHome.Shared
 @model SmartHome.Web.Models.BatteryPowerSourceType.BatteryPowerSourceTypeViewModel
 
 <div asp-validation-summary="All" class="section"></div>
 
-<form method="get" class="filter">
+<form method="post">
     <div class="form-row">
         <div class="col">
             <label asp-for="Model.BatteryType"></label>
-            <select asp-for="Model.BatteryType"></select>
+            <select asp-for="Model.BatteryType" asp-items="Html.GetEnumSelectList<BatteryType>()"></select>
         </div>
     </div>
 
