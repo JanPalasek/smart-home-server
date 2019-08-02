@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Database.Entities;
 using SmartHome.Database.Repositories;
+using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared;
 
 namespace SmartHome.Web.Controllers.ApiControllers
@@ -32,9 +33,9 @@ namespace SmartHome.Web.Controllers.ApiControllers
             await temperatureMeasurementRepository.AddAsync(unitId, temperature, DateTime.Now);
             
             // if voltage has been measured and the unit is currently on a battery source => add battery voltage measurement
-            if (voltage != null && await unitRepository.AnyAsync(x => x.Id == unitId && x.BatteryPowerSourceTypeId != null))
+            if (voltage != null && await unitRepository.AnyWithBatteryPowerSourceAsync(unitId))
             {
-                await batteryMeasurementRepository.AddAsync(unitId, voltage.Value);
+                await batteryMeasurementRepository.AddAsync(unitId, voltage.Value, DateTime.Now);
             }
 
             return Ok();

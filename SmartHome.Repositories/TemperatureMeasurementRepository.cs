@@ -2,15 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Database.Entities;
+using SmartHome.Database.Repositories;
+using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared;
+using SmartHome.Shared.Models;
 
-namespace SmartHome.Database.Repositories
+namespace SmartHome.Repositories
 {
     public class TemperatureMeasurementRepository : GenericRepository<TemperatureMeasurement>, ITemperatureMeasurementRepository
     {
-        public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext) : base(smartHomeAppDbContext)
+        public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {
         }
 
@@ -28,14 +33,15 @@ namespace SmartHome.Database.Repositories
             return await AddOrUpdateAsync(temperatureMeasurement);
         }
 
-        public Task<TemperatureMeasurement> GetUnitLastTemperatureMeasurementAsync(long unitId)
+        public async Task<TemperatureMeasurementModel> GetUnitLastTemperatureMeasurementAsync(long unitId)
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>()
                 .Where(x => x.UnitId == unitId);
 
             // take temperature measurement of given unit with maximum date time
             var lastDateTime = query.DefaultIfEmpty().Max(y => y.MeasurementDateTime);
-            return query.FirstOrDefaultAsync(x => x.MeasurementDateTime == lastDateTime);
+            var temperatureMeasurement = await query.FirstOrDefaultAsync(x => x.MeasurementDateTime == lastDateTime);
+            return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
         }
         
         public Task<IList<TemperatureMeasurement>> GetLastTemperatureMeasurementAsync()
@@ -43,9 +49,9 @@ namespace SmartHome.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IList<TemperatureMeasurement>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
+        public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
         {
-            return await GetTemperatureMeasurementsQuery(filter).ToListAsync();
+            return await GetTemperatureMeasurementsQuery(filter).ProjectTo<TemperatureMeasurementModel>(Mapper).ToListAsync();
         }
 
         private IQueryable<TemperatureMeasurement> GetTemperatureMeasurementsQuery(MeasurementFilter filter)

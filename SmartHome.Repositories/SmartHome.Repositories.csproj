@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
+      <ProjectReference Include="..\SmartHome.Repositories.Interfaces\SmartHome.Repositories.Interfaces.csproj" />
+      <ProjectReference Include="..\SmartHome.Shared\SmartHome.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="8.1.1" />
+    </ItemGroup>
+
+</Project>

@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SmartHome.Database.Entities;
 using SmartHome.Shared;
+using SmartHome.Shared.Models;
 
-namespace SmartHome.Database.Repositories
+namespace SmartHome.Repositories.Interfaces
 {
     public interface ITemperatureMeasurementRepository
     {
         Task<long> AddAsync(long unitId, double temperature, DateTime measurementDateTime);
-        Task<IList<TemperatureMeasurement>> GetTemperatureMeasurementsAsync(MeasurementFilter filter);
+        Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter);
         
         /// <summary>
         /// Obtains last temperature measurement of specified unit.
         /// </summary>
         /// <param name="unitId"></param>
         /// <returns></returns>
-        Task<TemperatureMeasurement> GetUnitLastTemperatureMeasurementAsync(long unitId);
+        Task<TemperatureMeasurementModel> GetUnitLastTemperatureMeasurementAsync(long unitId);
     }
 }

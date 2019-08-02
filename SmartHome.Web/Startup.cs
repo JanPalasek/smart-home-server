@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using SmartHome.Database;
 using SmartHome.Database.Repositories;
+using SmartHome.Repositories;
+using SmartHome.Repositories.Interfaces;
 using SmartHome.Web.Filters;
 
 namespace SmartHome.Web
@@ -56,6 +59,23 @@ namespace SmartHome.Web
                     options => options
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
+            
+            #region AutoMapper
+            
+            var config = new MapperConfiguration(cfg =>
+            {
+                // get all non-tests assemblies
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(a => a.FullName.StartsWith("SmartHome") && !a.FullName.EndsWith("Tests"));
+                
+                cfg.AddMaps(assemblies);
+            });
+            config.AssertConfigurationIsValid();
+            
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+            
+            #endregion
 
             services.AddScoped<SmartHomeAppDbContext>();
             

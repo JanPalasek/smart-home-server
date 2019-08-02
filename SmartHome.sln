@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Database", "Smart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Shared", "SmartHome.Shared\SmartHome.Shared.csproj", "{C59BF326-97AD-453A-8272-80FAB555FE9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Repositories.Interfaces", "SmartHome.Repositories.Interfaces\SmartHome.Repositories.Interfaces.csproj", "{7791D27F-AAE9-43F1-948D-47AC756C119C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Repositories", "SmartHome.Repositories\SmartHome.Repositories.csproj", "{0AE672E1-1AF2-424D-A55A-B387677EDEC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{C59BF326-97AD-453A-8272-80FAB555FE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C59BF326-97AD-453A-8272-80FAB555FE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C59BF326-97AD-453A-8272-80FAB555FE9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7791D27F-AAE9-43F1-948D-47AC756C119C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7791D27F-AAE9-43F1-948D-47AC756C119C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7791D27F-AAE9-43F1-948D-47AC756C119C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7791D27F-AAE9-43F1-948D-47AC756C119C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AE672E1-1AF2-424D-A55A-B387677EDEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AE672E1-1AF2-424D-A55A-B387677EDEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AE672E1-1AF2-424D-A55A-B387677EDEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AE672E1-1AF2-424D-A55A-B387677EDEC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

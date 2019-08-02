@@ -1,20 +1,22 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using SmartHome.Database.Entities;
+using SmartHome.Database.Repositories;
+using SmartHome.Repositories.Interfaces;
 
-namespace SmartHome.Database.Repositories
+namespace SmartHome.Repositories
 {
     public class BatteryMeasurementRepository : GenericRepository<BatteryMeasurement>, IBatteryMeasurementRepository
     {
-        public BatteryMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext) : base(smartHomeAppDbContext)
+        public BatteryMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {
         }
 
-        public async Task<long> AddAsync(long unitId, double voltage)
+        public async Task<long> AddAsync(long unitId, double voltage, DateTime measurementDateTime)
         {
             var unit = await SmartHomeAppDbContext.SingleAsync<Unit>(unitId);
             
-            // TODO: it has to be check somewhere, MCU can send battery info all the time but not be on the battery at the same moment
             if (unit.BatteryPowerSourceTypeId == null)
             {
                 throw new ArgumentNullException(nameof(unit.BatteryPowerSourceType), $"Unit with id {unit.Id} " +
@@ -25,7 +27,7 @@ namespace SmartHome.Database.Repositories
             var batteryMeasurement = new BatteryMeasurement()
             {
                 BatteryPowerSourceTypeId = unit.BatteryPowerSourceTypeId.Value,
-                MeasurementDateTime = DateTime.Now,
+                MeasurementDateTime = measurementDateTime,
                 UnitId = unit.Id,
                 Voltage = voltage
             };

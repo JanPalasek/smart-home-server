@@ -1,7 +1,8 @@
-﻿namespace SmartHome.Database.Utils
+﻿using System.Collections.Generic;
+using SmartHome.Database.Entities;
+
+namespace SmartHome.Repositories.Utils
 {
-    using System.Collections.Generic;
-    using Entities;
     public class EntityEqualityComparer : IEqualityComparer<Entity>
     {
         public bool Equals(Entity x, Entity y)

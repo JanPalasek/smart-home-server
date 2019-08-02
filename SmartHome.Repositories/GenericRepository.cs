@@ -1,19 +1,23 @@
-﻿namespace SmartHome.Database.Repositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
-    using Entities;
-    using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SmartHome.Database.Entities;
+using SmartHome.Database.Repositories;
 
-    public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
+namespace SmartHome.Repositories
+{
+    public abstract class GenericRepository<TEntity>
+        where TEntity : Entity, new()
     {
+        protected IMapper Mapper { get; }
         protected SmartHomeAppDbContext SmartHomeAppDbContext { get; }
 
-        protected GenericRepository(SmartHomeAppDbContext smartHomeAppDbContext)
+        protected GenericRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper)
         {
+            this.Mapper = mapper;
             SmartHomeAppDbContext = smartHomeAppDbContext;
         }
 
@@ -22,6 +26,7 @@
             return SmartHomeAppDbContext.SingleOrDefaultAsync<TEntity>(entityId);
         }
 
+        
         public Task<TEntity> SingleAsync(long entityId)
         {
             return SmartHomeAppDbContext.SingleAsync<TEntity>(entityId);
@@ -52,27 +57,14 @@
             return await SmartHomeAppDbContext.Query<TEntity>().ToListAsync();
         }
 
-//        public async Task<ICollection<TEntity>> GetAllEntitiesAsync<TOrder>(Expression<Func<TEntity, TOrder>> sortExpression,
-//            SortDirection sortDirection = SortDirection.Ascending)
-//        {
-//            var query = SmartHomeAppDbContext.Query<TEntity>();
-//
-//            if (sortDirection == SortDirection.Descending)
-//            {
-//                query = query.OrderByDescending(sortExpression);
-//            }
-//            else
-//            {
-//                query = query.OrderBy(sortExpression);
-//            }
-//
-//
-//            return await query.ToListAsync();
-//        }
-//
         public Task<bool> AnyAsync(long entityId)
         {
             return SmartHomeAppDbContext.Query<TEntity>().AnyAsync(x => x.Id == entityId);
+        }
+
+        public async Task DeleteAsync(long id)
+        {
+            await SmartHomeAppDbContext.DeleteAsync<TEntity>(id);
         }
 
         public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)

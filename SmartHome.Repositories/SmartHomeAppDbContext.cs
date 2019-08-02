@@ -1,4 +1,6 @@
-﻿namespace SmartHome.Database.Repositories
+﻿using SmartHome.Repositories.Utils;
+
+namespace SmartHome.Database.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +8,7 @@
     using System.Threading.Tasks;
     using Entities;
     using Microsoft.EntityFrameworkCore;
-    using Utils;
-    
+
     /// <summary>
     /// Wrapper around <see cref="SmartHomeDbContext"/> that should be used instead of that class,
     /// because it wraps it functionality and provides additional methods to make usage of database easier.

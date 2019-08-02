@@ -17,7 +17,6 @@
 
 
     <ItemGroup>
-      <Folder Include="Models" />
       <Folder Include="wwwroot\lib\css" />
       <Folder Include="wwwroot\lib\js" />
     </ItemGroup>
@@ -35,6 +34,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
+      <ProjectReference Include="..\SmartHome.Repositories\SmartHome.Repositories.csproj" />
     </ItemGroup>
 
 </Project>
