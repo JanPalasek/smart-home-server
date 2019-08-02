@@ -1,5 +1,6 @@
 using AutoMapper;
 using SmartHome.Database.Entities;
+using SmartHome.Shared;
 using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories

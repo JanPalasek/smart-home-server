@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SmartHome.Database.Entities;
 using SmartHome.Database.Repositories;
 using SmartHome.Repositories.Interfaces;
@@ -16,9 +18,9 @@ namespace SmartHome.Repositories
         {
         }
 
-        public Task<ICollection<TModel>> GetAllAsync()
+        public virtual async Task<ICollection<TModel>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            return await SmartHomeAppDbContext.Query<TEntity>().ProjectTo<TModel>(Mapper.ConfigurationProvider).ToListAsync();
         }
 
         public new async Task<TModel> SingleAsync(long id)

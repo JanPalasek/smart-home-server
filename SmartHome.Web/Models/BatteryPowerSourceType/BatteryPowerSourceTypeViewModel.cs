@@ -2,8 +2,8 @@ using SmartHome.Shared.Models;
 
 namespace SmartHome.Web.Models.BatteryPowerSourceType
 {
-    public class BatteryPowerSourceTypeViewModel
+    public class BatteryPowerSourceTypeViewModel : SmartHomeViewModel<BatteryPowerSourceTypeModel>
     {
-        public BatteryPowerSourceTypeModel Model { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

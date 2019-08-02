@@ -38,6 +38,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IBatteryMeasurementRepository, BatteryMeasurementRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddScoped<IBatteryPowerSourceTypeRepository, BatteryPowerSourceTypeRepository>();
+            services.AddScoped<IUnitTypeRepository, UnitTypeRepository>();
 
             return services;
         }
