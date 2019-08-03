@@ -3,15 +3,19 @@
 @* TODO: lang depends on country *@
 <html lang="en">
 <head>
-    <link asp-href-include="~/lib/css/*.css" rel="stylesheet" />
-    <script asp-src-include="~/lib/js/*.min.js"></script>
+    <environment names="Staging,Production">
+        <link asp-href-include="~/lib/css/*.min.css" rel="stylesheet"/>
+        <script asp-src-include="~/lib/js/*.min.js"></script>
+    </environment>
+    <environment names="Development">
+        <link asp-href-include="~/lib/css/*.css" rel="stylesheet"/>
+        <script asp-src-include="~/lib/js/*.js"></script>
+    </environment>
     <title>
         TODO
     </title>
 </head>
 <body>
-    <div class="container">
-        @RenderBody()
-    </div>
+    @RenderBody()
 </body>
 </html>

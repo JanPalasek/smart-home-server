@@ -24,11 +24,5 @@ namespace SmartHome.Database.Entities
         /// </summary>
         public long PlaceId { get; set; }
         public virtual Place Place { get; set; }
-        
-        /// <summary>
-        /// Defines what this sensor can measure.
-        /// </summary>
-        
-        public MeasurementType MeasurementTypes { get; set; }
     }
 }

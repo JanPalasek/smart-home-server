@@ -6,9 +6,9 @@ namespace SmartHome.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public Task<IActionResult> Overview()
+        public async Task<IActionResult> Overview()
         {
-            throw new NotImplementedException();
+            return View("Overview");
         }
     }
 }

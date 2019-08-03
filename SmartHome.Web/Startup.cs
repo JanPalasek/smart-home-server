@@ -89,7 +89,7 @@ namespace SmartHome.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default",
-                    "{controller=Account}/{action=Login}/{id:int?}");
+                    "{controller=Home}/{action=Overview}/{id:int?}");
             });
         }
     }
