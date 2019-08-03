@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using SmartHome.Shared;
 using SmartHome.Shared.Models;
 
 namespace SmartHome.Web.Models.Account

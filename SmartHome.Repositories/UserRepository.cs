@@ -27,9 +27,14 @@ namespace SmartHome.Repositories
             return result;
         }
 
-        public async Task<SignInResult> SignInAsync(LoginModel model)
+        public Task<SignInResult> SignInAsync(LoginModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            return SignInAsync(model.Email, model.Password);
+        }
+
+        public async Task<SignInResult> SignInAsync(string email, string password)
+        {
+            var user = await userManager.FindByEmailAsync(email);
 
             if (user == null)
             {
@@ -37,7 +42,7 @@ namespace SmartHome.Repositories
             }
 
             await signInManager.SignOutAsync();
-            var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            var result = await signInManager.PasswordSignInAsync(user, password, false, false);
             
             return result;
         }

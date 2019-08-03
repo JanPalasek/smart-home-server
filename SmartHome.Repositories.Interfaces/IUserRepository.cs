@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SmartHome.Shared;
 using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories.Interfaces

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
+using SmartHome.Shared;
 using SmartHome.Shared.Models;
 using SmartHome.Web.Models.Account;
 
