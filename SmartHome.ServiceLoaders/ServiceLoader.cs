@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using SmartHome.Database.Repositories;
+using SmartHome.Database;
+using SmartHome.Database.Entities;
 using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
 
@@ -12,7 +14,7 @@ namespace SmartHome.ServiceLoaders
     {
         public abstract IServiceCollection Load(IServiceCollection services);
         
-        protected IServiceCollection LoadAutoMapper(IServiceCollection services)
+        protected internal virtual ServiceLoader LoadAutoMapper(IServiceCollection services)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -27,10 +29,10 @@ namespace SmartHome.ServiceLoaders
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            return services;
+            return this;
         }
 
-        protected IServiceCollection LoadRepositories(IServiceCollection services)
+        protected internal virtual ServiceLoader LoadRepositories(IServiceCollection services)
         {
             services.AddScoped<SmartHomeAppDbContext>();
             
@@ -39,8 +41,23 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddScoped<IBatteryPowerSourceTypeRepository, BatteryPowerSourceTypeRepository>();
             services.AddScoped<IUnitTypeRepository, UnitTypeRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            return services;
+            return this;
+        }
+
+        protected internal virtual ServiceLoader LoadAuthentication(IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole<long>>()
+                .AddEntityFrameworkStores<SmartHomeDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+            return this;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using SmartHome.Database.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using SmartHome.Database.Entities;
 
 namespace SmartHome.Database
 {
@@ -12,7 +14,7 @@ namespace SmartHome.Database
     /// <summary>
     /// Represents BazaarFilter database.
     /// </summary>
-    public class SmartHomeDbContext : DbContext
+    public class SmartHomeDbContext : IdentityDbContext<User, IdentityRole<long>, long>
     {
 
         public SmartHomeDbContext(

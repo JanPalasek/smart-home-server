@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Database;
-using SmartHome.Database.Repositories;
 using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
 
@@ -43,11 +42,8 @@ namespace SmartHome.ServiceLoaders
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
 
-            services = LoadRepositories(services);
+            LoadAuthentication(services).LoadRepositories(services).LoadAutoMapper(services);
             
-            services = LoadAutoMapper(services);
-
-
             return services;
         }
     }

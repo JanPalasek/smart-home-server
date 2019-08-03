@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Database.Entities;
-using SmartHome.Database.Repositories;
+using SmartHome.Shared;
 
 namespace SmartHome.Repositories
 {
     public abstract class GenericRepository<TEntity>
-        where TEntity : Entity, new()
+        where TEntity : class, IId<long>, new()
     {
         protected IMapper Mapper { get; }
         protected SmartHomeAppDbContext SmartHomeAppDbContext { get; }

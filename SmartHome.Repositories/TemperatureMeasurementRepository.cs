@@ -6,7 +6,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Database.Entities;
-using SmartHome.Database.Repositories;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared;
 using SmartHome.Shared.Models;

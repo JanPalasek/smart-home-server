@@ -1,14 +1,13 @@
-﻿using SmartHome.Repositories.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using SmartHome.Database;
+using SmartHome.Repositories.Utils;
+using SmartHome.Shared;
 
-namespace SmartHome.Database.Repositories
+namespace SmartHome.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Entities;
-    using Microsoft.EntityFrameworkCore;
-
     /// <summary>
     /// Wrapper around <see cref="SmartHomeDbContext"/> that should be used instead of that class,
     /// because it wraps it functionality and provides additional methods to make usage of database easier.
@@ -23,13 +22,13 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task DeleteAsync<TEntity>(long id)
-            where TEntity : Entity, new()
+            where TEntity : class, IId<long>, new()
         {
             await DeleteAsync(new TEntity() { Id = id });
         }
         
         public async Task DeleteAsync<TEntity>(TEntity entity)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             var dbEntity = SingleOrDefaultAsync<TEntity>(entity.Id);
 
@@ -44,7 +43,7 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task DeleteRangeAsync<TEntity>(IEnumerable<TEntity> items)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             bool originalAutoDetectChangesEnabled = Context
                 .ChangeTracker.AutoDetectChangesEnabled;
@@ -82,7 +81,7 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task<TEntity> SingleAsync<TEntity>(long id)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             var entity = await SingleOrDefaultAsync<TEntity>(id);
 
@@ -95,7 +94,7 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task<TEntity> SingleOrDefaultAsync<TEntity>(long id)
-            where TEntity : Entity
+            where TEntity :class, IId<long>, new()
         {
             var entity = await Context.FindAsync<TEntity>(id);
             
@@ -103,7 +102,7 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task<long> AddOrUpdateAsync<TEntity>(TEntity entity)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             var dbEntity = await SingleOrDefaultAsync<TEntity>(entity.Id);
 
@@ -123,14 +122,14 @@ namespace SmartHome.Database.Repositories
         }
         
         public async Task AddRangeAsync<TEntity>(IEnumerable<TEntity> items)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             await Context.AddRangeAsync(items);
             await Context.SaveChangesAsync();
         }
         
         public async Task UpdateRangeAsync<TEntity>(IEnumerable<TEntity> items)
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             var entityEqualityComparer = new EntityEqualityComparer();
 
@@ -150,7 +149,7 @@ namespace SmartHome.Database.Repositories
         }
         
         public IQueryable<TEntity> Query<TEntity>()
-            where TEntity : Entity
+            where TEntity : class, IId<long>, new()
         {
             return Context.Set<TEntity>();
         }

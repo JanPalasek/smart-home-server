@@ -1,7 +1,7 @@
 namespace SmartHome.Shared.Models
 {
-    public class Model
+    public class Model : IId<long?>
     {
-        public virtual int? Id { get; set; }
+        public virtual long? Id { get; set; }
     }
 }

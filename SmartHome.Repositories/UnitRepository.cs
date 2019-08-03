@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using SmartHome.Database.Entities;
-using SmartHome.Database.Repositories;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
 

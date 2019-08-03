@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartHome.Shared;
 using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories.Interfaces
 {
     public interface IStandardRepository<TModel>
-        where TModel : Model
+        where TModel : class, IId<long?>, new()
     {
         Task<ICollection<TModel>> GetAllAsync();
         Task<TModel> SingleAsync(long id);
