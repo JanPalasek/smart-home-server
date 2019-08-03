@@ -28,13 +28,13 @@ namespace SmartHome.Database
             // add model building
             modelBuilder.Entity<BatteryPowerSourceType>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
 
-            modelBuilder.Entity<UnitType>(builder =>
+            modelBuilder.Entity<SensorType>(builder =>
             {
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
                 
                 builder.HasIndex(x => x.Name).IsUnique();
             });
-            modelBuilder.Entity<Unit>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Sensor>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
 
             #region Measurements
             
@@ -44,7 +44,7 @@ namespace SmartHome.Database
                     .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
-                builder.HasIndex(x => x.UnitId);
+                builder.HasIndex(x => x.SensorId);
             });
             
             modelBuilder.Entity<HumidityMeasurement>(builder =>
@@ -53,7 +53,7 @@ namespace SmartHome.Database
                     .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
-                builder.HasIndex(x => x.UnitId);
+                builder.HasIndex(x => x.SensorId);
             });
             
             modelBuilder.Entity<BatteryMeasurement>(builder =>
@@ -62,7 +62,7 @@ namespace SmartHome.Database
                     .ValueGeneratedOnAdd();
 
                 builder.HasIndex(x => x.MeasurementDateTime);
-                builder.HasIndex(x => x.UnitId);
+                builder.HasIndex(x => x.SensorId);
             });
             
             #endregion

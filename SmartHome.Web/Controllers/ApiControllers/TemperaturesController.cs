@@ -12,57 +12,57 @@ namespace SmartHome.Web.Controllers.ApiControllers
     {
         private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
         private readonly IBatteryMeasurementRepository batteryMeasurementRepository;
-        private readonly IUnitRepository unitRepository;
+        private readonly ISensorRepository sensorRepository;
 
         public TemperaturesController(
             ITemperatureMeasurementRepository temperatureMeasurementRepository,
             IBatteryMeasurementRepository batteryMeasurementRepository,
-            IUnitRepository unitRepository)
+            ISensorRepository sensorRepository)
         {
             this.temperatureMeasurementRepository = temperatureMeasurementRepository;
             this.batteryMeasurementRepository = batteryMeasurementRepository;
-            this.unitRepository = unitRepository;
+            this.sensorRepository = sensorRepository;
         }
         
-        [HttpPost("api/units/{unitId:int}/temperatures")]
+        [HttpPost("api/sensors/{sensorId:int}/temperatures")]
         [HttpPost("api/temperatures")]
-        public async Task<IActionResult> Temperature(int unitId, double temperature, double? voltage)
+        public async Task<IActionResult> Temperature(int sensorId, double temperature, double? voltage)
         {
-            await temperatureMeasurementRepository.AddAsync(unitId, temperature, DateTime.Now);
+            await temperatureMeasurementRepository.AddAsync(sensorId, temperature, DateTime.Now);
             
-            // if voltage has been measured and the unit is currently on a battery source => add battery voltage measurement
-            if (voltage != null && await unitRepository.AnyWithBatteryPowerSourceAsync(unitId))
+            // if voltage has been measured and the sensor is currently on a battery source => add battery voltage measurement
+            if (voltage != null && await sensorRepository.AnyWithBatteryPowerSourceAsync(sensorId))
             {
-                await batteryMeasurementRepository.AddAsync(unitId, voltage.Value, DateTime.Now);
+                await batteryMeasurementRepository.AddAsync(sensorId, voltage.Value, DateTime.Now);
             }
 
             return Ok();
         }
         
-        [HttpGet("api/units/{unitId:int}/temperatures")]
+        [HttpGet("api/sensors/{sensorId:int}/temperatures")]
         [HttpGet("api/temperatures")]
-        public async Task<IActionResult> Temperatures(int? unitId, DateTime? from, DateTime? to)
+        public async Task<IActionResult> Temperatures(int? sensorId, DateTime? from, DateTime? to)
         {
             var filter = new MeasurementFilter()
             {
                 From = from,
                 To = to,
-                UnitId = unitId
+                SensorId = sensorId
             };
 
             var temperatureMeasurements = await temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
 
-            return Json(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, x.UnitId }).ToList());
+            return Json(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
         }
 
-        [HttpGet("api/units/{unitId:int}/temperatures/last")]
-        public async Task<IActionResult> LastUnitTemperature(int unitId)
+        [HttpGet("api/sensors/{sensorId:int}/temperatures/last")]
+        public async Task<IActionResult> LastSensorTemperature(int sensorId)
         {
-            var temperatureMeasurement = await temperatureMeasurementRepository.GetUnitLastTemperatureMeasurementAsync(unitId);
+            var temperatureMeasurement = await temperatureMeasurementRepository.GetSensorLastTemperatureMeasurementAsync(sensorId);
 
             if (temperatureMeasurement == null)
             {
-                return BadRequest("Given unit does not exist or doesn't have temperature measurements.");
+                return BadRequest("Given sensor does not exist or doesn't have temperature measurements.");
             }
 
             return Json(temperatureMeasurement.Temperature);

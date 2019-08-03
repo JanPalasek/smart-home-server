@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using SmartHome.Shared.Models;
 
-namespace SmartHome.Web.Models.Unit
+namespace SmartHome.Web.Models.Sensor
 {
-    public class UnitViewModel : SmartHomeViewModel<UnitModel>
+    public class SensorViewModel : SmartHomeViewModel<SensorModel>
     {
         public bool ReadOnly { get; set; }
         
         public IEnumerable<BatteryPowerSourceTypeModel> BatteryPowerSourceTypes { get; set; }
-        public IEnumerable<UnitTypeModel> UnitTypes { get; set; }
+        public IEnumerable<SensorTypeModel> SensorTypes { get; set; }
     }
 }

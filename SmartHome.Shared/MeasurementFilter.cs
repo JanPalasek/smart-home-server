@@ -11,8 +11,8 @@ namespace SmartHome.Shared
         public DateTime? To { get; set; }
         
         /// <summary>
-        /// Id of unit that we want to take.
+        /// Id of sensor that we want to take.
         /// </summary>
-        public long? UnitId { get; set; }
+        public long? SensorId { get; set; }
     }
 }

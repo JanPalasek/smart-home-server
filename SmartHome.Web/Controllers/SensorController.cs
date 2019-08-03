@@ -3,51 +3,51 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
-using SmartHome.Web.Models.Unit;
+using SmartHome.Web.Models.Sensor;
 
 namespace SmartHome.Web.Controllers
 {
-    public class UnitController : Controller
+    public class SensorController : Controller
     {
-        private readonly IUnitRepository repository;
+        private readonly ISensorRepository repository;
         private readonly IBatteryPowerSourceTypeRepository batteryPowerSourceTypeRepository;
-        private readonly IUnitTypeRepository unitTypeRepository;
+        private readonly ISensorTypeRepository sensorTypeRepository;
 
-        public UnitController(
-            IUnitRepository repository,
+        public SensorController(
+            ISensorRepository repository,
             IBatteryPowerSourceTypeRepository batteryPowerSourceTypeRepository,
-            IUnitTypeRepository unitTypeRepository)
+            ISensorTypeRepository sensorTypeRepository)
         {
             this.repository = repository;
             this.batteryPowerSourceTypeRepository = batteryPowerSourceTypeRepository;
-            this.unitTypeRepository = unitTypeRepository;
+            this.sensorTypeRepository = sensorTypeRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Detail(int? id)
         {
-            UnitModel unitModel;
+            SensorModel sensorModel;
             if (id != null)
             {
-                unitModel = await repository.SingleAsync(id.Value);
+                sensorModel = await repository.SingleAsync(id.Value);
             }
             else
             {
-                unitModel = new UnitModel();
+                sensorModel = new SensorModel();
             }
 
             var vm = await FillViewModelAsync();
-            vm.Model = unitModel;
+            vm.Model = sensorModel;
             
             return View("Detail", vm);
         }
         
         [HttpPost]
-        public async Task<IActionResult> Detail(UnitModel model)
+        public async Task<IActionResult> Detail(SensorModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new UnitViewModel {Model = model});
+                return View("Detail", new SensorViewModel {Model = model});
             }
 
             long id = await repository.AddOrUpdateAsync(model);
@@ -55,18 +55,18 @@ namespace SmartHome.Web.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
-        private async Task<UnitViewModel> FillViewModelAsync(UnitViewModel viewModel = null)
+        private async Task<SensorViewModel> FillViewModelAsync(SensorViewModel viewModel = null)
         {
             if (viewModel == null)
             {
-                viewModel = new UnitViewModel();
+                viewModel = new SensorViewModel();
             }
 
             var batteryPowerSourceTypesTask = batteryPowerSourceTypeRepository.GetAllAsync();
-            var unitTypesTask = unitTypeRepository.GetAllAsync();
+            var sensorTypesTask = sensorTypeRepository.GetAllAsync();
 
             viewModel.BatteryPowerSourceTypes = await batteryPowerSourceTypesTask;
-            viewModel.UnitTypes = await unitTypesTask;
+            viewModel.SensorTypes = await sensorTypesTask;
 
             return viewModel;
         }

@@ -12,22 +12,22 @@ namespace SmartHome.Repositories
         {
         }
 
-        public async Task<long> AddAsync(long unitId, double voltage, DateTime measurementDateTime)
+        public async Task<long> AddAsync(long sensorId, double voltage, DateTime measurementDateTime)
         {
-            var unit = await SmartHomeAppDbContext.SingleAsync<Unit>(unitId);
+            var sensor = await SmartHomeAppDbContext.SingleAsync<Sensor>(sensorId);
             
-            if (unit.BatteryPowerSourceTypeId == null)
+            if (sensor.BatteryPowerSourceTypeId == null)
             {
-                throw new ArgumentNullException(nameof(unit.BatteryPowerSourceType), $"Unit with id {unit.Id} " +
+                throw new ArgumentNullException(nameof(sensor.BatteryPowerSourceType), $"Sensor with id {sensor.Id} " +
                                                                                      $"doesn't have any battery power source type, " +
                                                                                      $"and thus can't have voltage measurements.");
             }
             
             var batteryMeasurement = new BatteryMeasurement()
             {
-                BatteryPowerSourceTypeId = unit.BatteryPowerSourceTypeId.Value,
+                BatteryPowerSourceTypeId = sensor.BatteryPowerSourceTypeId.Value,
                 MeasurementDateTime = measurementDateTime,
-                UnitId = unit.Id,
+                SensorId = sensor.Id,
                 Voltage = voltage
             };
 

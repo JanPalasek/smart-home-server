@@ -8,14 +8,20 @@ namespace SmartHome.Database.Entities
     public abstract class Measurement : Entity
     {
         /// <summary>
-        /// Unit that did this particular measurement.
+        /// Sensor that did this particular measurement.
         /// </summary>
-        public long UnitId { get; set; }
-        public virtual Unit Unit { get; set; }
+        public long SensorId { get; set; }
+        public virtual Sensor Sensor { get; set; }
         
         /// <summary>
         /// Date and time when this measurement was performed.
         /// </summary>
         public DateTime MeasurementDateTime { get; set; }
+        
+        /// <summary>
+        /// Describes place where the sensor was located at time of the measurement.
+        /// </summary>
+        public long PlaceId { get; set; }
+        public virtual Place Place { get; set; }
     }
 }

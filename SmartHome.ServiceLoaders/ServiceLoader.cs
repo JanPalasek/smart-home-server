@@ -38,9 +38,9 @@ namespace SmartHome.ServiceLoaders
             
             services.AddScoped<ITemperatureMeasurementRepository, TemperatureMeasurementRepository>();
             services.AddScoped<IBatteryMeasurementRepository, BatteryMeasurementRepository>();
-            services.AddScoped<IUnitRepository, UnitRepository>();
+            services.AddScoped<ISensorRepository, SensorRepository>();
             services.AddScoped<IBatteryPowerSourceTypeRepository, BatteryPowerSourceTypeRepository>();
-            services.AddScoped<IUnitTypeRepository, UnitTypeRepository>();
+            services.AddScoped<ISensorTypeRepository, SensorTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             return this;

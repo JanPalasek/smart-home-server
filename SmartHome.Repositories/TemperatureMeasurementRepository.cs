@@ -18,26 +18,26 @@ namespace SmartHome.Repositories
         {
         }
 
-        public async Task<long> AddAsync(long unitId, double temperature, DateTime measurementDateTime)
+        public async Task<long> AddAsync(long sensorId, double temperature, DateTime measurementDateTime)
         {
-            var unit = await SmartHomeAppDbContext.SingleAsync<Unit>(unitId);
+            var sensor = await SmartHomeAppDbContext.SingleAsync<Sensor>(sensorId);
             
             var temperatureMeasurement = new TemperatureMeasurement()
             {
                 MeasurementDateTime = measurementDateTime,
                 Temperature = temperature,
-                UnitId = unit.Id
+                SensorId = sensor.Id
             };
 
             return await AddOrUpdateAsync(temperatureMeasurement);
         }
 
-        public async Task<TemperatureMeasurementModel> GetUnitLastTemperatureMeasurementAsync(long unitId)
+        public async Task<TemperatureMeasurementModel> GetSensorLastTemperatureMeasurementAsync(long sensorId)
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>()
-                .Where(x => x.UnitId == unitId);
+                .Where(x => x.SensorId == sensorId);
 
-            // take temperature measurement of given unit with maximum date time
+            // take temperature measurement of given sensor with maximum date time
             var lastDateTime = query.DefaultIfEmpty().Max(y => y.MeasurementDateTime);
             var temperatureMeasurement = await query.FirstOrDefaultAsync(x => x.MeasurementDateTime == lastDateTime);
             return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
@@ -67,9 +67,9 @@ namespace SmartHome.Repositories
                 query = query.Where(x => x.MeasurementDateTime <= filter.To.Value);
             }
 
-            if (filter.UnitId != null)
+            if (filter.SensorId != null)
             {
-                query = query.Where(x => x.UnitId == filter.UnitId.Value);
+                query = query.Where(x => x.SensorId == filter.SensorId.Value);
             }
 
             return query;

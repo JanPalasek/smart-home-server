@@ -9,7 +9,8 @@ namespace SmartHome.Repositories
         public TemperatureMeasurementProfile()
         {
             CreateMap<TemperatureMeasurementModel, TemperatureMeasurement>()
-                .ForMember(x => x.Unit, x => x.Ignore())
+                .ForMember(x => x.Sensor, x => x.Ignore())
+                .ForMember(x => x.Place, x => x.Ignore())
                 .ReverseMap();
         }
     }

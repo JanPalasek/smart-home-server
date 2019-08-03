@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartHome.Shared.Models
 {
-    public class UnitTypeModel : Model
+    public class SensorTypeModel : Model
     {
         [Required]
         public string Name { get; set; }

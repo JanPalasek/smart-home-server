@@ -4,13 +4,14 @@ using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories
 {
-    public class UnitProfile : Profile
+    public class SensorProfile : Profile
     {
-        public UnitProfile()
+        public SensorProfile()
         {
-            CreateMap<UnitModel, Unit>()
-                .ForMember(x => x.UnitType, x => x.Ignore())
+            CreateMap<SensorModel, Sensor>()
+                .ForMember(x => x.SensorType, x => x.Ignore())
                 .ForMember(x => x.BatteryPowerSourceType, x => x.Ignore())
+                .ForMember(x => x.Place, x => x.Ignore())
                 .ReverseMap();
         }
     }

@@ -5,6 +5,6 @@ namespace SmartHome.Repositories.Interfaces
 {
     public interface IBatteryMeasurementRepository
     {
-        Task<long> AddAsync(long unitId, double voltage, DateTime measurementDateTime);
+        Task<long> AddAsync(long sensorId, double voltage, DateTime measurementDateTime);
     }
 }
