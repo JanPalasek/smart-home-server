@@ -1,0 +1,20 @@
+@model SmartHome.Web.Models.Place.PlaceViewModel
+
+<div asp-validation-summary="All"></div>
+
+<form asp-action="Detail" method="post">
+    <input type="hidden" asp-for="Model.Id"/>
+    <div>
+        <label asp-for="Model.Name"></label>
+        <input asp-for="Model.Name" />
+    </div>
+    <div>
+        <label asp-for="Model.IsInside"></label>
+        <input asp-for="Model.IsInside" type="checkbox" />
+    </div>
+    <div>
+        <label asp-for="Model.Note"></label>
+        <input asp-for="Model.Note" />
+    </div>
+    <button class="btn btn-primary" type="submit">TODO</button>
+</form>

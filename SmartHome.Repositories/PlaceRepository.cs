@@ -7,7 +7,7 @@ namespace SmartHome.Repositories
 {
     public class PlaceRepository : StandardRepository<Place, PlaceModel>, IPlaceRepository
     {
-        protected PlaceRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
+        public PlaceRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {
         }
     }

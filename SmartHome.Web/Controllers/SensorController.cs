@@ -13,18 +13,20 @@ namespace SmartHome.Web.Controllers
         private readonly ISensorRepository repository;
         private readonly IBatteryPowerSourceTypeRepository batteryPowerSourceTypeRepository;
         private readonly ISensorTypeRepository sensorTypeRepository;
+        private readonly IPlaceRepository placeRepository;
 
         public SensorController(
             ISensorRepository repository,
             IBatteryPowerSourceTypeRepository batteryPowerSourceTypeRepository,
-            ISensorTypeRepository sensorTypeRepository)
+            ISensorTypeRepository sensorTypeRepository,
+            IPlaceRepository placeRepository)
         {
             this.repository = repository;
             this.batteryPowerSourceTypeRepository = batteryPowerSourceTypeRepository;
             this.sensorTypeRepository = sensorTypeRepository;
+            this.placeRepository = placeRepository;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Detail(int? id)
         {
             SensorModel sensorModel;
@@ -43,7 +45,6 @@ namespace SmartHome.Web.Controllers
             return View("Detail", vm);
         }
         
-        [HttpPost]
         public async Task<IActionResult> Detail(SensorModel model)
         {
             if (!ModelState.IsValid)
@@ -65,10 +66,11 @@ namespace SmartHome.Web.Controllers
 
             var batteryPowerSourceTypesTask = batteryPowerSourceTypeRepository.GetAllAsync();
             var sensorTypesTask = sensorTypeRepository.GetAllAsync();
+            var placesTask = placeRepository.GetAllAsync();
 
             viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypesTask).ToSelectListItems(x => x.Id, x => $"{x.BatteryType}, {x.MaximumVoltage}V");
             viewModel.SensorTypes = (await sensorTypesTask).ToSelectListItems(x => x.Id, x => x.Name);
-            // TODO: places
+            viewModel.Places = (await placesTask).ToSelectListItems(x => x.Id, x => $"{x.Name}, in: {x.IsInside}");
 
             return viewModel;
         }

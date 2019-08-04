@@ -26,12 +26,17 @@ namespace SmartHome.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add model building
-            modelBuilder.Entity<BatteryPowerSourceType>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<BatteryPowerSourceType>(builder =>
+            {
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            });
 
             modelBuilder.Entity<Place>(builder =>
             {
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
                 builder.Property(x => x.Name).IsRequired();
+
+                builder.HasIndex(x => x.Name).IsUnique();
             });
 
             modelBuilder.Entity<SensorType>(builder =>
@@ -41,7 +46,14 @@ namespace SmartHome.Database
                 
                 builder.HasIndex(x => x.Name).IsUnique();
             });
-            modelBuilder.Entity<Sensor>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
+            modelBuilder.Entity<Sensor>(builder =>
+            {
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                
+                builder.HasIndex(x => x.PlaceId);
+                builder.HasIndex(x => x.SensorTypeId);
+                builder.HasIndex(x => x.BatteryPowerSourceTypeId);
+            });
 
             #region Measurements
             

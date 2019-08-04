@@ -24,5 +24,10 @@ namespace SmartHome.Database.Entities
         /// </summary>
         public long? PlaceId { get; set; }
         public virtual Place Place { get; set; }
+        
+        /// <summary>
+        /// Specifies minimum required voltage this particular sensor needs.
+        /// </summary>
+        public double? MinimumRequiredVoltage { get; set; }
     }
 }
