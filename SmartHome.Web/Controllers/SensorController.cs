@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
 using SmartHome.Web.Models.Sensor;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
@@ -65,8 +66,9 @@ namespace SmartHome.Web.Controllers
             var batteryPowerSourceTypesTask = batteryPowerSourceTypeRepository.GetAllAsync();
             var sensorTypesTask = sensorTypeRepository.GetAllAsync();
 
-            viewModel.BatteryPowerSourceTypes = await batteryPowerSourceTypesTask;
-            viewModel.SensorTypes = await sensorTypesTask;
+            viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypesTask).ToSelectListItems(x => x.Id, x => $"{x.BatteryType}, {x.MaximumVoltage}V");
+            viewModel.SensorTypes = (await sensorTypesTask).ToSelectListItems(x => x.Id, x => x.Name);
+            // TODO: places
 
             return viewModel;
         }

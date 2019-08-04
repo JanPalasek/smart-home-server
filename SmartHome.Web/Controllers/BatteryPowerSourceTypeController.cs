@@ -5,6 +5,7 @@ using SmartHome.Repositories.Interfaces;
 using SmartHome.ServiceLoaders;
 using SmartHome.Shared.Models;
 using SmartHome.Web.Models.BatteryPowerSourceType;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {

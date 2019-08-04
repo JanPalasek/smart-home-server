@@ -50,7 +50,7 @@ namespace SmartHome.Repositories
 
         public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
         {
-            return await GetTemperatureMeasurementsQuery(filter).ProjectTo<TemperatureMeasurementModel>(Mapper).ToListAsync();
+            return await GetTemperatureMeasurementsQuery(filter).ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider).ToListAsync();
         }
 
         private IQueryable<TemperatureMeasurement> GetTemperatureMeasurementsQuery(MeasurementFilter filter)

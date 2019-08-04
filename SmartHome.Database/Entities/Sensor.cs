@@ -22,7 +22,7 @@ namespace SmartHome.Database.Entities
         /// <summary>
         /// Describes place where this sensor is located.
         /// </summary>
-        public long PlaceId { get; set; }
+        public long? PlaceId { get; set; }
         public virtual Place Place { get; set; }
     }
 }

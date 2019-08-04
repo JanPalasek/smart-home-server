@@ -28,9 +28,16 @@ namespace SmartHome.Database
             // add model building
             modelBuilder.Entity<BatteryPowerSourceType>(builder => { builder.Property(x => x.Id).ValueGeneratedOnAdd(); });
 
+            modelBuilder.Entity<Place>(builder =>
+            {
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                builder.Property(x => x.Name).IsRequired();
+            });
+
             modelBuilder.Entity<SensorType>(builder =>
             {
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                builder.Property(x => x.Name).IsRequired();
                 
                 builder.HasIndex(x => x.Name).IsUnique();
             });

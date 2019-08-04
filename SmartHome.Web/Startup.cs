@@ -1,6 +1,8 @@
-﻿using SmartHome.Repositories;
+﻿using Microsoft.AspNetCore.HttpOverrides;
+using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.ServiceLoaders;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web
 {
@@ -81,9 +83,10 @@ namespace SmartHome.Web
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
-
+            
             app.UseStaticFiles();
-            app.UseHsts();
+            app.UseAuthentication();
+            //app.UseHsts();
 
             // set up route mapping
             app.UseMvc(routes =>

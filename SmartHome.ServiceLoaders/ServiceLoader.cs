@@ -16,18 +16,22 @@ namespace SmartHome.ServiceLoaders
         
         protected internal virtual ServiceLoader LoadAutoMapper(IServiceCollection services)
         {
-            var config = new MapperConfiguration(cfg =>
+            services.AddSingleton(provider =>
             {
-                // get all non-tests assemblies
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(a => a.FullName.StartsWith("SmartHome"));
+                var config = new MapperConfiguration(cfg =>
+                {
+                    // get all non-tests assemblies
+                    var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                        .Where(a => a.FullName.StartsWith("SmartHome"));
                 
-                cfg.AddMaps(assemblies);
-            });
-            config.AssertConfigurationIsValid();
+                    cfg.AddMaps(assemblies);
+                });
+                config.AssertConfigurationIsValid();
             
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
+                var mapper = config.CreateMapper();
+
+                return mapper;
+            });
 
             return this;
         }
@@ -42,6 +46,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IBatteryPowerSourceTypeRepository, BatteryPowerSourceTypeRepository>();
             services.AddScoped<ISensorTypeRepository, SensorTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPlaceRepository, PlaceRepository>();
 
             return this;
         }

@@ -7,8 +7,8 @@ namespace SmartHome.Shared.Models
         [Required]
         public string Name { get; set; }
         
-        [Required]
-        public MeasurementType? MeasurementTypes { get; set; }
+//        [Required]
+//        public MeasurementType? MeasurementTypes { get; set; }
         public string Description { get; set; }
     }
 }

@@ -1,0 +1,21 @@
+@using SmartHome.Shared
+@model SmartHome.Web.Models.SensorType.SensorTypeViewModel
+
+<div asp-validation-summary="All" class="section"></div>
+
+<form asp-action="Detail" method="post">
+    <input type="hidden" asp-for="Model.Id"/>
+    <div>
+        <label asp-for="Model.Name"></label>
+        <input asp-for="Model.Name" />
+    </div>
+    @* <div> *@
+    @*     <label asp-for="Model.MeasurementTypes"></label> *@
+    @*     <select asp-for="Model.MeasurementTypes" asp-items="Model.MeasurementTypes"></select> *@
+    @* </div> *@
+    <div>
+        <label asp-for="Model.Description"></label>
+        <textarea asp-for="Model.Description" rows="5" cols="10"></textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">TODO</button>
+</form>

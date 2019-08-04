@@ -3,7 +3,7 @@ using System;
 namespace SmartHome.Database.Entities
 {
     /// <summary>
-    /// Abstract predecessor for all measurements (e.g. temperature, humidity, voltage,...).
+    /// Abstract predecessor for all measurements that need to be logged (e.g. temperature, humidity, voltage,...).
     /// </summary>
     public abstract class Measurement : Entity
     {
