@@ -7,8 +7,7 @@ using SmartHome.Shared;
 
 namespace SmartHome.Web.Controllers.ApiControllers
 {
-    [ApiController]
-    public class TemperaturesController : Controller
+    public class TemperaturesController : ControllerBase
     {
         private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
         private readonly IBatteryMeasurementRepository batteryMeasurementRepository;
@@ -28,6 +27,11 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [HttpPost("api/temperatures")]
         public async Task<IActionResult> Temperature(int sensorId, double temperature, double? voltage)
         {
+            if (!await sensorRepository.AnyAsync(sensorId))
+            {
+                return BadRequest($"Sensor with id {sensorId} does not exist.");
+            }
+            
             await temperatureMeasurementRepository.AddAsync(sensorId, temperature, DateTime.Now);
             
             // if voltage has been measured and the sensor is currently on a battery source => add battery voltage measurement
@@ -52,7 +56,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
 
             var temperatureMeasurements = await temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
 
-            return Json(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
+            return Ok(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
         }
 
         [HttpGet("api/sensors/{sensorId:int}/temperatures/last")]
@@ -65,7 +69,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
                 return BadRequest("Given sensor does not exist or doesn't have temperature measurements.");
             }
 
-            return Json(temperatureMeasurement.Temperature);
+            return Ok(temperatureMeasurement.Temperature);
         }
     }
 }
