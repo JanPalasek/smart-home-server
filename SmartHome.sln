@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Repositories", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.ServiceLoaders", "SmartHome.ServiceLoaders\SmartHome.ServiceLoaders.csproj", "{1D942932-C2A3-453A-A642-286A5ADEAA6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Common", "SmartHome.Common\SmartHome.Common.csproj", "{1BC3BDE8-AA97-4259-A3EF-798644A5FD39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{1D942932-C2A3-453A-A642-286A5ADEAA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D942932-C2A3-453A-A642-286A5ADEAA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D942932-C2A3-453A-A642-286A5ADEAA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC3BDE8-AA97-4259-A3EF-798644A5FD39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC3BDE8-AA97-4259-A3EF-798644A5FD39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC3BDE8-AA97-4259-A3EF-798644A5FD39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC3BDE8-AA97-4259-A3EF-798644A5FD39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,26 @@
+@using SmartHome.Shared
+@model SmartHome.Web.Models.Admin.DetailUserViewModel
+
+@* TODO  *@
+
+<div asp-validation-summary="All" class="section"></div>
+
+<div class="form-row">
+    <div class="col">
+        <label asp-for="Model.UserName"></label>
+        <input asp-for="Model.UserName" readonly="@(true)"/>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="col">
+        <label asp-for="Model.Email"></label>
+        <input asp-for="Model.Email" readonly="@(true)"/>
+    </div>
+</div>
+
+<div class="form-row">
+    <a href="@Url.Action("ChangePassword", new { id = Model.Model.Id })">Change password</a>
+</div>
+
+<input asp-for="Model.Id" type="hidden"/>

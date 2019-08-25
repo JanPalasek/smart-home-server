@@ -30,6 +30,8 @@ namespace SmartHome.Web.Controllers
                 {
                     return RedirectToAction(returnUrl);
                 }
+                
+                ModelState.AddModelError(nameof(model.Login), "Invalid credentials.");
             }
 
             return View("Login", new LoginViewModel() { Model = model, ReturnUrl = returnUrl });

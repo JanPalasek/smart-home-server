@@ -1,0 +1,42 @@
+@using SmartHome.Shared
+@model SmartHome.Web.Models.Admin.CreateUserViewModel
+
+@* TODO  *@
+
+<div asp-validation-summary="All" class="section"></div>
+
+<form method="post">
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="Model.UserName"></label>
+            <input asp-for="Model.UserName"/>
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="Model.Email"></label>
+            <input asp-for="Model.Email"/>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            <label asp-for="Model.Password"></label>
+            <input asp-for="Model.Password" type="password"/>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            <label>Password again</label>
+            <input type="password"/>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <button class="btn btn-primary mb-2 mr-sm-2" type="submit">Submit</button>
+    </div>
+
+    @* TODO: Validate two passwords are same before submitting *@
+</form>

@@ -59,9 +59,15 @@ namespace SmartHome.ServiceLoaders
 
             services.Configure<IdentityOptions>(options =>
             {
-                // User settings
                 options.User.RequireUniqueEmail = true;
+                
+                options.Password.RequireNonAlphanumeric = false;
+                
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
             });
+            
             return this;
         }
     }

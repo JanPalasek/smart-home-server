@@ -86,7 +86,7 @@ namespace SmartHome.Web
             
             app.UseStaticFiles();
             app.UseAuthentication();
-
+            
             // set up route mapping
             app.UseMvc(routes =>
             {

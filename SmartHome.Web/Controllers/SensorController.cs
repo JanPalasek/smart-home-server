@@ -27,6 +27,7 @@ namespace SmartHome.Web.Controllers
             this.placeRepository = placeRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Detail(int? id)
         {
             SensorModel sensorModel;
@@ -45,6 +46,7 @@ namespace SmartHome.Web.Controllers
             return View("Detail", vm);
         }
         
+        [HttpPost]
         public async Task<IActionResult> Detail(SensorModel model)
         {
             if (!ModelState.IsValid)

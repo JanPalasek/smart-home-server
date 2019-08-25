@@ -12,7 +12,7 @@ namespace SmartHome.Repositories
 {
     public class StandardRepository<TEntity, TModel> : GenericRepository<TEntity>, IStandardRepository<TModel>
         where TEntity : class, IId<long>, new()
-        where TModel : class, IId<long?>, new()
+        where TModel : class, IId<long>, new()
     {
         protected StandardRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {

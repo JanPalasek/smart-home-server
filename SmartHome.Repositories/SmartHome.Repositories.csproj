@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SmartHome.Common\SmartHome.Common.csproj" />
       <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
       <ProjectReference Include="..\SmartHome.Repositories.Interfaces\SmartHome.Repositories.Interfaces.csproj" />
       <ProjectReference Include="..\SmartHome.Shared\SmartHome.Shared.csproj" />

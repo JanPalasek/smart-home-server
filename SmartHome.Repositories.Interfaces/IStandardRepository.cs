@@ -6,7 +6,7 @@ using SmartHome.Shared.Models;
 namespace SmartHome.Repositories.Interfaces
 {
     public interface IStandardRepository<TModel>
-        where TModel : class, IId<long?>, new()
+        where TModel : class, IId<long>, new()
     {
         Task<ICollection<TModel>> GetAllAsync();
         Task<TModel> SingleAsync(long id);
