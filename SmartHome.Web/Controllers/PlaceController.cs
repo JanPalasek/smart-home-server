@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
@@ -6,6 +7,7 @@ using SmartHome.Web.Models.Place;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize]
     public class PlaceController : Controller
     {
         private readonly IPlaceRepository repository;

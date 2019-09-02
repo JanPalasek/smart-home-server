@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.ServiceLoaders;
@@ -10,6 +11,7 @@ using SmartHome.Web.Utils;
 namespace SmartHome.Web.Controllers
 {
     [ServiceFilter(typeof(TransactionFilter))]
+    [Authorize]
     public class BatteryPowerSourceTypeController : Controller
     {
         private readonly IBatteryPowerSourceTypeRepository repository;

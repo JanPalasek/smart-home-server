@@ -12,7 +12,7 @@ using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories
 {
-    public class TemperatureMeasurementRepository : GenericRepository<TemperatureMeasurement>, ITemperatureMeasurementRepository
+    public class TemperatureMeasurementRepository : StandardRepository<TemperatureMeasurement, TemperatureMeasurementModel>, ITemperatureMeasurementRepository
     {
         public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {

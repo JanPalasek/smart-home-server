@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
@@ -8,6 +9,7 @@ using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize]
     public class SensorTypeController : Controller
     {
         private readonly ISensorTypeRepository repository;
