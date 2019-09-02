@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.ServiceLoaders;
@@ -72,6 +73,8 @@ namespace SmartHome.Web
                     (x) => localizer["Null value is invalid.", x]);
             })
                 .AddViewLocalization();
+            
+            new DatabaseSeeder(services.BuildServiceProvider(), configuration).SeedInitialUserAsync().Wait();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,7 +86,7 @@ namespace SmartHome.Web
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
-            
+
             app.UseStaticFiles();
             app.UseAuthentication();
             

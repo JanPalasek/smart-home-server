@@ -26,9 +26,15 @@ namespace SmartHome.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await repository.SignInAsync(model);
+                if (result?.Succeeded == true && returnUrl != null)
+                {
+                    return Redirect(returnUrl);
+                }
+
                 if (result?.Succeeded == true)
                 {
-                    return RedirectToAction(returnUrl);
+                    // redirect to base page
+                    return Redirect("/");
                 }
                 
                 ModelState.AddModelError(nameof(model.Login), "Invalid credentials.");

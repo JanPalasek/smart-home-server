@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
@@ -8,6 +9,7 @@ using SmartHome.Web.Models.Admin;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly IUserRepository userRepository;
