@@ -8,42 +8,32 @@
     <h3>Inside</h3>
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-4">
-                Temperature 1
-                Unit 1
-                Place 1
-            </div>
-            <div class="col-lg-4">
-                Temperature 2
-                Unit 2
-                Place 2
-            </div>
-            <div class="col-lg-4">
-                Temperature 3
-                Unit 3
-                Place 3
+            @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => x.IsInside))
+            {
+                <div class="col-lg-4">
+                    @measurement.Temperature
+                    @measurement.SensorTypeName
+                    @measurement.PlaceName
+                </div>
+            }
+        </div>
+    </div>
+
+    <h3>Outside</h3>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="row align-items-center">
+                @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => !x.IsInside))
+                {
+                    <div class="col-lg-4">
+                        @measurement.Temperature
+                        @measurement.SensorTypeName
+                        @measurement.PlaceName
+                    </div>
+                }
             </div>
         </div>
     </div>
     
-    <h3>Outside</h3>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4">
-                    Temperature 1
-                    Unit 1
-                    Place 1
-                </div>
-                <div class="col-lg-4">
-                    Temperature 2
-                    Unit 2
-                    Place 2
-                </div>
-                <div class="col-lg-4">
-                    Temperature 3
-                    Unit 3
-                    Place 3
-                </div>
-            </div>
-        </div>
+    @* TODO: graph showing how the temperature evolved in last n days (e.g. 7 days) with possibility to zoom in *@
 </section>

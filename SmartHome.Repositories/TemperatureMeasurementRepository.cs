@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -12,7 +13,7 @@ using SmartHome.Shared.Models;
 
 namespace SmartHome.Repositories
 {
-    public class TemperatureMeasurementRepository : StandardRepository<TemperatureMeasurement, TemperatureMeasurementModel>, ITemperatureMeasurementRepository
+    public class TemperatureMeasurementRepository : GenericRepository<TemperatureMeasurement>, ITemperatureMeasurementRepository
     {
         public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {
@@ -42,10 +43,26 @@ namespace SmartHome.Repositories
             var temperatureMeasurement = await query.FirstOrDefaultAsync(x => x.MeasurementDateTime == lastDateTime);
             return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
         }
-        
-        public Task<IList<TemperatureMeasurement>> GetLastTemperatureMeasurementAsync()
+
+        public async Task<IList<OverviewTemperatureMeasurementModel>> GetAllSensorsLastTemperatureMeasurementAsync()
         {
-            throw new NotImplementedException();
+            var orderedMeasurements = from item in SmartHomeAppDbContext.Query<TemperatureMeasurement>()
+                orderby item.MeasurementDateTime descending
+                select item;
+
+            // TODO: ToListAsync() because EF Core 2.2 cannot translate GroupBy
+            var query = await orderedMeasurements
+                .Include(x => x.Place)
+                .Include(x => x.Sensor)
+                .ThenInclude(x => x.SensorType)
+                .ToListAsync();
+
+            var groupedMeasurements = query.GroupBy(x => x.SensorId);
+            
+            // last temperature measurements for each sensor
+            var lastTemperatureMeasurements = groupedMeasurements.Select(x => x.First());
+
+            return lastTemperatureMeasurements.Select(x => Mapper.Map<OverviewTemperatureMeasurementModel>(x)).ToList();
         }
 
         public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)

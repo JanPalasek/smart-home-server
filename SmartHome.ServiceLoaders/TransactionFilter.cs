@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using SmartHome.Database;
 
-namespace SmartHome.Web.Utils
+namespace SmartHome.ServiceLoaders
 {
     /// <summary>
     /// Handles beginning and ending of transaction for selected method.

@@ -17,5 +17,11 @@ namespace SmartHome.Repositories.Interfaces
         /// <param name="sensorId"></param>
         /// <returns></returns>
         Task<TemperatureMeasurementModel> GetSensorLastTemperatureMeasurementAsync(long sensorId);
+
+        /// <summary>
+        /// Obtains last temperature measurement of all sensors.
+        /// </summary>
+        /// <returns></returns>
+        Task<IList<OverviewTemperatureMeasurementModel>> GetAllSensorsLastTemperatureMeasurementAsync();
     }
 }

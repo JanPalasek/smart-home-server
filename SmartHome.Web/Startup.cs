@@ -43,8 +43,6 @@ namespace SmartHome.Web
         {
             new WebLoader(hostingEnvironment, configuration).Load(services);
             
-            services.AddScoped<TransactionFilter>();
-
             services.AddMvc(options =>
             {
                 var stringLocalizerFactory = services
@@ -73,13 +71,12 @@ namespace SmartHome.Web
                     (x) => localizer["Null value is invalid.", x]);
             })
                 .AddViewLocalization();
-            
-            new DatabaseSeeder(services.BuildServiceProvider(), configuration).SeedInitialUserAsync().Wait();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
-            IHostingEnvironment env)
+            IHostingEnvironment env,
+            IServiceProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -94,8 +91,11 @@ namespace SmartHome.Web
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default",
-                    "{controller=Place}/{action=Detail}/{id:int?}");
+                    "{controller=Home}/{action=Overview}/{id:int?}");
             });
+            
+            // seed data
+            new DatabaseSeeder(provider, configuration).SeedInitialUserAsync().Wait();
         }
     }
 }
