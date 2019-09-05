@@ -14,13 +14,11 @@ namespace SmartHome.ServiceLoaders
     {
         private readonly IConfiguration configuration;
         private readonly UserManager<User> userManager;
-        private readonly SmartHomeAppDbContext context;
 
-        public DatabaseSeeder(IConfiguration configuration, UserManager<User> userManager, SmartHomeAppDbContext context)
+        public DatabaseSeeder(IConfiguration configuration, UserManager<User> userManager)
         {
             this.configuration = configuration;
             this.userManager = userManager;
-            this.context = context;
         }
 
         /// <summary>
