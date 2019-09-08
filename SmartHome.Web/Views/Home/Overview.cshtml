@@ -6,11 +6,11 @@
     <h2>Temperature</h2>
     
     <h3>Inside</h3>
-    <div class="container">
-        <div class="row align-items-center">
+    <div>
+        <div>
             @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => x.IsInside))
             {
-                <div class="col-lg-4">
+                <div>
                     @measurement.Temperature
                     @measurement.SensorTypeName
                     @measurement.PlaceName
@@ -20,12 +20,12 @@
     </div>
 
     <h3>Outside</h3>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="row align-items-center">
+    <div>
+        <div>
+            <div>
                 @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => !x.IsInside))
                 {
-                    <div class="col-lg-4">
+                    <div>
                         @measurement.Temperature
                         @measurement.SensorTypeName
                         @measurement.PlaceName

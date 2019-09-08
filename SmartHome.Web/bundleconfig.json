@@ -1,19 +1,32 @@
 ﻿[
   {
+    "outputFileName": "wwwroot/css/styles.min.css",
+    "inputFiles": [
+      "wwwroot/css/global.css"
+    ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/js/code.min.js",
+    "inputFiles": [
+      "wwwroot/js/global.js"
+    ],
+    "minify": { "enabled": true }
+  },
+  {
     "outputFileName": "wwwroot/lib/css/vendor.min.css",
     "inputFiles": [
     ],
-    "minify": { "enabled": false }
+    "minify": { "enabled": true }
   },
   {
     "outputFileName": "wwwroot/lib/js/vendor.min.js",
     "inputFiles": [
-      "node_modules/jquery/dist/jquery.min.js"
+      "node_modules/jquery/dist/jquery.js"
     ],
-    "minify": { "enabled": false }
+    "minify": { "enabled": true }
   },
 
-  
   {
     "outputFileName": "wwwroot/lib/css/vendor.css",
     "inputFiles": [

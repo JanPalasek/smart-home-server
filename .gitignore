@@ -267,3 +267,5 @@ FakesAssemblies/
 
 # compiled libraries by package manager
 SmartHome.Web/wwwroot/lib/
+SmartHome.Web/wwwroot/**/*.min.css
+SmartHome.Web/wwwroot/**/*.min.js
