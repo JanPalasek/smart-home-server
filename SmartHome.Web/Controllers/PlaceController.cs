@@ -18,23 +18,21 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int id)
         {
-            PlaceModel placeModel;
-            if (id == null)
-            {
-                placeModel = new PlaceModel();
-            }
-            else
-            {
-                placeModel = await repository.SingleAsync(id.Value);
-            }
-
+            PlaceModel placeModel = await repository.SingleAsync(id);
+            
             return View("Detail", new PlaceViewModel {Model = placeModel});
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            return View("Detail", new PlaceViewModel() {Model = new PlaceModel()});
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Detail(PlaceModel model)
+        public async Task<IActionResult> Create(PlaceModel model)
         {
             if (!ModelState.IsValid)
             {

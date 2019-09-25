@@ -30,26 +30,27 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int id)
         {
-            SensorModel sensorModel;
-            if (id != null)
-            {
-                sensorModel = await repository.SingleAsync(id.Value);
-            }
-            else
-            {
-                sensorModel = new SensorModel();
-            }
+            SensorModel sensorModel = await repository.SingleAsync(id);
 
             var vm = await FillViewModelAsync();
             vm.Model = sensorModel;
             
             return View("Detail", vm);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var vm = await FillViewModelAsync();
+            vm.Model = new SensorModel();
+
+            return View("Detail", vm);
+        }
         
         [HttpPost]
-        public async Task<IActionResult> Detail(SensorModel model)
+        public async Task<IActionResult> Create(SensorModel model)
         {
             if (!ModelState.IsValid)
             {

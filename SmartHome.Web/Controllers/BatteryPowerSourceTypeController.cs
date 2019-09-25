@@ -22,26 +22,26 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int id)
         {
-            BatteryPowerSourceTypeModel powerSourceType;
-            if (id != null)
-            {
-                powerSourceType = await repository.SingleAsync(id.Value);
-            }
-            else
-            {
-                powerSourceType = new BatteryPowerSourceTypeModel();
-            }
+            BatteryPowerSourceTypeModel powerSourceType = await repository.SingleAsync(id);
             
             return View("Detail", new BatteryPowerSourceTypeViewModel()
             {
                 Model = powerSourceType
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var vm = new BatteryPowerSourceTypeViewModel() {Model = new BatteryPowerSourceTypeModel()};
+
+            return View("Detail", vm);
+        }
         
         [HttpPost]
-        public async Task<IActionResult> Detail(BatteryPowerSourceTypeModel model)
+        public async Task<IActionResult> Create(BatteryPowerSourceTypeModel model)
         {
             if (!ModelState.IsValid)
             {
