@@ -32,7 +32,7 @@ namespace SmartHome.ServiceLoaders
                     options => options
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
                         // log data to know where is the mistake
-                        .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
+                        .EnableSensitiveDataLogging());
             }
             else
             {
