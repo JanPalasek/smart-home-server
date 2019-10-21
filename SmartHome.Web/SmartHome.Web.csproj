@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <DebugType>full</DebugType>
         <LangVersion>8</LangVersion>
+        <Nullable>warnings</Nullable>
     </PropertyGroup>
 
 

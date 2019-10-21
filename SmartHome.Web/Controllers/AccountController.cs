@@ -21,7 +21,7 @@ namespace SmartHome.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginModel model, string? returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace SmartHome.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl)
+        public async Task<IActionResult> Login(string? returnUrl)
         {
             return View("Login", new LoginViewModel() { ReturnUrl = returnUrl });
         }

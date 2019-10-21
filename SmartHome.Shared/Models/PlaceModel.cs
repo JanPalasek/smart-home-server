@@ -19,6 +19,6 @@ namespace SmartHome.Shared.Models
         /// <summary>
         /// Note about the place.
         /// </summary>
-        public string Note { get; set; }
+        public string? Note { get; set; }
     }
 }

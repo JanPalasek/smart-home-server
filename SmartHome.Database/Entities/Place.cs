@@ -18,6 +18,6 @@ namespace SmartHome.Database.Entities
         /// <summary>
         /// Note about the place.
         /// </summary>
-        public string Note { get; set; }
+        public string? Note { get; set; }
     }
 }

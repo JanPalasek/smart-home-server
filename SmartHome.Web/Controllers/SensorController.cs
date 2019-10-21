@@ -69,13 +69,9 @@ namespace SmartHome.Web.Controllers
                 viewModel = new SensorViewModel();
             }
 
-            var batteryPowerSourceTypesTask = batteryPowerSourceTypeRepository.GetAllAsync();
-            var sensorTypesTask = sensorTypeRepository.GetAllAsync();
-            var placesTask = placeRepository.GetAllAsync();
-
-            viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypesTask).ToSelectListItems(x => x.Id, x => $"{x.BatteryType}, {x.MaximumVoltage}V");
-            viewModel.SensorTypes = (await sensorTypesTask).ToSelectListItems(x => x.Id, x => x.Name);
-            viewModel.Places = (await placesTask).ToSelectListItems(x => x.Id, x => $"{x.Name}, in: {x.IsInside}");
+            viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => $"{x.BatteryType}, {x.MaximumVoltage}V");
+            viewModel.SensorTypes = (await sensorTypeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => x.Name);
+            viewModel.Places = (await placeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => $"{x.Name}, in: {x.IsInside}");
 
             return viewModel;
         }

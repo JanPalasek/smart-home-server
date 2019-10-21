@@ -17,13 +17,13 @@ namespace SmartHome.Database.Entities
         /// Represents current power source type of the sensor. If null, the power source is not from a battery.
         /// </summary>
         public long? BatteryPowerSourceTypeId { get; set; }
-        public virtual BatteryPowerSourceType BatteryPowerSourceType { get; set; }
+        public virtual BatteryPowerSourceType? BatteryPowerSourceType { get; set; }
         
         /// <summary>
         /// Describes place where this sensor is located.
         /// </summary>
         public long? PlaceId { get; set; }
-        public virtual Place Place { get; set; }
+        public virtual Place? Place { get; set; }
         
         /// <summary>
         /// Specifies minimum required voltage this particular sensor needs.

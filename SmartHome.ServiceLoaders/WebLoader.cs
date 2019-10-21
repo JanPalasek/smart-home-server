@@ -31,9 +31,8 @@ namespace SmartHome.ServiceLoaders
                 services.AddDbContext<SmartHomeDbContext>(
                     options => options
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"))
-                        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
                         // log data to know where is the mistake
-                        .EnableSensitiveDataLogging());
+                        .EnableSensitiveDataLogging(), ServiceLifetime.Transient);
             }
             else
             {
