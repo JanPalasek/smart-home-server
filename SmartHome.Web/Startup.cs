@@ -70,6 +70,8 @@ namespace SmartHome.Web
                     (x) => localizer["The supplied value is invalid for {0}.", x]);
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
                     (x) => localizer["Null value is invalid.", x]);
+
+                options.EnableEndpointRouting = false;
             })
                 .AddViewLocalization();
         }
