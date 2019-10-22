@@ -8,7 +8,7 @@ namespace SmartHome.Shared.Models
         /// Name of the place, e.g. bathroom.
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         
         /// <summary>
         /// True, if the place is inside (a building).

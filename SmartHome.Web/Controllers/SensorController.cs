@@ -62,7 +62,7 @@ namespace SmartHome.Web.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
-        private async Task<SensorViewModel> FillViewModelAsync(SensorViewModel viewModel = null)
+        private async Task<SensorViewModel> FillViewModelAsync(SensorViewModel? viewModel = null)
         {
             if (viewModel == null)
             {

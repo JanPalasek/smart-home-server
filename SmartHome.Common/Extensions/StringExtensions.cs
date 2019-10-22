@@ -12,7 +12,7 @@ namespace SmartHome.Common.Extensions
         /// <remarks>
         /// https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
         /// </remarks>
-        public static bool IsEmail(this string address)
+        public static bool IsEmail(this string? address)
         {
             return address != null && new EmailAddressAttribute().IsValid(address);
         }

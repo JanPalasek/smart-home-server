@@ -34,7 +34,7 @@ namespace SmartHome.Repositories
 
         }
 
-        public async Task<SignInResult> SignInAsync(LoginModel model)
+        public async Task<SignInResult?> SignInAsync(LoginModel model)
         {
             // TODO: this is
             var user = await userManager.FindByNameAsync(model.Login);

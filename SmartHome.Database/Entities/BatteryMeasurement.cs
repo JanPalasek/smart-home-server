@@ -6,7 +6,7 @@ namespace SmartHome.Database.Entities
     public class BatteryMeasurement : Measurement
     {
         public double Voltage { get; set; }
-        
+
         public virtual BatteryPowerSourceType BatteryPowerSourceType { get; set; }
         /// <summary>
         /// Represents battery power source given <see cref="Measurement.Sensor"/> has at the moment

@@ -51,7 +51,7 @@ namespace SmartHome.Web.Controllers
                 var result = await userRepository.AddUser(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UserDetail", new { id = (await userRepository.GetUserAsync(model.Email)).Id });
+                    return RedirectToAction("UserDetail", new { id = (await userRepository.GetUserAsync(model.Email!)).Id });
                 }
                 
                 // print errors

@@ -75,7 +75,7 @@ namespace SmartHome.Web.Utils
             {
                 yield return new SelectListItem()
                 {
-                    Value = valueSelector(item).ToString(),
+                    Value = valueSelector(item)!.ToString(),
                     Text = textSelector(item)
                 };
             }

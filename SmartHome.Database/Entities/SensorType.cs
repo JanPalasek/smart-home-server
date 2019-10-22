@@ -20,6 +20,6 @@ namespace SmartHome.Database.Entities
         /// <summary>
         /// Text describing what this sensor is supposed to do in detail.
         /// </summary>
-        public virtual string Description { get; set; }
+        public virtual string? Description { get; set; }
     }
 }

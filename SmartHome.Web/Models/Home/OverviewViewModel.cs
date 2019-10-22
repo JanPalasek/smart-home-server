@@ -9,6 +9,6 @@ namespace SmartHome.Web.Models.Home
         /// <summary>
         /// Last temperature measurements for each sensor.
         /// </summary>
-        public IList<OverviewTemperatureMeasurementModel> LastSensorTemperatureMeasurements { get; set; }
+        public IList<OverviewTemperatureMeasurementModel>? LastSensorTemperatureMeasurements { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace SmartHome.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string? returnUrl)
         {
-            return View("Login", new LoginViewModel() { ReturnUrl = returnUrl });
+            return View("Login", new LoginViewModel() { Model = new LoginModel(), ReturnUrl = returnUrl });
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SmartHome.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<IdentityResult> AddUser(CreateUserModel model);
-        Task<SignInResult> SignInAsync(LoginModel model);
+        Task<SignInResult?> SignInAsync(LoginModel model);
 
         Task<UserModel> GetUserAsync(string email);
 

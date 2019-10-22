@@ -22,7 +22,7 @@ namespace SmartHome.ServiceLoaders
                 {
                     // get all non-tests assemblies
                     var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                        .Where(a => a.FullName.StartsWith("SmartHome"));
+                        .Where(a => a.FullName!.StartsWith("SmartHome"));
                 
                     cfg.AddMaps(assemblies);
                 });

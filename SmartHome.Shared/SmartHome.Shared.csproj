@@ -3,7 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <LangVersion>8</LangVersion>
-        <Nullable>warnings</Nullable>
+        <Nullable>enable</Nullable>
+        <CodeAnalysisRuleSet>..\Rules\SmartHome.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
