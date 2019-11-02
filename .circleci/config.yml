@@ -1,0 +1,39 @@
+version: 2.0
+jobs:
+ build:
+   docker:
+     - image: mcr.microsoft.com/dotnet/core/sdk:3.0
+     - image: circleci/mysql:5.7.27
+       environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: SmartHome
+        MYSQL_USER: HomeUser
+        MYSQL_PASSWORD: noPass1234
+   steps:
+     - checkout
+     - run:
+         name: Restore packages
+         command:
+           dotnet restore
+     - run:
+         name: Build App
+         command:
+           dotnet build
+     - run:
+          name: Install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+     - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+     - run:
+          name: Install MySQL CLI
+          command: apt-get update && apt-get install -y default-mysql-client
+     - run:
+         name: Update database to current migration
+         command: mysql -h "127.0.0.1" -u "HomeUser" -p"noPass1234" -D "SmartHome" < Scripts/CreateDatabase.sql # dotnet-ef command cannot be found
+     - run:
+         name: Run tests
+         command:
+           dotnet test --no-build

@@ -1,12 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using SmartHome.Database;
 using SmartHome.Database.Entities;
-using SmartHome.Repositories;
-using SmartHome.Shared;
 
 namespace SmartHome.ServiceLoaders
 {

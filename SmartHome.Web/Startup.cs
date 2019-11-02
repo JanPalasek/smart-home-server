@@ -24,14 +24,13 @@ namespace SmartHome.Web
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
     public class Startup
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
         private readonly IConfiguration configuration;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration)
         {
             this.hostingEnvironment = hostingEnvironment;
             this.configuration = configuration;
@@ -41,7 +40,7 @@ namespace SmartHome.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            new WebLoader(hostingEnvironment, configuration).Load(services);
+            new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
             services.AddTransient<DatabaseSeeder>();
             
             services.AddMvc(options =>
@@ -78,7 +77,7 @@ namespace SmartHome.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             DatabaseSeeder seeder)
         {
             if (env.IsDevelopment())
