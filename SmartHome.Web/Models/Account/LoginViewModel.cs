@@ -6,7 +6,12 @@ namespace SmartHome.Web.Models.Account
 {
     public class LoginViewModel
     {
-        public LoginModel Model { get; set; } = null!;
+        public LoginViewModel(LoginModel model)
+        {
+            Model = model;
+        }
+
+        public LoginModel Model { get; set; }
         
         public string? ReturnUrl { get; set; }
     }

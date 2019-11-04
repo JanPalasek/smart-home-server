@@ -9,13 +9,12 @@ namespace SmartHome.Database.Tests
     [TestFixture]
     public class DatabaseSmokeTests : DatabaseTests
     {
-        [Test]
+        [Test(Description = "Tests that it is possible to connect to database by obtaining a simple entry that has to be there.")]
         public void TestConnection()
         {
-//            TODO:
-//            var user = GetAny<User>();
-//            
-//            Assert.That(user, Is.Not.Null);
+            var user = GetAny<User>();
+            
+            Assert.That(user, Is.Not.Null);
         }
     }
 }

@@ -31,9 +31,9 @@ namespace SmartHome.Shared.Tests
             DbContext = new SmartHomeDbContext(builder.Options);
         }
         
-        public Task<TType> GetAnyAsync<TType>() where TType : class, IId<long>
+        protected TType GetAny<TType>() where TType : class, IId<long>
         {
-            return DbContext.Set<TType>().AsQueryable().FirstAsync();
+            return DbContext.Set<TType>().First();
         }
     }
 }

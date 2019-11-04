@@ -26,16 +26,13 @@ namespace SmartHome.Web.Controllers
         {
             BatteryPowerSourceTypeModel powerSourceType = await repository.SingleAsync(id);
             
-            return View("Detail", new BatteryPowerSourceTypeViewModel()
-            {
-                Model = powerSourceType
-            });
+            return View("Detail", new BatteryPowerSourceTypeViewModel(powerSourceType));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var vm = new BatteryPowerSourceTypeViewModel() {Model = new BatteryPowerSourceTypeModel()};
+            var vm = new BatteryPowerSourceTypeViewModel(new BatteryPowerSourceTypeModel());
 
             return View("Detail", vm);
         }
@@ -45,10 +42,7 @@ namespace SmartHome.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new BatteryPowerSourceTypeViewModel()
-                {
-                    Model = model
-                });
+                return View("Detail", new BatteryPowerSourceTypeViewModel(model));
             }
 
             long id = await repository.AddOrUpdateAsync(model);

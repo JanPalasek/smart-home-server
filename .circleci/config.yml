@@ -31,8 +31,8 @@ jobs:
           name: Install MySQL CLI
           command: apt-get update && apt-get install -y default-mysql-client
      - run:
-         name: Update database to current migration
-         command: mysql -h "127.0.0.1" -u "HomeUser" -p"noPass1234" -D "SmartHome" < Scripts/CreateDatabase.sql # dotnet-ef command cannot be found
+         name: Create test database
+         command: mysql -h "127.0.0.1" -u "HomeUser" -p"noPass1234" -D "SmartHome" < Scripts/RenewDb.sql # Create test database and initialize it with test data
      - run:
          name: Run tests
          command:

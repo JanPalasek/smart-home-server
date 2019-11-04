@@ -22,13 +22,13 @@ namespace SmartHome.Web.Controllers
         {
             PlaceModel placeModel = await repository.SingleAsync(id);
             
-            return View("Detail", new PlaceViewModel {Model = placeModel});
+            return View("Detail", new PlaceViewModel(placeModel));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            return View("Detail", new PlaceViewModel() {Model = new PlaceModel()});
+            return View("Detail", new PlaceViewModel(new PlaceModel()));
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace SmartHome.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new PlaceViewModel() {Model = model});
+                return View("Detail", new PlaceViewModel(model));
             }
 
             long id = await repository.AddOrUpdateAsync(model);

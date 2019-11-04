@@ -21,7 +21,7 @@ namespace SmartHome.Shared.Tests
             }
 
             [TearDown]
-            public void TearDown()
+            public new void TearDown()
             {
                 DbContext.Database.CurrentTransaction.Rollback();
             }

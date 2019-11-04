@@ -41,7 +41,6 @@ namespace SmartHome.Web
         public void ConfigureServices(IServiceCollection services)
         {
             new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
-            services.AddTransient<DatabaseSeeder>();
             
             services.AddMvc(options =>
             {
@@ -77,8 +76,7 @@ namespace SmartHome.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
-            IWebHostEnvironment env,
-            DatabaseSeeder seeder)
+            IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -95,9 +93,6 @@ namespace SmartHome.Web
                 routes.MapRoute("default",
                     "{controller=Home}/{action=Overview}/{id:int?}");
             });
-            
-            // seed data
-            seeder.SeedAllAsync().Wait();
         }
     }
 }
