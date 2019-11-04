@@ -24,21 +24,15 @@ namespace SmartHome.Web.Controllers
         {
             var model = await userRepository.GetUserAsync(id);
             
-            var viewModel = new DetailUserViewModel()
-            {
-                Model = model
-            };
+            var viewModel = new DetailUserViewModel(model);
 
             return View("UserDetail", viewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserCreate()
+        public IActionResult UserCreate()
         {
-            var viewModel = new CreateUserViewModel()
-            {
-                Model = new CreateUserModel()
-            };
+            var viewModel = new CreateUserViewModel(new CreateUserModel());
 
             return View("UserCreate", viewModel);
         }
@@ -61,7 +55,7 @@ namespace SmartHome.Web.Controllers
                 }
             }
 
-            return View("UserCreate", new CreateUserViewModel {Model = model});
+            return View("UserCreate", new CreateUserViewModel(model));
         }
 
         [HttpGet]
@@ -69,7 +63,7 @@ namespace SmartHome.Web.Controllers
         {
             var model = await userRepository.GetUserAsync(id);
             
-            var vm = new ChangePasswordViewModel() { Model = new ChangePasswordModel() { Id = model.Id }};
+            var vm = new ChangePasswordViewModel(new ChangePasswordModel() { Id = model.Id });
             return View("ChangePassword", vm);
         }
         
@@ -88,7 +82,7 @@ namespace SmartHome.Web.Controllers
                 ModelState.AddModelError("Error", "An error has occured.");
             }
 
-            return View("ChangePassword", new ChangePasswordViewModel() {Model = model});
+            return View("ChangePassword", new ChangePasswordViewModel(model));
         }
     }
 }

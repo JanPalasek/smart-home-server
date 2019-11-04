@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SmartHome.Repositories.Interfaces;
 using SmartHome.Shared.Models;
 using SmartHome.Web.Models.Sensor;
@@ -34,8 +36,7 @@ namespace SmartHome.Web.Controllers
         {
             SensorModel sensorModel = await repository.SingleAsync(id);
 
-            var vm = await FillViewModelAsync();
-            vm.Model = sensorModel;
+            var vm = await CreateAndFillViewModelAsync(sensorModel);
             
             return View("Detail", vm);
         }
@@ -43,8 +44,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var vm = await FillViewModelAsync();
-            vm.Model = new SensorModel();
+            var vm = await CreateAndFillViewModelAsync(new SensorModel());
 
             return View("Detail", vm);
         }
@@ -54,7 +54,7 @@ namespace SmartHome.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new SensorViewModel {Model = model});
+                return View("Detail", new SensorViewModel(model));
             }
 
             long id = await repository.AddOrUpdateAsync(model);
@@ -62,16 +62,16 @@ namespace SmartHome.Web.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
-        private async Task<SensorViewModel> FillViewModelAsync(SensorViewModel? viewModel = null)
+        private async Task<SensorViewModel> CreateAndFillViewModelAsync(SensorModel model)
         {
-            if (viewModel == null)
-            {
-                viewModel = new SensorViewModel();
-            }
+            var viewModel = new SensorViewModel(model);
 
-            viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => $"{x.BatteryType}, {x.MaximumVoltage}V");
-            viewModel.SensorTypes = (await sensorTypeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => x.Name);
-            viewModel.Places = (await placeRepository.GetAllAsync()).ToSelectListItems(x => x.Id, x => $"{x.Name}, in: {x.IsInside}");
+            viewModel.BatteryPowerSourceTypes = (await batteryPowerSourceTypeRepository.GetAllAsync())
+                .ToSelectListItems(x => x.Id.ToString(), x => $"{x.BatteryType}, {x.MaximumVoltage}V");
+            viewModel.SensorTypes = (await sensorTypeRepository.GetAllAsync())
+                .ToSelectListItems(x => x.Id.ToString(), x => $"{x.Name}");
+            viewModel.Places = (await placeRepository.GetAllAsync())
+                .ToSelectListItems(x => x.Id.ToString(), x => $"{x.Name}, in: {x.IsInside}");
 
             return viewModel;
         }

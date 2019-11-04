@@ -25,15 +25,15 @@ namespace SmartHome.Web.Controllers
         {
             SensorTypeModel sensorModel = await repository.SingleAsync(id);
 
-            var vm = new SensorTypeViewModel {Model = sensorModel};
+            var vm = new SensorTypeViewModel(sensorModel);
 
             return View("Detail", vm);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var vm = new SensorTypeViewModel() {Model = new SensorTypeModel()};
+            var vm = new SensorTypeViewModel(new SensorTypeModel());
 
             return View("Detail", vm);
         }
@@ -43,7 +43,7 @@ namespace SmartHome.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new SensorTypeViewModel {Model = model});
+                return View("Detail", new SensorTypeViewModel(model));
             }
 
             long id = await repository.AddOrUpdateAsync(model);

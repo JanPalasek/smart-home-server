@@ -6,6 +6,8 @@ namespace SmartHome.Web.Models.SensorType
 {
     public class SensorTypeViewModel : SmartHomeViewModel<SensorTypeModel>
     {
-//        public IEnumerable<SelectListItem> MeasurementTypes { get; set; }
+        public SensorTypeViewModel(SensorTypeModel model) : base(model)
+        {
+        }
     }
 }
