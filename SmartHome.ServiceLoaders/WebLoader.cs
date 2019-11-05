@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SmartHome.Database;
 using SmartHome.Shared.Configurations;
+using Syncfusion.EJ2.FileManager.PhysicalFileProvider;
 
 namespace SmartHome.ServiceLoaders
 {
@@ -41,6 +42,16 @@ namespace SmartHome.ServiceLoaders
                 .LoadRepositories(services).LoadAutoMapper(services);
             
             services.AddScoped<TransactionFilter>();
+
+            services.AddScoped(serviceProvider =>
+            {
+                var fileManagerConfiguration = serviceProvider.GetRequiredService<FileManagerConfiguration>();
+                
+                var provider = new PhysicalFileProvider();
+                provider.RootFolder(fileManagerConfiguration.StoragePath);
+                
+                return provider;
+            });
             
             return services;
         }
