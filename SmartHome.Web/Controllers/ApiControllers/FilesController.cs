@@ -17,17 +17,19 @@ namespace SmartHome.Web.Controllers.ApiControllers
     /// <summary>
     /// Controller that handles accessing the disk files.
     /// </summary>
+    [Authorize]
     public class FilesController : Controller
     {
         private readonly FileManagerConfiguration fileManagerConfiguration;
         private readonly PhysicalFileProvider operation;
         
-        public FilesController(IWebHostEnvironment hostingEnvironment, FileManagerConfiguration fileManagerConfiguration)
+        public FilesController(FileManagerConfiguration fileManagerConfiguration)
         {
             this.fileManagerConfiguration = fileManagerConfiguration;
+            
             operation = new PhysicalFileProvider();
             // Assign the mapped path as root folder
-            operation.RootFolder($"{hostingEnvironment.ContentRootPath}/wwwroot/files");
+            operation.RootFolder(fileManagerConfiguration.StoragePath);
         }
 
         [Route("api/files/operations")]

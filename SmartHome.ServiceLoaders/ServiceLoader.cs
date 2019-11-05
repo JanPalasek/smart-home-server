@@ -79,7 +79,7 @@ namespace SmartHome.ServiceLoaders
             {
                 var configurationProvider = provider.GetRequiredService<IConfiguration>();
                 var parsedConfiguration = configurationProvider.GetSection("FileManager").Get<FileManagerConfiguration>();
-                    
+                  
                 return parsedConfiguration;
             });
 
