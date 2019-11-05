@@ -25,11 +25,6 @@ namespace SmartHome.Shared.Tests
             {
                 DbContext.Database.CurrentTransaction.Rollback();
             }
-
-            public TType GetAny<TType>() where TType : Entity
-            {
-                return DbContext.Set<TType>().AsQueryable().First();
-            }
         }
     }
 }

@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using SmartHome.Database;
+using SmartHome.Shared.Configurations;
 
 namespace SmartHome.ServiceLoaders
 {
@@ -34,7 +37,7 @@ namespace SmartHome.ServiceLoaders
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
 
-            LoadAuthentication(services)
+            LoadConfiguration(services).LoadAuthentication(services)
                 .LoadRepositories(services).LoadAutoMapper(services);
             
             services.AddScoped<TransactionFilter>();

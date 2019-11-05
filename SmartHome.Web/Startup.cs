@@ -78,6 +78,7 @@ namespace SmartHome.Web
         public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -90,8 +91,7 @@ namespace SmartHome.Web
             // set up route mapping
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default",
-                    "{controller=Home}/{action=Overview}/{id:int?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Overview}/{id:int?}");
             });
         }
     }

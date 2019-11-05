@@ -1,0 +1,14 @@
+@model SmartHome.Shared.Configurations.FileManagerConfiguration
+
+<div class=" control-section">
+    <div class="sample-container">
+        <ejs-filemanager id="filemanager">
+            <e-filemanager-ajaxsettings url="/api/files/operations"
+                                        downloadUrl="/api/files/download"
+                                        uploadUrl="/api/files/upload"
+                                        getImageUrl="/api/files/getImage">
+            </e-filemanager-ajaxsettings>
+            <e-filemanager-uploadsettings maxFileSize="@Model.MaximumUploadSize"></e-filemanager-uploadsettings>
+        </ejs-filemanager>
+    </div>
+</div>

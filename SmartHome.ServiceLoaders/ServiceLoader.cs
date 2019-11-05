@@ -2,11 +2,13 @@ using System;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
 using SmartHome.Repositories;
 using SmartHome.Repositories.Interfaces;
+using SmartHome.Shared.Configurations;
 
 namespace SmartHome.ServiceLoaders
 {
@@ -68,6 +70,19 @@ namespace SmartHome.ServiceLoaders
                 options.Lockout.AllowedForNewUsers = true;
             });
             
+            return this;
+        }
+
+        protected internal virtual ServiceLoader LoadConfiguration(IServiceCollection services)
+        {
+            services.AddScoped(provider =>
+            {
+                var configurationProvider = provider.GetRequiredService<IConfiguration>();
+                var parsedConfiguration = configurationProvider.GetSection("FileManager").Get<FileManagerConfiguration>();
+                    
+                return parsedConfiguration;
+            });
+
             return this;
         }
     }
