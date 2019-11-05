@@ -25,10 +25,10 @@ namespace SmartHome.Web
                     var hostingEnvironment =
                         builderContext.HostingEnvironment;
                     configurationBuilder
-                        .AddJsonFile($"appsettings.json")
+                        .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile(
                         $"appsettings.{hostingEnvironment.EnvironmentName.ToLower()}.json",
-                        optional: true);
+                        optional: true, reloadOnChange: true);
                 })
                 .UseStartup<Startup>()
                 .Build();

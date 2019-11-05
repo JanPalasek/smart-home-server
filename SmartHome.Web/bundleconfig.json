@@ -1,42 +1,43 @@
 ﻿[
   {
-    "outputFileName": "wwwroot/css/styles.min.css",
-    "inputFiles": [
-      "wwwroot/css/global.css"
-    ],
-    "minify": { "enabled": true }
-  },
-  {
-    "outputFileName": "wwwroot/js/code.min.js",
-    "inputFiles": [
-      "wwwroot/js/global.js"
-    ],
-    "minify": { "enabled": true }
-  },
-  {
-    "outputFileName": "wwwroot/lib/css/vendor.min.css",
-    "inputFiles": [
-    ],
-    "minify": { "enabled": true }
-  },
-  {
-    "outputFileName": "wwwroot/lib/js/vendor.min.js",
+    "outputFileName": "wwwroot/lib/js/jquery.js",
     "inputFiles": [
       "node_modules/jquery/dist/jquery.js"
-    ],
-    "minify": { "enabled": true }
-  },
-
-  {
-    "outputFileName": "wwwroot/lib/css/vendor.css",
-    "inputFiles": [
     ],
     "minify": { "enabled": false }
   },
   {
-    "outputFileName": "wwwroot/lib/js/vendor.js",
+    "outputFileName": "wwwroot/lib/js/jquery.min.js",
     "inputFiles": [
-      "node_modules/jquery/dist/jquery.js"
+      "node_modules/jquery/dist/jquery.min.js"
+    ]
+  },
+  
+  {
+    "outputFileName": "wwwroot/lib/css/ej2.css",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/lib/css/ej2.min.css",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+    ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/lib/js/ej2.js",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/lib/js/ej2.min.js",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
     ],
     "minify": { "enabled": false }
   }

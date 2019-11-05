@@ -78,6 +78,8 @@ namespace SmartHome.Web
         public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTY2Njc0QDMxMzcyZTMzMmUzMGRLOU5PL0Q4MXBGSUVOdDkxVmFWL0RYbkRwU3gzT0pLZVNxNTFsQ0x1cUE9");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -90,8 +92,7 @@ namespace SmartHome.Web
             // set up route mapping
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default",
-                    "{controller=Home}/{action=Overview}/{id:int?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Overview}/{id:int?}");
             });
         }
     }

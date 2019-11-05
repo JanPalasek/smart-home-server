@@ -2,7 +2,8 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
-  "devDependencies": {
+  "dependencies": {
+    "@syncfusion/ej2": "^17.3.19",
     "jquery": "^3.4.1"
   }
 }
