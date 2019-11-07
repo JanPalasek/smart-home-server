@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SmartHome.Database;
-using SmartHome.Shared.Configurations;
 using Syncfusion.EJ2.FileManager.PhysicalFileProvider;
 
 namespace SmartHome.ServiceLoaders
@@ -40,8 +39,6 @@ namespace SmartHome.ServiceLoaders
 
             LoadConfiguration(services).LoadAuthentication(services)
                 .LoadRepositories(services).LoadAutoMapper(services);
-            
-            services.AddScoped<TransactionFilter>();
             
             return services;
         }

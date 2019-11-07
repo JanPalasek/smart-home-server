@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using SmartHome.Shared.Models;
+using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.Sensor
 {

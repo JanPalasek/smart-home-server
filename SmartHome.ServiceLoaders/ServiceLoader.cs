@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
-using SmartHome.Repositories;
-using SmartHome.Repositories.Interfaces;
-using SmartHome.Shared.Configurations;
+using SmartHome.DomainCore.Data.Configurations;
+using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.Infrastructure;
 
 namespace SmartHome.ServiceLoaders
 {

@@ -1,4 +1,4 @@
-using SmartHome.Shared.Models;
+using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.BatteryPowerSourceType
 {

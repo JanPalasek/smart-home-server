@@ -1,5 +1,3 @@
-using SmartHome.Shared;
-
 namespace SmartHome.Database.Entities
 {
     /// <summary>

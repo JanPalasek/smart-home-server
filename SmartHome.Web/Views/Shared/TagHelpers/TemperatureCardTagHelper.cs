@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using SmartHome.Shared;
 
 namespace SmartHome.Web.Views.Shared.TagHelpers
 {

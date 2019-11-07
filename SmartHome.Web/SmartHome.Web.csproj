@@ -32,7 +32,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\SmartHome.Repositories.Interfaces\SmartHome.Repositories.Interfaces.csproj" />
+      <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
       <ProjectReference Include="..\SmartHome.ServiceLoaders\SmartHome.ServiceLoaders.csproj" />
     </ItemGroup>
 

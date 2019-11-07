@@ -5,13 +5,8 @@
         <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
         <CodeAnalysisRuleSet>..\Rules\SmartHome.ruleset</CodeAnalysisRuleSet>
+        <RootNamespace>SmartHome.ServiceLoaders</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
-      <ProjectReference Include="..\SmartHome.Repositories.Interfaces\SmartHome.Repositories.Interfaces.csproj" />
-      <ProjectReference Include="..\SmartHome.Repositories\SmartHome.Repositories.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
@@ -19,6 +14,12 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
       <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.3.0.21" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
+      <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
+      <ProjectReference Include="..\SmartHome.Infrastructure\SmartHome.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using SmartHome.Shared;
+﻿
+using SmartHome.DomainCore;
 
 namespace SmartHome.Database.Entities
 {

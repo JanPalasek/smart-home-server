@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using SmartHome.Repositories;
-using SmartHome.Repositories.Interfaces;
 using SmartHome.ServiceLoaders;
 using SmartHome.Web.Utils;
 

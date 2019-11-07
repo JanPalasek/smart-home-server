@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SmartHome.Repositories.Interfaces;
-using SmartHome.Shared;
-using SmartHome.Shared.Models;
+using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.Web.Models.Account;
 
 namespace SmartHome.Web.Controllers

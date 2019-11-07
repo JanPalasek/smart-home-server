@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SmartHome.Shared\SmartHome.Shared.csproj" />
+      <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
     </ItemGroup>
 
 </Project>
