@@ -5,7 +5,6 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
     /// <summary>
     /// Helper for temperature card.
     /// </summary>
-    [HtmlTargetElement(TagStructure = TagStructure.WithoutEndTag)]
     public class TemperatureCardTagHelper : TagHelper
     {
         public bool Inside { get; set; }
@@ -17,6 +16,8 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagMode = TagMode.StartTagAndEndTag;
+            
             if (Url != null)
             {
                 output.PreElement.AppendHtml($"<a href='{Url}' class='card-anchor'>");
@@ -31,13 +32,10 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
             output.Content.AppendHtml($@"<div class='e-card-header'>
                                             <div class='e-card-header-caption'>{Temperature:F1}°C</div>
                                         </div>");
-
             if (Url != null)
             {
                 output.PostElement.AppendHtml("</a>");
             }
-            
-            base.Process(context, output);
         }
     }
 }
