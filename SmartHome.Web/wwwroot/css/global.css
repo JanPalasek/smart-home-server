@@ -8,22 +8,8 @@ main {
     font-family: "Calibri";
     font-size: 16px;
 
-    max-width: 21cm;
-    max-height: 29.7cm;
     position: relative;
     z-index: 1;
-}
-
-a.nostyle:link {
-    text-decoration: inherit;
-    color: inherit;
-    cursor: auto;
-}
-
-a.nostyle:visited {
-    text-decoration: inherit;
-    color: inherit;
-    cursor: auto;
 }
 
 h1 {
