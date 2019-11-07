@@ -4,23 +4,32 @@
 <html lang="en">
 <head>
     <environment names="Staging,Production">
-        <link asp-href-include="~/css/*.min.css" rel="stylesheet"/>
-        <script asp-src-include="~/js/*.min.js" type="text/javascript"></script>
         <link asp-href-include="~/lib/css/*.min.css" rel="stylesheet"/>
-        <script asp-src-include="~/lib/js/*.min.js" type="text/javascript"></script>
+        <link asp-href-include="~/css/*.min.css" rel="stylesheet"/>
     </environment>
     <environment names="Development">
-        <link asp-href-include="~/css/*.css" asp-href-exclude="~/css/*.min.css" rel="stylesheet"/>
-        <script asp-src-include="~/js/*.js" asp-src-exclude="~/js/*.min.js" type="text/javascript"></script>
         <link asp-href-include="~/lib/css/*.css" asp-href-exclude="~/lib/css/*.min.css" rel="stylesheet"/>
-        <script asp-src-include="~/lib/js/*.js" asp-src-exclude="~/lib/js/*.min.js" type="text/javascript"></script>
+        <link asp-href-include="~/css/*.css" asp-href-exclude="~/css/*.min.css" rel="stylesheet"/>
     </environment>
     <title>
         TODO
     </title>
 </head>
 <body>
+<main>
     @RenderBody()
-    <ejs-scripts></ejs-scripts>
+</main>
+<img id="to-top" src="img/icons/arrow-icon.png" alt="arrow-icon"/>
+
+<environment names="Staging,Production">
+    <script asp-src-include="~/lib/js/*.min.js" type="text/javascript"></script>
+    <script asp-src-include="~/js/*.min.js" type="text/javascript"></script>
+</environment>
+<environment names="Development">
+    <script asp-src-include="~/lib/js/*.js" asp-src-exclude="~/lib/js/*.min.js" type="text/javascript"></script>
+    <script asp-src-include="~/js/*.js" asp-src-exclude="~/js/*.min.js" type="text/javascript"></script>
+</environment>
+
+<ejs-scripts></ejs-scripts>
 </body>
 </html>

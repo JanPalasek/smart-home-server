@@ -42,7 +42,8 @@ namespace SmartHome.Web
         {
             new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
             
-            services.AddMvc(options =>
+            // set up MVC
+            var mvcConfiguration = services.AddMvc(options =>
             {
                 var stringLocalizerFactory = services
                     .BuildServiceProvider()
@@ -70,8 +71,12 @@ namespace SmartHome.Web
                     (x) => localizer["Null value is invalid.", x]);
 
                 options.EnableEndpointRouting = false;
-            })
-                .AddViewLocalization();
+            }).AddViewLocalization();
+
+            if (hostingEnvironment.IsDevelopment())
+            {
+                mvcConfiguration.AddRazorRuntimeCompilation();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
