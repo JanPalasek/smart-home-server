@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
+using SmartHome.DomainCore;
 
 namespace SmartHome.Shared.Tests
 {

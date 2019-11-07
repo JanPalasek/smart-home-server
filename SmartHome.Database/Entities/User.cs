@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using SmartHome.Shared;
+using SmartHome.DomainCore;
 
 namespace SmartHome.Database.Entities
 {

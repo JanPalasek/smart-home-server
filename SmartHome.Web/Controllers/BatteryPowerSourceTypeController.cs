@@ -2,15 +2,12 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SmartHome.Repositories.Interfaces;
-using SmartHome.ServiceLoaders;
-using SmartHome.Shared.Models;
+using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.Web.Models.BatteryPowerSourceType;
-using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
-    [ServiceFilter(typeof(TransactionFilter))]
     [Authorize]
     public class BatteryPowerSourceTypeController : Controller
     {

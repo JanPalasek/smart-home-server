@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+        <CodeAnalysisRuleSet>..\Rules\SmartHome.ruleset</CodeAnalysisRuleSet>
+        <RootNamespace>SmartHome.Infrastructure</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SmartHome.Common\SmartHome.Common.csproj" />
+      <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
+      <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
+    </ItemGroup>
+
+</Project>

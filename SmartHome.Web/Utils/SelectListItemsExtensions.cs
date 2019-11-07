@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using SmartHome.Shared;
-using SmartHome.Shared.Models;
 
 namespace SmartHome.Web.Utils
 {

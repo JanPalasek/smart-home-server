@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using SmartHome.Repositories.Interfaces;
-using SmartHome.Shared.Configurations;
+using SmartHome.DomainCore.Data.Configurations;
+using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.Web.Models.Home;
-using IConfiguration = AutoMapper.Configuration.IConfiguration;
 
 namespace SmartHome.Web.Controllers
 {
