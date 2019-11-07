@@ -11,13 +11,12 @@
 
     <ItemGroup>
         <PackageReference Include="BuildBundlerMinifier" Version="3.1.430" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
         <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.3.0.21" />
     </ItemGroup>
 
 
     <ItemGroup>
-      <Folder Include="wwwroot\files" />
-      <Folder Include="wwwroot\img" />
       <Folder Include="wwwroot\lib" />
     </ItemGroup>
 

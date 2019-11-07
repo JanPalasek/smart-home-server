@@ -1,39 +1,16 @@
+@using Syncfusion.EJ2.LinearGauge
 @model SmartHome.Web.Models.Home.OverviewViewModel
 
-<h1>Overview</h1>
-
-<section>
-    <h2>Temperature</h2>
-    
-    <h3>Inside</h3>
-    <div>
-        <div>
-            @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => x.IsInside))
-            {
-                <div>
-                    @measurement.Temperature
-                    @measurement.SensorTypeName
-                    @measurement.PlaceName
-                </div>
-            }
-        </div>
-    </div>
-
-    <h3>Outside</h3>
-    <div>
-        <div>
-            <div>
-                @foreach (var measurement in Model.LastSensorTemperatureMeasurements.Where(x => !x.IsInside))
-                {
-                    <div>
-                        @measurement.Temperature
-                        @measurement.SensorTypeName
-                        @measurement.PlaceName
-                    </div>
-                }
+<article>
+    <h1>Overview</h1>
+    <section>
+        <div class="row">
+            <div class="col-sm">
+                <temperature-card url="http://www.janpalasek.com" inside="false" temperature="10" title="Temperature outside" />
+            </div>
+            <div class="col-sm">
+                <temperature-card inside="true" temperature="21" title="Temperature inside" />
             </div>
         </div>
-    </div>
-    
-    @* TODO: graph showing how the temperature evolved in last n days (e.g. 7 days) with possibility to zoom in *@
-</section>
+    </section>
+</article>

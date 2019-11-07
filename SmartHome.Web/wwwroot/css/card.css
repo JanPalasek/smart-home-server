@@ -1,0 +1,20 @@
+a.card-anchor:hover {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+.temp-card {
+    background-size: cover;
+}
+
+.temp-card .e-card-header-title {
+    text-align: left;
+    font-weight: bolder;
+}
+
+.temp-card.temp-outside {
+    background-image: url("../img/weather-background.jpg");
+}
+.temp-card.temp-inside {
+    background-image: url("../img/room-background.jpg");
+}
