@@ -9,85 +9,23 @@ main {
     font-size: 16px;
 
     position: relative;
-    z-index: 1;
 }
 
-h1 {
+.section {
+    background-color: white;
+    margin: 1em 0 4em;
+    padding: 1em;
+    border-style: groove;
+    border-radius: 0.5em;
+}
+
+h1, h2, h3, h4 {
     text-align: center;
-}
-
-#to-top {
-    position: fixed;
-    right: 2em;
-    bottom: 2em;
-    width: 5em;
-    display: none;
-    z-index: 2;
-}
-
-/* is invoked only if device has hover (won't be triggered on touch devices) */
-@media (hover: hover) {
-    #to-top:hover {
-        cursor: pointer;
-    }
-
-    #menu-icon img:hover {
-        cursor: pointer;
-        background-color: rgba(207, 197, 197, 0.6);
-    }
-
-    #menu-items a:hover {
-        background-color: rgba(207, 197, 197, 0.6);
-    }
-}
-
-nav {
-    width: 100%;
-    min-height: 50px;
-    background-color: rgba(224, 219, 219, 0.75);
-    position: fixed;
-    top: 0;
-    /* navigation bar has greater index than main */
-    z-index: 2;
-}
-
-#menu-icon {
-    display: none;
-}
-
-#menu-icon img {
-    width: 50px;
-    height: 50px;
-
-    margin-left: 15px;
-}
-
-#menu-items {
-    font-size: 2em;
-    margin-bottom: 0;
-    letter-spacing: -1px;
-}
-
-#menu-items a {
-    text-decoration: inherit;
-    color: inherit;
-    float: left;
-    padding: 5px 20px;
-    display: block;
-}
-
-#menu-items a:first-child {
-    margin-left: 5%;
 }
 
 @media screen and (max-width: 700px) {
     main {
         width: 75%;
-    }
-
-    #to-top {
-        right: 1em;
-        bottom: 1em;
     }
 }
 
@@ -95,44 +33,10 @@ nav {
     main {
         width: 90%;
     }
-
-    #to-top {
-        right: 0.7em;
-        bottom: 0.7em;
-        width: 4.5em;
-    }
-
-    #menu-items a {
-        float: none;
-    }
-
-    #menu-icon {
-        display: block;
-    }
-
-    #menu-items a:first-child {
-        margin-left: 0;
-    }
-
-    #menu-items a {
-        padding: 5px 15px;
-    }
 }
-
-@media screen and (max-width: 400px) {
-    #to-top {
-        width: 3em;
-    }
-}
-
 @media print {
     main {
         width: 100%;
-    }
-
-    #to-top {
-        display: none;
-        visibility: hidden;
     }
 
     article .section {

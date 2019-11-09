@@ -2,19 +2,21 @@
 
 <div asp-validation-summary="All"></div>
 
-<form asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl"/>
-    <div class="form-group">
-        <label asp-for="Model.Login"></label>
-        <input asp-for="Model.Login" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Model.Password"></label>
-        <input asp-for="Model.Password" type="password"/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Model.RememberMe"></label>
-        <input asp-for="Model.RememberMe" type="checkbox"/>
-    </div>
-    <button class="btn btn-primary" type="submit">TODO</button>
-</form>
+<article>
+    <h1>Log In</h1>
+    <section class="section control-section">
+        <form asp-action="Login" method="post">
+            <input type="hidden" asp-for="ReturnUrl"/>
+            <div class="form-group">
+                <ejs-textbox cssClass="e-outline" id="login" ejs-for="Model.Login" placeholder="Login" floatLabelType="Auto"></ejs-textbox>
+            </div>
+            <div class="form-group">
+                <ejs-textbox cssClass="e-outline" id="password" ejs-for="Model.Password" placeholder="Password" floatLabelType="Auto" type="Password"></ejs-textbox>
+            </div>
+            <div class="form-group">
+                <ejs-checkbox id="remember-me" ejs-for="Model.RememberMe" label="Remember me"></ejs-checkbox>
+            </div>
+            <ejs-button id="button" type="submit" content="Log In"></ejs-button>
+        </form>
+    </section>
+</article>

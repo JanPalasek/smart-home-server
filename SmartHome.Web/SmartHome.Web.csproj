@@ -17,6 +17,7 @@
 
 
     <ItemGroup>
+      <Folder Include="wwwroot\img\icons" />
       <Folder Include="wwwroot\lib" />
     </ItemGroup>
 
