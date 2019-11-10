@@ -4,8 +4,8 @@
 
 <article>
     <h1>Place</h1>
-    <section class="section control-section">
-        <form asp-action="Create" method="post">
+    <section class="section control-section form-section">
+        <form asp-action="Create" method="post" class="form">
             <input type="hidden" asp-for="Model.Id" />
             <div class="form-group">
                 <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>

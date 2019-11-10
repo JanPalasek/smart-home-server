@@ -69,5 +69,22 @@
       "node_modules/bootstrap/dist/js/bootstrap.min.js"
     ],
     "minify": { "enabled": false }
+  },
+
+  {
+    "outputFileName": "wwwroot/out/css/styles.min.css",
+    "inputFiles": [
+      "wwwroot/css/global.css",
+      "wwwroot/css/form.css",
+      "wwwroot/css/card.css"
+    ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/out/js/scripts.min.js",
+    "inputFiles": [
+      "wwwroot/js/global.js"
+    ],
+    "minify": { "enabled": true }
   }
 ]

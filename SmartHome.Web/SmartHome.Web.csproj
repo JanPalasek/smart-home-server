@@ -18,7 +18,7 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\img\icons" />
-      <Folder Include="wwwroot\lib" />
+      <Folder Include="wwwroot\out\css" />
     </ItemGroup>
 
 
@@ -29,6 +29,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\bootstrap.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\bootstrap.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\ej2.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\ej2.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\jquery.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\out\js\jquery.min.js" />
     </ItemGroup>
 
 
