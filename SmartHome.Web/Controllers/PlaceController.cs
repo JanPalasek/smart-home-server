@@ -64,7 +64,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var items = await getPlacesService.GetPlacesAsync();
+            var items = await getPlacesService.GetAllPlacesAsync();
             
             var viewModel = new PlaceListViewModel(items);
             

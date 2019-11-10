@@ -16,7 +16,7 @@ namespace SmartHome.Services.Place
             this.placeRepository = placeRepository;
         }
 
-        public Task<IList<PlaceModel>> GetPlacesAsync()
+        public Task<IList<PlaceModel>> GetAllPlacesAsync()
         {
             return placeRepository.GetAllAsync();
         }

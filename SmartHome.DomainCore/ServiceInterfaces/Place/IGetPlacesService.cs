@@ -6,7 +6,7 @@ namespace SmartHome.DomainCore.ServiceInterfaces.Place
 {
     public interface IGetPlacesService
     {
-        Task<IList<PlaceModel>> GetPlacesAsync();
+        Task<IList<PlaceModel>> GetAllPlacesAsync();
         Task<PlaceModel> GetPlaceAsync(long id);
     }
 }
