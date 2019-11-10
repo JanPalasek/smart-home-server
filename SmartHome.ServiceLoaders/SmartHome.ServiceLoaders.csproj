@@ -20,6 +20,7 @@
       <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
       <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
       <ProjectReference Include="..\SmartHome.Infrastructure\SmartHome.Infrastructure.csproj" />
+      <ProjectReference Include="..\SmartHome.Services\SmartHome.Services.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,14 +5,17 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.Sensor
 {
-    public class SensorViewModel : SmartHomeViewModel<SensorModel>
+    public class SensorViewModel
     {
         public SensorViewModel(
-            SensorModel model) : base(model)
+            SensorModel model)
         {
+            Model = model;
         }
 
         public bool ReadOnly { get; set; }
+        
+        public SensorModel Model { get; set; }
 
         public IEnumerable<SelectListItem> BatteryPowerSourceTypes { get; set; } = Enumerable.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> SensorTypes { get; set; } = Enumerable.Empty<SelectListItem>();

@@ -38,7 +38,7 @@ namespace SmartHome.ServiceLoaders
             }
 
             LoadConfiguration(services).LoadAuthentication(services)
-                .LoadRepositories(services).LoadAutoMapper(services);
+                .LoadRepositoriesAndServices(services).LoadAutoMapper(services);
             
             return services;
         }

@@ -2,10 +2,12 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.Admin
 {
-    public class ChangePasswordViewModel : SmartHomeViewModel<ChangePasswordModel>
+    public class ChangePasswordViewModel
     {
-        public ChangePasswordViewModel(ChangePasswordModel model) : base(model)
+        public ChangePasswordModel Model { get; set; }
+        public ChangePasswordViewModel(ChangePasswordModel model)
         {
+            Model = model;
         }
     }
 }

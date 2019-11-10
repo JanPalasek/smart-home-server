@@ -2,10 +2,12 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.Admin
 {
-    public class DetailUserViewModel : SmartHomeViewModel<UserModel>
+    public class DetailUserViewModel
     {
-        public DetailUserViewModel(UserModel model) : base(model)
+        public UserModel Model { get; set; }
+        public DetailUserViewModel(UserModel model)
         {
+            Model = model;
         }
     }
 }

@@ -1,22 +1,22 @@
 @model SmartHome.Web.Models.Place.PlaceViewModel
+@{
+    ViewBag.Header = "Place";
+}
 
 <div asp-validation-summary="All"></div>
 
-<article>
-    <h1>Place</h1>
-    <section class="section control-section form-section">
-        <form asp-action="Create" method="post" class="form">
-            <input type="hidden" asp-for="Model.Id" />
-            <div class="form-group">
-                <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>
-            </div>
-            <div class="form-group">
-                <ejs-checkbox id="is-inside" ejs-for="Model.IsInside" label="Inside"></ejs-checkbox>
-            </div>
-            <div class="form-group">
-                <ejs-textbox ejs-for="Model.Note" id="note" placeholder="Note" multiline="true" floatLabelType="Auto"></ejs-textbox>
-            </div>
-            <ejs-button id="button" type="submit" content="Submit"></ejs-button>
-        </form>
-    </section>
-</article>
+<section class="section control-section form-section">
+    <form method="post" class="form">
+        <input type="hidden" asp-for="Model.Id"/>
+        <div class="form-group">
+            <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>
+        </div>
+        <div class="form-group">
+            <ejs-checkbox id="is-inside" ejs-for="Model.IsInside" label="Inside"></ejs-checkbox>
+        </div>
+        <div class="form-group">
+            <ejs-textbox ejs-for="Model.Note" id="note" placeholder="Note" multiline="true" floatLabelType="Auto"></ejs-textbox>
+        </div>
+        <ejs-button id="button" type="submit" content="Submit"></ejs-button>
+    </form>
+</section>

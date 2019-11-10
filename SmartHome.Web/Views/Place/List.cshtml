@@ -1,0 +1,21 @@
+@model SmartHome.Web.Models.Place.PlaceListViewModel
+
+@{
+    ViewBag.Header = "Place";
+}
+
+<section>
+    <a asp-action="Create"><ejs-button id="create" content="Create"></ejs-button></a>
+    
+    <ejs-grid id="grid" dataSource="Model.Items">
+        <e-grid-columns>
+            <e-grid-column template="#detail-template"></e-grid-column>
+            <e-grid-column field="Name" headerText="Name"></e-grid-column>
+            <e-grid-column field="IsInside" headerText="Is inside"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>
+
+<script id="detail-template" type="text/x-template">
+    <a href="Detail/${Id}">${Id}</a>
+</script>

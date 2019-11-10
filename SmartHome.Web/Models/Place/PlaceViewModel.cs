@@ -2,10 +2,13 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.Place
 {
-    public class PlaceViewModel : SmartHomeViewModel<PlaceModel>
+    public class PlaceViewModel
     {
-        public PlaceViewModel(PlaceModel model) : base(model)
+        public PlaceModel Model { get; set; }
+        
+        public PlaceViewModel(PlaceModel model)
         {
+            this.Model = model;
         }
     }
 }

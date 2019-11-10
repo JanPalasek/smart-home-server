@@ -12,8 +12,4 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="ServiceInterfaces" />
-    </ItemGroup>
-
 </Project>

@@ -4,10 +4,13 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.Web.Models.SensorType
 {
-    public class SensorTypeViewModel : SmartHomeViewModel<SensorTypeModel>
+    public class SensorTypeViewModel
     {
-        public SensorTypeViewModel(SensorTypeModel model) : base(model)
+        public SensorTypeViewModel(SensorTypeModel model)
         {
+            Model = model;
         }
+        
+        public SensorTypeModel Model { get; set; }
     }
 }

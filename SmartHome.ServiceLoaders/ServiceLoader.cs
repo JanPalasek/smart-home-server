@@ -8,7 +8,10 @@ using SmartHome.Database;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data.Configurations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.Infrastructure;
+using SmartHome.Services.Place;
 
 namespace SmartHome.ServiceLoaders
 {
@@ -38,7 +41,7 @@ namespace SmartHome.ServiceLoaders
             return this;
         }
 
-        protected internal virtual ServiceLoader LoadRepositories(IServiceCollection services)
+        protected internal virtual ServiceLoader LoadRepositoriesAndServices(IServiceCollection services)
         {
             services.AddScoped<SmartHomeAppDbContext>();
             
@@ -49,6 +52,10 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ISensorTypeRepository, SensorTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPlaceRepository, PlaceRepository>();
+
+            services.AddScoped<ICreatePlaceService, CreatePlaceService>();
+            services.AddScoped<IGetPlacesService, GetPlacesService>();
+            services.AddScoped<IUpdatePlaceService, UpdatePlaceService>();
 
             return this;
         }

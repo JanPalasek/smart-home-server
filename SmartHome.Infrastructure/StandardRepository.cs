@@ -16,7 +16,7 @@ namespace SmartHome.Infrastructure
         {
         }
 
-        public virtual async Task<ICollection<TModel>> GetAllAsync()
+        public virtual async Task<IList<TModel>> GetAllAsync()
         {
             return await SmartHomeAppDbContext.Query<TEntity>().ProjectTo<TModel>(Mapper.ConfigurationProvider).ToListAsync();
         }
