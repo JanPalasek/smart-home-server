@@ -5,13 +5,13 @@
 <html lang="en">
 <head>
     <environment names="Staging,Production">
-        <link asp-href-include="~/lib/css/*.min.css" rel="stylesheet"/>
-        <link asp-href-include="~/out/css/*.min.css" rel="stylesheet"/>
+        <link asp-href-include="~/lib/css/*.min.css" asp-href-exclude="~/lib/css/*-dark.min.css" rel="stylesheet"/>
+        <link asp-href-include="~/out/css/*.min.css" asp-href-exclude="~/lib/css/*-dark.min.css" rel="stylesheet"/>
     </environment>
     <environment names="Development">
-        <link asp-href-include="~/lib/css/*.css" asp-href-exclude="~/lib/css/*.min.css" rel="stylesheet"/>
+        <link asp-href-include="~/lib/css/*.css" asp-href-exclude="~/lib/css/*.min.css,~/lib/css/*-dark.css" rel="stylesheet"/>
         <link asp-href-include="~/css/global.css" rel="stylesheet"/>
-        <link asp-href-include="~/css/*.css" asp-href-exclude="~/css/global.css" rel="stylesheet"/>
+        <link asp-href-include="~/css/*.css" asp-href-exclude="~/css/global.css,~/css/*-dark.css" rel="stylesheet"/>
     </environment>
     
     <environment names="Staging,Production">
