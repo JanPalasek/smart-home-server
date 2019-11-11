@@ -33,7 +33,7 @@ namespace SmartHome.Services.Admin
         private async Task<IList<IdentityError>> ValidateAsync(CreateUserModel model)
         {
             var identityErrors = new List<IdentityError>();
-            if (await repository.GetUserByNameAsync(model.UserName) != null)
+            if (await repository.GetUserByNameAsync(model.UserName!) != null)
             {
                 identityErrors.Add(new IdentityError()
                 {
@@ -42,7 +42,7 @@ namespace SmartHome.Services.Admin
                 });
             }
             
-            if (await repository.GetUserByNameAsync(model.UserName) != null)
+            if (await repository.GetUserByEmailAsync(model.Email!) != null)
             {
                 identityErrors.Add(new IdentityError()
                 {

@@ -18,7 +18,7 @@ namespace SmartHome.Services.Account
 
         public async Task<SignInResult> SignInAsync(LoginModel model)
         {
-            var user = await repository.GetUserByNameAsync(model.Login);
+            var user = await repository.GetUserByNameAsync(model.Login!);
 
             if (user == null && !model.Login.IsEmail())
             {
@@ -27,7 +27,7 @@ namespace SmartHome.Services.Account
             
             if (user == null && model.Login.IsEmail())
             {
-                user = await repository.GetUserByEmailAsync(model.Login);
+                user = await repository.GetUserByEmailAsync(model.Login!);
             }
 
             if (user == null)
@@ -36,7 +36,7 @@ namespace SmartHome.Services.Account
             }
 
             await repository.SignOutAsync();
-            var result = await repository.SignInAsync(user, model.Password, model.RememberMe);
+            var result = await repository.SignInAsync(user, model.Password!, model.RememberMe);
             
             return result;
         }
