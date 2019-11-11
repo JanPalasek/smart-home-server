@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Syncfusion.EJ2.Navigations
+<!DOCTYPE html>
 
 @* TODO: lang depends on country *@
 <html lang="en">
@@ -25,6 +26,7 @@
     <title>Smart home</title>
 </head>
 <body>
+<nav><partial name="Menu" /></nav>
 <main>
     <h1>@ViewBag.Header</h1>
     @RenderBody()

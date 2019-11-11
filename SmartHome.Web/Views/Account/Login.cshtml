@@ -4,8 +4,8 @@
 
 <article>
     <h1>Log In</h1>
-    <section class="section control-section form">
-        <form asp-action="Login" method="post" class="form">
+    <section class="section control-section form-section">
+        <form asp-action="Login" method="post">
             <input type="hidden" asp-for="ReturnUrl"/>
             <div class="form-group">
                 <ejs-textbox cssClass="e-outline" id="login" ejs-for="Model.Login" placeholder="Login" floatLabelType="Auto"></ejs-textbox>

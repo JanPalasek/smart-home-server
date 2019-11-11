@@ -1,0 +1,60 @@
+@using Syncfusion.EJ2.Navigations
+
+<style>
+    .menu>div:nth-child(2) {
+        float: right;
+    }
+</style>
+
+@{
+    var leftMenuItems = new List<MenuItem>();
+    leftMenuItems.Add(new MenuItem
+    {
+        Text = "Home",
+        Url = Url.Action("Overview", "Home")
+    });
+    leftMenuItems.Add(new MenuItem()
+    {
+        Text = "Statistics"
+    });
+
+    leftMenuItems.Add(new MenuItem()
+    {
+        Text = "Files",
+        Url = Url.Action("Files", "Home")
+    });
+    leftMenuItems.Add(new MenuItem()
+    {
+        Text = "Enumerations",
+        Items = new List<MenuItem>()
+        {
+            new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") },
+//            TODO
+            new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")}
+        }
+    });
+
+    var rightMenuItems = new List<MenuItem>();
+    rightMenuItems.Add(new MenuItem()
+    {
+        Text = "Admin logged",
+        Items = new List<MenuItem>()
+        {
+//            TODO
+            new MenuItem() {Text = "Settings", Url = Url.Action("ChangePassword", "Admin")},
+            new MenuItem() {Text = "Log out", Url = Url.Action()}
+        }
+    });
+}
+<div class="menu-control menu small-hide">
+    <ejs-menu id="main-menu-left" items="leftMenuItems" showItemOnClick="true"></ejs-menu>
+    <ejs-menu id="main-menu-right" items="rightMenuItems" showItemOnClick="true"></ejs-menu>
+</div>
+
+@{
+    var items = leftMenuItems.Concat(rightMenuItems).ToList();
+}
+
+<div class="menu-control menu small-show">
+    <ejs-menu id="main-menu-left-hamburger" items="items" hamburgerMode="true" showItemOnClick="true"></ejs-menu>
+</div>

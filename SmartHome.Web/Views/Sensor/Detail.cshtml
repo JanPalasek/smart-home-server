@@ -1,20 +1,22 @@
 @model SmartHome.Web.Models.Sensor.SensorViewModel
 
-<div asp-validation-summary="All" class="section"></div>
+<div asp-validation-summary="All"></div>
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="Model.Id"/>
-    <div>
-        <label asp-for="Model.PlaceId"></label>
-        <select asp-for="Model.PlaceId" asp-items="Model.Places"></select>
-    </div>
-    <div>
-        <label asp-for="Model.SensorTypeId"></label>
-        <select asp-for="Model.SensorTypeId" asp-items="Model.SensorTypes"></select>
-    </div>
-    <div>
-        <label asp-for="Model.BatteryPowerSourceTypeId"></label>
-        <select asp-for="Model.BatteryPowerSourceTypeId" asp-items="Model.BatteryPowerSourceTypes"></select>
-    </div>
-    <button class="btn btn-primary" type="submit">TODO</button>
-</form>
+<section class="section control-section form-section">
+    <form asp-action="Create" method="post">
+        <input type="hidden" asp-for="Model.Id"/>
+        <div>
+            <label asp-for="Model.PlaceId"></label>
+            <select asp-for="Model.PlaceId" asp-items="Model.Places"></select>
+        </div>
+        <div>
+            <label asp-for="Model.SensorTypeId"></label>
+            <select asp-for="Model.SensorTypeId" asp-items="Model.SensorTypes"></select>
+        </div>
+        <div>
+            <label asp-for="Model.BatteryPowerSourceTypeId"></label>
+            <select asp-for="Model.BatteryPowerSourceTypeId" asp-items="Model.BatteryPowerSourceTypes"></select>
+        </div>
+        <button class="btn btn-primary" type="submit">TODO</button>
+    </form>
+</section>
