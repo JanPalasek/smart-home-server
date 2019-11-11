@@ -31,31 +31,6 @@ namespace SmartHome.Infrastructure
             return SmartHomeAppDbContext.SingleAsync<TEntity>(entityId);
         }
 
-        public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return SmartHomeAppDbContext.Query<TEntity>().SingleOrDefaultAsync<TEntity>(predicate: predicate);
-        }
-
-        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return SmartHomeAppDbContext.Query<TEntity>().SingleAsync<TEntity>(predicate);
-        }
-
-        public Task<TEntity> FirstAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return SmartHomeAppDbContext.Query<TEntity>().FirstAsync(predicate);
-        }
-
-        public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return SmartHomeAppDbContext.Query<TEntity>().FirstOrDefaultAsync(predicate);
-        }
-
-        public async Task<ICollection<TEntity>> GetAllEntitiesAsync()
-        {
-            return await SmartHomeAppDbContext.Query<TEntity>().ToListAsync();
-        }
-
         public Task<bool> AnyAsync(long entityId)
         {
             return SmartHomeAppDbContext.Query<TEntity>().AnyAsync(x => x.Id == entityId);

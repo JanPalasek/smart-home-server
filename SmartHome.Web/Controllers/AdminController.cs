@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces.Admin;
 using SmartHome.Web.Models.Admin;
 
 namespace SmartHome.Web.Controllers
@@ -12,17 +13,22 @@ namespace SmartHome.Web.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private readonly IUserRepository userRepository;
+        private readonly ICreateUserService createUserService;
+        private readonly IGetUsersService getUsersService;
+        private readonly IChangePasswordService changePasswordService;
 
-        public AdminController(IUserRepository userRepository)
+        public AdminController(ICreateUserService createUserService, IGetUsersService getUsersService,
+            IChangePasswordService changePasswordService)
         {
-            this.userRepository = userRepository;
+            this.createUserService = createUserService;
+            this.getUsersService = getUsersService;
+            this.changePasswordService = changePasswordService;
         }
 
         [HttpGet]
         public async Task<IActionResult> UserDetail(long id)
         {
-            var model = await userRepository.GetUserAsync(id);
+            var model = await getUsersService.GetByIdAsync(id);
             
             var viewModel = new DetailUserViewModel(model);
 
@@ -42,10 +48,10 @@ namespace SmartHome.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await userRepository.AddUser(model);
+                var result = await createUserService.CreateUserAsync(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UserDetail", new { id = (await userRepository.GetUserAsync(model.Email!)).Id });
+                    return RedirectToAction("UserDetail", new { id = (await getUsersService.GetByEmailAsync(model.Email!))!.Id });
                 }
                 
                 // print errors
@@ -61,7 +67,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangePassword(long id)
         {
-            var model = await userRepository.GetUserAsync(id);
+            var model = await getUsersService.GetByIdAsync(id);
             
             var vm = new ChangePasswordViewModel(new ChangePasswordModel() { Id = model.Id });
             return View("ChangePassword", vm);
@@ -72,14 +78,17 @@ namespace SmartHome.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await userRepository.ChangePasswordAsync(model);
+                var result = await changePasswordService.ChangePasswordAsync(model);
 
                 if (result.Succeeded)
                 {
                     return RedirectToAction("UserDetail", new {id = model.Id});
                 }
-                
-                ModelState.AddModelError("Error", "An error has occured.");
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
             }
 
             return View("ChangePassword", new ChangePasswordViewModel(model));

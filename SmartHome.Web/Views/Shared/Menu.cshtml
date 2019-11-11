@@ -18,11 +18,14 @@
         Text = "Statistics"
     });
 
-    leftMenuItems.Add(new MenuItem()
+    if (User.Identity.IsAuthenticated)
     {
-        Text = "Files",
-        Url = Url.Action("Files", "Home")
-    });
+        leftMenuItems.Add(new MenuItem()
+        {
+            Text = "Files",
+            Url = Url.Action("Files", "Home")
+        });
+    }
     leftMenuItems.Add(new MenuItem()
     {
         Text = "Enumerations",
@@ -35,16 +38,26 @@
     });
 
     var rightMenuItems = new List<MenuItem>();
-    rightMenuItems.Add(new MenuItem()
+    if (User.Identity.IsAuthenticated)
     {
-        Text = "Admin logged",
-        Items = new List<MenuItem>()
+        rightMenuItems.Add(new MenuItem()
         {
-//            TODO
-            new MenuItem() {Text = "Settings", Url = Url.Action("ChangePassword", "Admin")},
-            new MenuItem() {Text = "Log out", Url = Url.Action()}
-        }
-    });
+            Text = "Account",
+            Items = new List<MenuItem>()
+            {
+                new MenuItem() {Text = "Settings", Url = Url.Action("ChangePassword", "Admin")},
+                new MenuItem() {Text = "Log Out", Url = Url.Action("LogOut", "Account")}
+            }
+        });
+    }
+    else
+    {
+        rightMenuItems.Add(new MenuItem()
+        {
+            Text = "Log In",
+            Url = Url.Action("Login", "Account")
+        });
+    }
 }
 <div class="menu-control menu small-hide">
     <ejs-menu id="main-menu-left" items="leftMenuItems" showItemOnClick="true"></ejs-menu>

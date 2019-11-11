@@ -9,8 +9,12 @@ using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data.Configurations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces.Account;
+using SmartHome.DomainCore.ServiceInterfaces.Admin;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.Infrastructure;
+using SmartHome.Services.Account;
+using SmartHome.Services.Admin;
 using SmartHome.Services.Place;
 
 namespace SmartHome.ServiceLoaders
@@ -56,6 +60,13 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ICreatePlaceService, CreatePlaceService>();
             services.AddScoped<IGetPlacesService, GetPlacesService>();
             services.AddScoped<IUpdatePlaceService, UpdatePlaceService>();
+
+            services.AddScoped<ISignInService, SignInService>();
+            services.AddScoped<ISignOutService, SignOutService>();
+
+            services.AddScoped<IChangePasswordService, ChangePasswordService>();
+            services.AddScoped<ICreateUserService, CreateUserService>();
+            services.AddScoped<IGetUsersService, GetUsersService>();
 
             return this;
         }

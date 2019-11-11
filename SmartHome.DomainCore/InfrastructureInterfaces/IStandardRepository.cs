@@ -3,12 +3,10 @@ using System.Threading.Tasks;
 
 namespace SmartHome.DomainCore.InfrastructureInterfaces
 {
-    public interface IStandardRepository<TModel>
+    public interface IStandardRepository<TModel> : IGetByIdRepository<TModel>
         where TModel : class, IId<long>, new()
     {
         Task<IList<TModel>> GetAllAsync();
-        Task<TModel> SingleAsync(long id);
-        Task<TModel> SingleOrDefaultAsync(long id);
         Task<bool> AnyAsync(long id);
 
         Task DeleteAsync(long id);

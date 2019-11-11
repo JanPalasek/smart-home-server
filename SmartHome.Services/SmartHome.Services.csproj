@@ -5,7 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SmartHome.Common\SmartHome.Common.csproj" />
       <ProjectReference Include="..\SmartHome.DomainCore\SmartHome.DomainCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Identity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+        <HintPath>..\..\..\..\..\..\..\usr\share\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.0.0\ref\netcoreapp3.0\Microsoft.AspNetCore.Identity.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

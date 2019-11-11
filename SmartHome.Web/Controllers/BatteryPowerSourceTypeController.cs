@@ -21,7 +21,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
         {
-            BatteryPowerSourceTypeModel powerSourceType = await repository.SingleAsync(id);
+            BatteryPowerSourceTypeModel powerSourceType = await repository.GetByIdAsync(id);
             
             return View("Detail", new BatteryPowerSourceTypeViewModel(powerSourceType));
         }

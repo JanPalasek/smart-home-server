@@ -19,53 +19,44 @@ namespace SmartHome.Infrastructure
             this.signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> AddUser(CreateUserModel model)
+        public async Task<IdentityResult> CreateUserAsync(CreateUserModel model)
         {
             var entity = Mapper.Map<User>(model);
-
-            if (entity.Id > 0)
-            {
-                return await userManager.UpdateAsync(entity);
-            }
             
             return await userManager.CreateAsync(entity, model.Password);
 
         }
 
-        public async Task<SignInResult?> SignInAsync(LoginModel model)
+        public async Task<IdentityResult> UpdateUserAsync(CreateUserModel model)
         {
-            // TODO: this is
-            var user = await userManager.FindByNameAsync(model.Login);
-
-            if (user == null && !model.Login.IsEmail())
-            {
-                return null;
-            }
-            
-            if (user == null && model.Login.IsEmail())
-            {
-                user = await userManager.FindByEmailAsync(model.Login);
-            }
-
-            if (user == null)
-            {
-                // couldn't sign in with login or email
-                return null;
-            }
-
-            await signInManager.SignOutAsync();
-            var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
-            
-            return result;
+            var entity = Mapper.Map<User>(model);
+            return await userManager.UpdateAsync(entity);
         }
 
-        public async Task<UserModel> GetUserAsync(string email)
+        public async Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe)
+        {
+            var user = await SingleAsync(model.Id);
+            return await signInManager.PasswordSignInAsync(user, password, rememberMe, false);
+        }
+
+        public async Task SignOutAsync()
+        {
+            await signInManager.SignOutAsync();
+        }
+
+        public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
             var entity = await userManager.FindByEmailAsync(email);
             return Mapper.Map<UserModel>(entity);
         }
+
+        public async Task<UserModel?> GetUserByNameAsync(string name)
+        {
+            var entity = await userManager.FindByNameAsync(name);
+            return Mapper.Map<UserModel>(entity);
+        }
         
-        public async Task<UserModel> GetUserAsync(long id)
+        public async Task<UserModel> GetByIdAsync(long id)
         {
             var entity = await SmartHomeAppDbContext.SingleAsync<User>(id);
             return Mapper.Map<UserModel>(entity);

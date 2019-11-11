@@ -23,7 +23,7 @@ namespace SmartHome.Services.Place
 
         public Task<PlaceModel> GetPlaceAsync(long id)
         {
-            return placeRepository.SingleAsync(id);
+            return placeRepository.GetByIdAsync(id);
         }
     }
 }

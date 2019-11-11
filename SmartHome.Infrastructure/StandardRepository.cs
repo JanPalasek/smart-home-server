@@ -21,16 +21,9 @@ namespace SmartHome.Infrastructure
             return await SmartHomeAppDbContext.Query<TEntity>().ProjectTo<TModel>(Mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public new async Task<TModel> SingleAsync(long id)
+        public async Task<TModel> GetByIdAsync(long id)
         {
             var entity = await base.SingleAsync(id);
-
-            return Mapper.Map<TModel>(entity);
-        }
-
-        public new async Task<TModel> SingleOrDefaultAsync(long id)
-        {
-            var entity = await base.SingleOrDefaultAsync(id);
 
             return Mapper.Map<TModel>(entity);
         }

@@ -23,7 +23,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(int id)
         {
-            SensorTypeModel sensorModel = await repository.SingleAsync(id);
+            SensorTypeModel sensorModel = await repository.GetByIdAsync(id);
 
             var vm = new SensorTypeViewModel(sensorModel);
 

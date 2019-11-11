@@ -4,14 +4,18 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.DomainCore.InfrastructureInterfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IGetByIdRepository<UserModel>
     {
-        Task<IdentityResult> AddUser(CreateUserModel model);
-        Task<SignInResult?> SignInAsync(LoginModel model);
+        Task<IdentityResult> CreateUserAsync(CreateUserModel model);
 
-        Task<UserModel> GetUserAsync(string email);
+        Task<IdentityResult> UpdateUserAsync(CreateUserModel model);
+        Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe);
+        
+        Task SignOutAsync();
 
-        Task<UserModel> GetUserAsync(long id);
+        Task<UserModel?> GetUserByEmailAsync(string email);
+
+        Task<UserModel?> GetUserByNameAsync(string name);
 
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel);
     }

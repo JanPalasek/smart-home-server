@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces.Account;
 using SmartHome.Web.Models.Account;
 
 namespace SmartHome.Web.Controllers
@@ -11,11 +12,13 @@ namespace SmartHome.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly IUserRepository repository;
+        private readonly ISignInService signInService;
+        private readonly ISignOutService signOutService;
 
-        public AccountController(IUserRepository repository)
+        public AccountController(ISignInService signInService, ISignOutService signOutService)
         {
-            this.repository = repository;
+            this.signInService = signInService;
+            this.signOutService = signOutService;
         }
 
         [HttpPost]
@@ -24,13 +27,13 @@ namespace SmartHome.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await repository.SignInAsync(model);
-                if (result?.Succeeded == true && returnUrl != null)
+                var result = await signInService.SignInAsync(model);
+                if (result.Succeeded && returnUrl != null)
                 {
                     return Redirect(returnUrl);
                 }
 
-                if (result?.Succeeded == true)
+                if (result.Succeeded)
                 {
                     // redirect to base page
                     return Redirect("/");
@@ -47,6 +50,13 @@ namespace SmartHome.Web.Controllers
         public IActionResult Login(string? returnUrl)
         {
             return View("Login", new LoginViewModel(new LoginModel()) { ReturnUrl = returnUrl });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LogOut()
+        {
+            await signOutService.SignOutAsync();
+            return RedirectToAction("Overview", "Home");
         }
     }
 }
