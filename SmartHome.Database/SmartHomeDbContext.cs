@@ -14,7 +14,7 @@ namespace SmartHome.Database
     /// <summary>
     /// Represents BazaarFilter database.
     /// </summary>
-    public class SmartHomeDbContext : IdentityDbContext<User, IdentityRole<long>, long>
+    public class SmartHomeDbContext : IdentityDbContext<User, Role, long>
     {
 
         public SmartHomeDbContext(

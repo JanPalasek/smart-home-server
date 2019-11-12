@@ -18,5 +18,7 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
         Task<UserModel?> GetUserByNameAsync(string name);
 
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel);
+
+        Task<IdentityResult> AddRoleAsync(long userId, string roleName);
     }
 }

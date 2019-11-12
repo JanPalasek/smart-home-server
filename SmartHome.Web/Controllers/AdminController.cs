@@ -93,5 +93,29 @@ namespace SmartHome.Web.Controllers
 
             return View("ChangePassword", new ChangePasswordViewModel(model));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleCreate()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleCreate(RoleModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleDetail(long roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleDetail(RoleModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

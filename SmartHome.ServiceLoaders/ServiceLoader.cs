@@ -56,6 +56,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ISensorTypeRepository, SensorTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPlaceRepository, PlaceRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
             services.AddScoped<ICreatePlaceService, CreatePlaceService>();
             services.AddScoped<IGetPlacesService, GetPlacesService>();
@@ -73,7 +74,9 @@ namespace SmartHome.ServiceLoaders
 
         protected internal virtual ServiceLoader LoadAuthentication(IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole<long>>()
+            services
+                .AddIdentity<User, Role>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<SmartHomeDbContext>()
                 .AddDefaultTokenProviders();
 

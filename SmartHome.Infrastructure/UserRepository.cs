@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SmartHome.Common.Extensions;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data.Models;
@@ -67,6 +70,12 @@ namespace SmartHome.Infrastructure
             var user = await SmartHomeAppDbContext.SingleAsync<User>(changePasswordModel.Id);
 
             return await userManager.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
+        }
+        
+        public async Task<IdentityResult> AddRoleAsync(long userId, string roleName)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            return await userManager.AddToRoleAsync(user, roleName);
         }
     }
 }

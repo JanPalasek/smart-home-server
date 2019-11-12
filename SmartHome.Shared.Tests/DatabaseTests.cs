@@ -36,5 +36,10 @@ namespace SmartHome.Shared.Tests
         {
             return DbContext.Set<TType>().First();
         }
+        
+        protected Task<TType> GetAnyAsync<TType>() where TType : class, IId<long>
+        {
+            return DbContext.Set<TType>().FirstAsync();
+        }
     }
 }
