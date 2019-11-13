@@ -1,41 +1,21 @@
 @model SmartHome.Web.Models.Admin.CreateUserViewModel
+@{
+    ViewBag.Header = "User";
+}
 
-@* TODO  *@
+<div asp-validation-summary="All"></div>
 
-<div asp-validation-summary="All" class="section"></div>
-
-<form method="post">
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.UserName"></label>
-            <input asp-for="Model.UserName"/>
+<section class="section control-section form-section">
+    <form method="post">
+        <div class="form-group">
+            <ejs-textbox id="user-name" ejs-for="Model.UserName" placeholder="User name" floatLabelType="Auto"></ejs-textbox>
         </div>
-    </div>
-    
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.Email"></label>
-            <input asp-for="Model.Email"/>
+        <div class="form-group">
+            <ejs-textbox id="email" ejs-for="Model.Email" placeholder="E-mail" floatLabelType="Auto" type="Email"></ejs-textbox>
         </div>
-    </div>
-
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.Password"></label>
-            <input asp-for="Model.Password" type="password"/>
+        <div class="form-group">
+            <ejs-textbox ejs-for="Model.Password" id="password" placeholder="Password" floatLabelType="Auto" type="Password"></ejs-textbox>
         </div>
-    </div>
-
-    <div class="form-row">
-        <div class="col">
-            <label>Password again</label>
-            <input type="password"/>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <button class="btn btn-primary mb-2 mr-sm-2" type="submit">Submit</button>
-    </div>
-
-    @* TODO: Validate two passwords are same before submitting *@
-</form>
+        <ejs-button id="button" type="submit" content="Create" cssClass="e-primary"></ejs-button>
+    </form>
+</section>

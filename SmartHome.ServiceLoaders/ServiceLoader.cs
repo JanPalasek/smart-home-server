@@ -67,7 +67,12 @@ namespace SmartHome.ServiceLoaders
 
             services.AddScoped<IChangePasswordService, ChangePasswordService>();
             services.AddScoped<ICreateUserService, CreateUserService>();
+            services.AddScoped<IUpdateUserService, UpdateUserService>();
             services.AddScoped<IGetUsersService, GetUsersService>();
+
+            services.AddScoped<IGetRolesService, GetRolesService>();
+            services.AddScoped<ICreateRoleService, CreateRoleService>();
+            services.AddScoped<IUpdateRoleService, UpdateRoleService>();
 
             return this;
         }

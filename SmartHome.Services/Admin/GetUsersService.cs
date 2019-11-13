@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
@@ -22,6 +23,11 @@ namespace SmartHome.Services.Admin
         public async Task<UserModel?> GetByEmailAsync(string email)
         {
             return await repository.GetUserByEmailAsync(email);
+        }
+
+        public Task<IList<UserModel>> GetAllUsersAsync()
+        {
+            return repository.GetAllAsync();
         }
     }
 }

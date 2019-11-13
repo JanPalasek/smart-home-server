@@ -76,5 +76,17 @@ namespace SmartHome.Web.Utils
                 };
             }
         }
+
+        public static MultiSelectList ToMultiSelectList(this IEnumerable<SelectListItem> items)
+        {
+            return new MultiSelectList(items, nameof(SelectListItem.Value), nameof(SelectListItem.Text));
+        }
+
+        public static MultiSelectList ToMultiSelectList<TType>(this IEnumerable<TType> items,
+            Func<TType, string> valueSelector,
+            Func<TType, string> textSelector)
+        {
+            return items.ToSelectListItems(valueSelector, textSelector, false).ToMultiSelectList();
+        }
     }
 }

@@ -36,6 +36,15 @@
             new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")}
         }
     });
+    leftMenuItems.Add(new MenuItem()
+    {
+        Text = "Administration",
+        Items = new List<MenuItem>()
+        {
+            new MenuItem() { Text = "Users", Url = Url.Action("UserList", "Admin") },
+            new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Admin") },
+        }
+    });
 
     var rightMenuItems = new List<MenuItem>();
     if (User.Identity.IsAuthenticated)

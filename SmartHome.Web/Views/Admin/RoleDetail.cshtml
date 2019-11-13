@@ -1,4 +1,4 @@
-@model SmartHome.Web.Models.Admin.CreateRoleViewModel
+@model SmartHome.Web.Models.Admin.DetailRoleViewModel
 @{
     ViewBag.Header = "Role";
 }
@@ -6,10 +6,11 @@
 <div asp-validation-summary="All"></div>
 
 <section class="section control-section form-section">
-    <form method="post" asp-action="RoleCreate">
+    <form method="post" asp-action="RoleUpdate">
+        <input type="hidden" asp-for="Model.Id "/>
         <div class="form-group">
             <ejs-textbox id="role-name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>
         </div>
-        <ejs-button id="button" type="submit" content="Create" cssClass="e-primary"></ejs-button>
+        <ejs-button id="button" type="submit" content="Update" cssClass="e-primary"></ejs-button>
     </form>
 </section>

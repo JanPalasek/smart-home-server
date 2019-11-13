@@ -1,25 +1,29 @@
 @model SmartHome.Web.Models.Admin.DetailUserViewModel
 
-@* TODO  *@
+@{
+    ViewBag.Header = "User";
+}
 
-<div asp-validation-summary="All" class="section"></div>
+<div asp-validation-summary="All"></div>
 
-<div class="form-row">
-    <div class="col">
-        <label asp-for="Model.UserName"></label>
-        <input asp-for="Model.UserName" readonly="@(true)"/>
-    </div>
-</div>
-
-<div class="form-row">
-    <div class="col">
-        <label asp-for="Model.Email"></label>
-        <input asp-for="Model.Email" readonly="@(true)"/>
-    </div>
-</div>
-
-<div class="form-row">
-    <a href="@Url.Action("ChangePassword", new { id = Model.Model.Id })">Change password</a>
-</div>
-
-<input asp-for="Model.Id" type="hidden"/>
+<section class="form-section">
+    <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
+        <ejs-button id="password-change" content="Change password">
+        </ejs-button>
+    </a>
+    <section class="section control-section">
+        <div class="form-group">
+            <ejs-textbox id="user-name" ejs-for="Model.UserName" placeholder="User name" floatLabelType="Auto" readonly="true"></ejs-textbox>
+        </div>
+        <div class="form-group">
+            <ejs-textbox id="email" ejs-for="Model.Email" placeholder="E-mail" floatLabelType="Auto" type="Email" readonly="true"></ejs-textbox>
+        </div>
+    </section>
+    
+    <h2>Roles</h2>
+    <form class="section control-section">
+        <ejs-multiselect id="roles" ejs-for="Roles" dataSource="@Model.AvailableRoles">
+            <e-multiselect-fields text="Name" value="Name"></e-multiselect-fields>
+        </ejs-multiselect>
+    </form>
+</section>

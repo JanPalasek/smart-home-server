@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Admin;
 using SmartHome.Web.Models.Admin;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
@@ -16,23 +18,42 @@ namespace SmartHome.Web.Controllers
         private readonly ICreateUserService createUserService;
         private readonly IGetUsersService getUsersService;
         private readonly IChangePasswordService changePasswordService;
+        private readonly ICreateRoleService createRoleService;
+        private readonly IUpdateRoleService updateRoleService;
+        private readonly IGetRolesService getRolesService;
 
         public AdminController(ICreateUserService createUserService, IGetUsersService getUsersService,
-            IChangePasswordService changePasswordService)
+            IChangePasswordService changePasswordService, ICreateRoleService createRoleService,
+            IUpdateRoleService updateRoleService, IGetRolesService getRolesService)
         {
             this.createUserService = createUserService;
             this.getUsersService = getUsersService;
             this.changePasswordService = changePasswordService;
+            this.createRoleService = createRoleService;
+            this.updateRoleService = updateRoleService;
+            this.getRolesService = getRolesService;
         }
 
         [HttpGet]
         public async Task<IActionResult> UserDetail(long id)
         {
             var model = await getUsersService.GetByIdAsync(id);
+
+            var availableRoles = await getRolesService.GetAllRolesAsync();
+            var userRoles = await getRolesService.GetUserRolesAsync(id);
             
-            var viewModel = new DetailUserViewModel(model);
+            var viewModel = new DetailUserViewModel(model, (List<RoleModel>)userRoles,
+                (List<RoleModel>)availableRoles);
 
             return View("UserDetail", viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserList()
+        {
+            var users = await getUsersService.GetAllUsersAsync();
+
+            return View("UserList", new UserListViewModel(users));
         }
 
         [HttpGet]
@@ -95,27 +116,66 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> RoleCreate()
+        public IActionResult RoleCreate()
         {
-            throw new NotImplementedException();
+            return View("RoleCreate", new CreateRoleViewModel(new CreateRoleModel()));
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> RoleCreate(RoleModel model)
+        public async Task<IActionResult> RoleCreate(CreateRoleModel model)
         {
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                var result = await createRoleService.CreateRoleAsync(model);
+                if (result.Succeeded)
+                {
+                    long roleId = (await getRolesService.GetRoleByNameAsync(model.Name)).Id;
+                    return RedirectToAction("RoleDetail", new {id = roleId});
+                }
+                
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+            }
+
+            return View("RoleCreate", new CreateRoleViewModel(model));
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> RoleDetail(int id)
+        {
+            var role = await getRolesService.GetRoleByIdAsync(id);
+
+            return View("RoleDetail", new DetailRoleViewModel(role));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> RoleUpdate(RoleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await updateRoleService.UpdateRoleAsync(model);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("RoleDetail", new {id = model.Id});
+                }
+                
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+            }
+
+            return View("RoleDetail", new DetailRoleViewModel(model));
         }
 
         [HttpGet]
-        public async Task<IActionResult> RoleDetail(long roleId)
+        public async Task<IActionResult> RoleList()
         {
-            throw new NotImplementedException();
-        }
+            var roles = await getRolesService.GetAllRolesAsync();
 
-        [HttpGet]
-        public async Task<IActionResult> RoleDetail(RoleModel model)
-        {
-            throw new NotImplementedException();
+            return View("RoleList", new RoleListViewModel(roles));
         }
     }
 }

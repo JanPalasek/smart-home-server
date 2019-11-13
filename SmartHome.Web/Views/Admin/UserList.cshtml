@@ -1,0 +1,21 @@
+@model SmartHome.Web.Models.Admin.UserListViewModel
+
+@{
+    ViewBag.Header = "User";
+}
+
+<section>
+    <a asp-action="UserCreate"><ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button></a>
+    
+    <ejs-grid id="grid" dataSource="Model.Items">
+        <e-grid-columns>
+            <e-grid-column field="UserName" headerText="Name"></e-grid-column>
+            <e-grid-column field="Email" headerText="E-mail"></e-grid-column>
+            <e-grid-column template="#detail-template" textAlign="Right"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>
+
+<script id="detail-template" type="text/x-template">
+    <a href="UserDetail/${Id}"><button class="e-control e-btn e-lib">Detail</button></a>
+</script>

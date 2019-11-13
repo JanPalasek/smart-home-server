@@ -1,14 +1,15 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.DomainCore.InfrastructureInterfaces
 {
-    public interface IUserRepository : IGetByIdRepository<UserModel>
+    public interface IUserRepository : IGetByIdRepository<UserModel>, IGetAllRepository<UserModel>
     {
         Task<IdentityResult> CreateUserAsync(CreateUserModel model);
 
-        Task<IdentityResult> UpdateUserAsync(CreateUserModel model);
+        Task<IdentityResult> UpdateUserAsync(UserModel model);
         Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe);
         
         Task SignOutAsync();

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SmartHome.Common.Extensions;
@@ -30,10 +32,9 @@ namespace SmartHome.Infrastructure
 
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(CreateUserModel model)
+        public async Task<IdentityResult> UpdateUserAsync(UserModel model)
         {
-            var entity = Mapper.Map<User>(model);
-            return await userManager.UpdateAsync(entity);
+            throw new NotSupportedException();
         }
 
         public async Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe)
@@ -76,6 +77,11 @@ namespace SmartHome.Infrastructure
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
             return await userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task<IList<UserModel>> GetAllAsync()
+        {
+            return await SmartHomeAppDbContext.Query<User>().ProjectTo<UserModel>(Mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }
