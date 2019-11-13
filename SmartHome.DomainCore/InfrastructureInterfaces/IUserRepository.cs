@@ -20,6 +20,11 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
 
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel);
 
-        Task<IdentityResult> AddRoleAsync(long userId, string roleName);
+        Task<IdentityResult> AddToRoleAsync(long userId, long roleId);
+
+        Task<IdentityResult> RemoveFromRoleAsync(long userId, long roleId);
+
+        Task<IdentityResult> AddToRolesAsync(long userId, IEnumerable<long> roleIds);
+        Task<IdentityResult> RemoveFromRolesAsync(long userId, IEnumerable<long> roleIds);
     }
 }

@@ -10,9 +10,9 @@ namespace SmartHome.Web.Models.Admin
         public List<RoleModel> AvailableRoles { get; set; }
         
         public UserModel Model { get; set; }
-        public List<RoleModel> Roles { get; set; }
+        public List<long> Roles { get; set; }
         
-        public DetailUserViewModel(UserModel model, List<RoleModel> roles, List<RoleModel> availableRoles)
+        public DetailUserViewModel(UserModel model, List<long> roles, List<RoleModel> availableRoles)
         {
             Model = model;
             Roles = roles;

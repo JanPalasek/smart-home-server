@@ -17,6 +17,7 @@ namespace SmartHome.Web.Controllers
     {
         private readonly ICreateUserService createUserService;
         private readonly IGetUsersService getUsersService;
+        private readonly IUpdateUserService updateUserService;
         private readonly IChangePasswordService changePasswordService;
         private readonly ICreateRoleService createRoleService;
         private readonly IUpdateRoleService updateRoleService;
@@ -24,7 +25,7 @@ namespace SmartHome.Web.Controllers
 
         public AdminController(ICreateUserService createUserService, IGetUsersService getUsersService,
             IChangePasswordService changePasswordService, ICreateRoleService createRoleService,
-            IUpdateRoleService updateRoleService, IGetRolesService getRolesService)
+            IUpdateRoleService updateRoleService, IGetRolesService getRolesService, IUpdateUserService updateUserService)
         {
             this.createUserService = createUserService;
             this.getUsersService = getUsersService;
@@ -32,6 +33,7 @@ namespace SmartHome.Web.Controllers
             this.createRoleService = createRoleService;
             this.updateRoleService = updateRoleService;
             this.getRolesService = getRolesService;
+            this.updateUserService = updateUserService;
         }
 
         [HttpGet]
@@ -42,10 +44,32 @@ namespace SmartHome.Web.Controllers
             var availableRoles = await getRolesService.GetAllRolesAsync();
             var userRoles = await getRolesService.GetUserRolesAsync(id);
             
-            var viewModel = new DetailUserViewModel(model, (List<RoleModel>)userRoles,
+            var viewModel = new DetailUserViewModel(model, userRoles.Select(x => x.Id).ToList(),
                 (List<RoleModel>)availableRoles);
 
             return View("UserDetail", viewModel);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> UserUpdate(UserModel model, List<long> roles)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await updateUserService.AddToOrRemoveFromRolesAsync(model.Id, roles);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("UserDetail", new {id = model.Id});
+                }
+                
+                foreach (var identityError in result.Errors)
+                {
+                    ModelState.AddModelError(identityError.Code, identityError.Description);
+                }
+            }
+            
+            var availableRoles = await getRolesService.GetAllRolesAsync();
+            return View("UserDetail", new DetailUserViewModel(model, roles,
+                (List<RoleModel>)availableRoles));
         }
 
         [HttpGet]
@@ -129,7 +153,7 @@ namespace SmartHome.Web.Controllers
                 var result = await createRoleService.CreateRoleAsync(model);
                 if (result.Succeeded)
                 {
-                    long roleId = (await getRolesService.GetRoleByNameAsync(model.Name)).Id;
+                    long roleId = (await getRolesService.GetRoleByNameAsync(model.Name!)).Id;
                     return RedirectToAction("RoleDetail", new {id = roleId});
                 }
                 

@@ -72,11 +72,39 @@ namespace SmartHome.Infrastructure
 
             return await userManager.ChangePasswordAsync(user, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
         }
-        
-        public async Task<IdentityResult> AddRoleAsync(long userId, string roleName)
+
+        public async Task<IdentityResult> AddToRoleAsync(long userId, long roleId)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            var roleName = (await SmartHomeAppDbContext.SingleAsync<Role>(roleId)).Name;
             return await userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task<IdentityResult> AddToRolesAsync(long userId, IEnumerable<long> roleIds)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            // TODO: fix up query
+            var roleNames = SmartHomeAppDbContext.Query<Role>().AsEnumerable().Where(x => roleIds.Contains(x.Id))
+                .Select(x => x.Name).ToList();
+
+            return await userManager.AddToRolesAsync(user, roleNames);
+        }
+
+        public async Task<IdentityResult> RemoveFromRoleAsync(long userId, long roleId)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            var roleName = (await SmartHomeAppDbContext.SingleAsync<Role>(roleId)).Name;
+            return await userManager.RemoveFromRoleAsync(user, roleName);
+        }
+        
+        public async Task<IdentityResult> RemoveFromRolesAsync(long userId, IEnumerable<long> roleIds)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            // TODO: fix up query
+            var roleNames = SmartHomeAppDbContext.Query<Role>().AsEnumerable().Where(x => roleIds.Contains(x.Id))
+                .Select(x => x.Name).ToList();
+
+            return await userManager.RemoveFromRolesAsync(user, roleNames);
         }
 
         public async Task<IList<UserModel>> GetAllAsync()

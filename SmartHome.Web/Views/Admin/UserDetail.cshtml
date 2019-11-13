@@ -6,11 +6,15 @@
 
 <div asp-validation-summary="All"></div>
 
-<section class="form-section">
-    <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
-        <ejs-button id="password-change" content="Change password">
-        </ejs-button>
-    </a>
+<form class="form-section" method="post" asp-action="UserUpdate">
+    <input asp-for="Model.Id" type="hidden"/>
+    <div class="form-group">
+        <ejs-button id="update" content="Update" type="submit" cssClass="e-primary"></ejs-button>
+        <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
+            <ejs-button id="password-change" content="Change password" type="button">
+            </ejs-button>
+        </a>
+    </div>
     <section class="section control-section">
         <div class="form-group">
             <ejs-textbox id="user-name" ejs-for="Model.UserName" placeholder="User name" floatLabelType="Auto" readonly="true"></ejs-textbox>
@@ -18,12 +22,10 @@
         <div class="form-group">
             <ejs-textbox id="email" ejs-for="Model.Email" placeholder="E-mail" floatLabelType="Auto" type="Email" readonly="true"></ejs-textbox>
         </div>
+        <div class="form-group">
+            <ejs-multiselect id="roles" ejs-for="Roles" dataSource="@Model.AvailableRoles" placeholder="User's roles" floatLabelType="Auto">
+                <e-multiselect-fields text="Name" value="Id"></e-multiselect-fields>
+            </ejs-multiselect>
+        </div>
     </section>
-    
-    <h2>Roles</h2>
-    <form class="section control-section">
-        <ejs-multiselect id="roles" ejs-for="Roles" dataSource="@Model.AvailableRoles">
-            <e-multiselect-fields text="Name" value="Name"></e-multiselect-fields>
-        </ejs-multiselect>
-    </form>
-</section>
+</form>
