@@ -12,6 +12,7 @@ namespace SmartHome.Shared.Tests
         using NUnit.Framework;
     
         [TestFixture]
+        [Ignore("This class should be ignored for now, because tests run in memory.")]
         public abstract class TransactionTests : DatabaseTests
         {
             [SetUp]

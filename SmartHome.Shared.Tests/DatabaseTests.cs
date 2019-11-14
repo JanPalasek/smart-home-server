@@ -1,5 +1,7 @@
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -21,15 +23,36 @@ namespace SmartHome.Shared.Tests
         public void SetUpDatabase()
         {
             var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.AddJsonFile("appsettings.json");
-            configurationBuilder.AddJsonFile("appsettings.development.json");
+            configurationBuilder.AddJsonFile("appsettings.testing.json");
 
             var configuration = configurationBuilder.Build();
 
             var builder = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database"));
+                .UseInMemoryDatabase(configuration["Database:Name"]);
 
             DbContext = new SmartHomeDbContext(builder.Options);
+            
+            CreateInitialData(DbContext);
+        }
+
+        private void CreateInitialData(SmartHomeDbContext context)
+        {
+            context.Add(new User()
+            {
+                Email = "admin@janpalasek.com",
+                UserName = "admin",
+                NormalizedEmail = "admin@janpalasek.com",
+                NormalizedUserName = "admin",
+                PasswordHash = "asdfghjkl",
+            });
+
+            context.Add(new Role()
+            {
+                Name = "Admin",
+                NormalizedName = "Admin"
+            });
+
+            context.SaveChanges();
         }
         
         protected TType GetAny<TType>() where TType : class, IId<long>

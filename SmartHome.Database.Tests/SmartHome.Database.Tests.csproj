@@ -5,26 +5,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-        <PackageReference Include="NUnit" Version="3.12.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0"/>
+        <PackageReference Include="NUnit" Version="3.12.0"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj" />
-        <ProjectReference Include="..\SmartHome.Shared.Tests\SmartHome.Shared.Tests.csproj" />
+        <ProjectReference Include="..\SmartHome.Database\SmartHome.Database.csproj"/>
+        <ProjectReference Include="..\SmartHome.Shared.Tests\SmartHome.Shared.Tests.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\SmartHome.Web\appsettings.development.json">
-            <Link>appsettings.development.json</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\SmartHome.Web\appsettings.json">
-            <Link>appsettings.json</Link>
+        <Content Include="appsettings.testing.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
 
 </Project>
