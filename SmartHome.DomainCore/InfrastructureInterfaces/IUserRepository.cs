@@ -24,7 +24,7 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
 
         Task<IdentityResult> RemoveFromRoleAsync(long userId, long roleId);
 
-        Task<IdentityResult> AddToRolesAsync(long userId, IEnumerable<long> roleIds);
-        Task<IdentityResult> RemoveFromRolesAsync(long userId, IEnumerable<long> roleIds);
+        Task<IdentityResult> AddToRolesAsync(long userId, List<long> roleIds);
+        Task<IdentityResult> RemoveFromRolesAsync(long userId, List<long> roleIds);
     }
 }

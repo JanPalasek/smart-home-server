@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Services", "Smart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Services.Tests", "SmartHome.Services.Tests\SmartHome.Services.Tests.csproj", "{C8418495-C22F-4F6A-8771-8E2952E38BE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHome.Infrastructure.Tests", "SmartHome.Infrastructure.Tests\SmartHome.Infrastructure.Tests.csproj", "{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,10 +70,15 @@ Global
 		{C8418495-C22F-4F6A-8771-8E2952E38BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8418495-C22F-4F6A-8771-8E2952E38BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8418495-C22F-4F6A-8771-8E2952E38BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF555046-13DD-4C5C-9DAA-5D47A6398138} = {D33CEB0B-1CE7-4158-B6A0-D2307B93AE36}
 		{2AC623C2-B18A-4AAA-B43F-FE1C050BDBE5} = {D33CEB0B-1CE7-4158-B6A0-D2307B93AE36}
 		{C8418495-C22F-4F6A-8771-8E2952E38BE5} = {D33CEB0B-1CE7-4158-B6A0-D2307B93AE36}
+		{204AE6BA-DCE8-4B0D-8DDD-1B413F2DC460} = {D33CEB0B-1CE7-4158-B6A0-D2307B93AE36}
 	EndGlobalSection
 EndGlobal

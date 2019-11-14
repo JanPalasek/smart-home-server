@@ -33,8 +33,8 @@ namespace SmartHome.Services.Admin
             var rolesToRemove = allUserRoles.Select(x => x.Id).Except(roleIds);
             
             // TODO: should remove merged identity results from both
-            await repository.AddToRolesAsync(userId, rolesToAdd);
-            return await repository.RemoveFromRolesAsync(userId, rolesToRemove);
+            await repository.AddToRolesAsync(userId, rolesToAdd.ToList());
+            return await repository.RemoveFromRolesAsync(userId, rolesToRemove.ToList());
         }
     }
 }

@@ -80,13 +80,13 @@ namespace SmartHome.Infrastructure
             return await userManager.AddToRoleAsync(user, roleName);
         }
 
-        public async Task<IdentityResult> AddToRolesAsync(long userId, IEnumerable<long> roleIds)
+        public async Task<IdentityResult> AddToRolesAsync(long userId, List<long> roleIds)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
-            // TODO: fix up query
-            var roleNames = SmartHomeAppDbContext.Query<Role>().AsEnumerable().Where(x => roleIds.Contains(x.Id))
-                .Select(x => x.Name).ToList();
-
+            // this query needs for some reason roleIds to be List
+            var roleNames = await SmartHomeAppDbContext.Query<Role>().Where(x => roleIds.Contains(x.Id))
+                .Select(x => x.Name).ToListAsync();
+            
             return await userManager.AddToRolesAsync(user, roleNames);
         }
 
@@ -97,12 +97,11 @@ namespace SmartHome.Infrastructure
             return await userManager.RemoveFromRoleAsync(user, roleName);
         }
         
-        public async Task<IdentityResult> RemoveFromRolesAsync(long userId, IEnumerable<long> roleIds)
+        public async Task<IdentityResult> RemoveFromRolesAsync(long userId, List<long> roleIds)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
-            // TODO: fix up query
-            var roleNames = SmartHomeAppDbContext.Query<Role>().AsEnumerable().Where(x => roleIds.Contains(x.Id))
-                .Select(x => x.Name).ToList();
+            var roleNames = await SmartHomeAppDbContext.Query<Role>().Where(x => roleIds.Contains(x.Id))
+                .Select(x => x.Name).ToListAsync();
 
             return await userManager.RemoveFromRolesAsync(user, roleNames);
         }
