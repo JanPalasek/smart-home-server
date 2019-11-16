@@ -29,6 +29,26 @@ namespace SmartHome.Common.Extensions
             yield return enumerable.Current; 
             for (int i = 0; i < batchSize && enumerable.MoveNext(); i++) 
                 yield return enumerable.Current; 
-        } 
+        }
+
+        /// <summary>
+        /// Performs unordered equality comparison between <see cref="enumerable"/> and <see cref="collection"/>.
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <param name="collection"></param>
+        /// <typeparam name="TType"></typeparam>
+        /// <returns></returns>
+        public static bool UnorderedEquals<TType>(this IEnumerable<TType> enumerable, ICollection<TType> collection)
+        {
+            foreach (var item in enumerable)
+            {
+                if (!collection.Contains(item))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

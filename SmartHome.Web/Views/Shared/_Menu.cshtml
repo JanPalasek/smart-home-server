@@ -7,6 +7,10 @@
 </style>
 
 @{
+    bool isAdmin = User.IsInRole("Admin");
+    bool isUser = User.IsInRole("User");
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+    
     var leftMenuItems = new List<MenuItem>();
     leftMenuItems.Add(new MenuItem
     {
@@ -18,7 +22,7 @@
         Text = "Statistics"
     });
 
-    if (User.Identity.IsAuthenticated)
+    if (isAdmin)
     {
         leftMenuItems.Add(new MenuItem()
         {
@@ -26,28 +30,36 @@
             Url = Url.Action("Files", "Home")
         });
     }
-    leftMenuItems.Add(new MenuItem()
+
+    if (isUser)
     {
-        Text = "Enumerations",
-        Items = new List<MenuItem>()
+        leftMenuItems.Add(new MenuItem()
         {
-            new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") },
+            Text = "Enumerations",
+            Items = new List<MenuItem>()
+            {
+                new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") },
 //            TODO
-            new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")}
-        }
-    });
-    leftMenuItems.Add(new MenuItem()
+                new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")}
+            }
+        });
+    }
+
+    if (isAdmin)
     {
-        Text = "Administration",
-        Items = new List<MenuItem>()
+        leftMenuItems.Add(new MenuItem()
         {
-            new MenuItem() { Text = "Users", Url = Url.Action("UserList", "User") },
-            new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Role") },
-        }
-    });
+            Text = "Administration",
+            Items = new List<MenuItem>()
+            {
+                new MenuItem() { Text = "Users", Url = Url.Action("UserList", "User") },
+                new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Role") },
+            }
+        });
+    }
 
     var rightMenuItems = new List<MenuItem>();
-    if (User.Identity.IsAuthenticated)
+    if (isAuthenticated)
     {
         rightMenuItems.Add(new MenuItem()
         {

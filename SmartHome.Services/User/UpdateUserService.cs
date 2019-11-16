@@ -28,13 +28,18 @@ namespace SmartHome.Services.User
         {
             var allUserRoles = await roleRepository.GetUserRolesAsync(userId);
 
-            var rolesToAdd = roleIds.Except(allUserRoles.Select(x => x.Id));
+            var rolesToAdd = roleIds.Except(allUserRoles.Select(x => x.Id)).ToList();
             // roles that user currently has without those sent to the server
-            var rolesToRemove = allUserRoles.Select(x => x.Id).Except(roleIds);
+            var rolesToRemove = allUserRoles.Select(x => x.Id).Except(roleIds).ToList();
             
-            // TODO: should remove merged identity results from both
-            await repository.AddToRolesAsync(userId, rolesToAdd.ToList());
-            return await repository.RemoveFromRolesAsync(userId, rolesToRemove.ToList());
+            if (rolesToAdd.Count > 0 && rolesToRemove.Count > 0)
+            {
+                // TODO: merge
+                await repository.AddToRolesAsync(userId, rolesToAdd);
+                return await repository.RemoveFromRolesAsync(userId, rolesToRemove);
+            }
+            
+            return IdentityResult.Failed();
         }
     }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartHome.Common.Extensions;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.DomainCore.ServiceInterfaces.User;
@@ -12,7 +14,7 @@ using SmartHome.Web.Models.User;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly ICreateUserService createUserService;
@@ -37,14 +39,23 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> UserDetail(long id)
         {
-            // TODO: validate that if User doesn't have role "Admin", he only can view his own
+            // isn't admin and he isn't trying to change his own password
+            if (!await IsAuthorizedToChangeUserSettings(id))
+            {
+                return Unauthorized();
+            }
+            
             var model = await getUsersService.GetByIdAsync(id);
 
             var availableRoles = await getRolesService.GetAllRolesAsync();
             var userRoles = await getRolesService.GetUserRolesAsync(id);
             
             var viewModel = new DetailUserViewModel(model, userRoles.Select(x => x.Id).ToList(),
-                (List<RoleModel>)availableRoles);
+                (List<RoleModel>)availableRoles)
+            {
+                CanDelete = User.Identity.Name != model.UserName,
+                CanEditRoles = User.IsInRole("Admin")
+            };
 
             return View("UserDetail", viewModel);
         }
@@ -52,9 +63,21 @@ namespace SmartHome.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UserUpdate(UserModel model, List<long> roles)
         {
-            // TODO: validate that if User doesn't have role "Admin", he only can update his own
+            // isn't admin and he isn't trying to change his own password
+            if (!await IsAuthorizedToChangeUserSettings(model.Id))
+            {
+                return Unauthorized();
+            }
+            
             if (ModelState.IsValid)
             {
+                // if user attempts to update roles and is not admin => error
+                var storedRoles = (await getRolesService.GetUserRolesAsync(model.Id)).Select(x => x.Id).ToList();
+                if (!storedRoles.UnorderedEquals(roles) && !User.IsInRole("Admin"))
+                {
+                    return Unauthorized();
+                }
+                
                 var result = await updateUserService.AddToOrRemoveFromRolesAsync(model.Id, roles);
                 if (result.Succeeded)
                 {
@@ -69,7 +92,11 @@ namespace SmartHome.Web.Controllers
             
             var availableRoles = await getRolesService.GetAllRolesAsync();
             return View("UserDetail", new DetailUserViewModel(model, roles,
-                (List<RoleModel>)availableRoles));
+                (List<RoleModel>)availableRoles)
+            {
+                CanDelete = User.Identity.Name != model.UserName,
+                CanEditRoles = User.IsInRole("Admin")
+            });
         }
 
         [HttpGet]
@@ -116,7 +143,12 @@ namespace SmartHome.Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserDelete(long id)
         {
-            // TODO: validate in service that he can't delete his own
+            // cannot delete your own account
+            if ((await getUsersService.GetByNameAsync(User.Identity.Name))?.Id == id)
+            {
+                return Unauthorized();
+            }
+            
             var result = await deleteUserService.DeleteUserAsync(id);
 
             if (result.Succeeded)
@@ -130,7 +162,12 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangePassword(long id)
         {
-            // TODO: no admin => can change only his own
+            // isn't admin and he isn't trying to change his own password
+            if (!await IsAuthorizedToChangeUserSettings(id))
+            {
+                return Unauthorized();
+            }
+            
             var model = await getUsersService.GetByIdAsync(id);
             
             var vm = new ChangePasswordViewModel(new ChangePasswordModel() { Id = model.Id });
@@ -140,7 +177,12 @@ namespace SmartHome.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
-            // TODO: no admin => can change only his own
+            // isn't admin and he isn't trying to change his own password
+            if (!await IsAuthorizedToChangeUserSettings(model.Id))
+            {
+                return Unauthorized();
+            }
+            
             if (ModelState.IsValid)
             {
                 var result = await changePasswordService.ChangePasswordAsync(model);
@@ -157,6 +199,21 @@ namespace SmartHome.Web.Controllers
             }
 
             return View("ChangePassword", new ChangePasswordViewModel(model));
+        }
+
+        private async Task<bool> IsAuthorizedToChangeUserSettings(long userId)
+        {
+            if (User.Identity.Name == null)
+            {
+                return false;
+            }
+            if (!User.IsInRole("Admin") &&
+                (await getUsersService.GetByNameAsync(User.Identity.Name))?.Id != userId)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

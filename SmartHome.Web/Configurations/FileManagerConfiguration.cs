@@ -1,4 +1,4 @@
-namespace SmartHome.DomainCore.Data.Configurations
+namespace SmartHome.Web.Configurations
 {
     public class FileManagerConfiguration
     {

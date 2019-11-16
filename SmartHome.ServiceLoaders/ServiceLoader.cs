@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
-using SmartHome.DomainCore.Data.Configurations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
@@ -100,19 +99,6 @@ namespace SmartHome.ServiceLoaders
                 options.Lockout.AllowedForNewUsers = true;
             });
             
-            return this;
-        }
-
-        protected internal virtual ServiceLoader LoadConfiguration(IServiceCollection services)
-        {
-            services.AddScoped(provider =>
-            {
-                var configurationProvider = provider.GetRequiredService<IConfiguration>();
-                var parsedConfiguration = configurationProvider.GetSection("FileManager").Get<FileManagerConfiguration>();
-                  
-                return parsedConfiguration;
-            });
-
             return this;
         }
     }

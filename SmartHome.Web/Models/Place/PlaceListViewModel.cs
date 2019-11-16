@@ -10,6 +10,7 @@ namespace SmartHome.Web.Models.Place
             Items = items;
         }
 
+        public bool CanCreate { get; set; }
         public IEnumerable<PlaceModel> Items { get; }
     }
 }

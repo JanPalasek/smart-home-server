@@ -4,21 +4,28 @@
     ViewBag.Header = "User";
 }
 
+@{
+    bool rolesReadonly = !Model.CanEditRoles;
+}
+
 <div asp-validation-summary="All"></div>
 
 <form class="form-section" method="post" asp-action="UserUpdate">
     <input asp-for="Model.Id" type="hidden"/>
     <div class="form-group">
         <ejs-button id="update" content="Update" type="submit" cssClass="e-primary"></ejs-button>
-        <a href="@Url.Action("UserDelete", new {id = Model.Model.Id})">
-            <ejs-button id="delete-button" content="Delete" type="button"></ejs-button>
-        </a>
+        @if (Model.CanDelete)
+        {
+            <a href="@Url.Action("UserDelete", new {id = Model.Model.Id})">
+                <ejs-button id="delete-button" content="Delete" type="button"></ejs-button>
+            </a>
+        }
     </div>
     <div class="form-group">
         <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
-                    <ejs-button id="password-change" content="Change password" type="button">
-                    </ejs-button>
-                </a>
+            <ejs-button id="password-change" content="Change password" type="button">
+            </ejs-button>
+        </a>
     </div>
     <section class="section control-section">
         <div class="form-group">
@@ -28,7 +35,7 @@
             <ejs-textbox id="email" ejs-for="Model.Email" placeholder="E-mail" floatLabelType="Auto" type="Email" readonly="true"></ejs-textbox>
         </div>
         <div class="form-group">
-            <ejs-multiselect id="roles" ejs-for="Roles" dataSource="@Model.AvailableRoles" placeholder="User's roles" floatLabelType="Auto">
+            <ejs-multiselect id="roles" ejs-for="Roles" dataSource="@Model.AvailableRoles" placeholder="User's roles" floatLabelType="Auto" readonly="@rolesReadonly">
                 <e-multiselect-fields text="Name" value="Id"></e-multiselect-fields>
             </ejs-multiselect>
         </div>

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using SmartHome.DomainCore.Data.Configurations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.Web.Configurations;
 using SmartHome.Web.Models.Home;
 
 namespace SmartHome.Web.Controllers
@@ -36,8 +36,8 @@ namespace SmartHome.Web.Controllers
             return View("Overview", vm);
         }
         
-        [Authorize]
         [Route("Files")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Files()
         {
             return View("Files", fileManagerConfiguration);

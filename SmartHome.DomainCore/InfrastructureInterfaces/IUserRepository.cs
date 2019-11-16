@@ -15,6 +15,13 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
         Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe);
         
         Task SignOutAsync();
+        
+        /// <summary>
+        /// Use this preferably to sign out other users.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task SignOutAsync(long userId);
 
         Task<UserModel?> GetUserByEmailAsync(string email);
 

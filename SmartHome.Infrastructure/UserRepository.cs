@@ -32,7 +32,7 @@ namespace SmartHome.Infrastructure
 
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(UserModel model)
+        public Task<IdentityResult> UpdateUserAsync(UserModel model)
         {
             throw new NotSupportedException();
         }
@@ -52,6 +52,12 @@ namespace SmartHome.Infrastructure
         public async Task SignOutAsync()
         {
             await signInManager.SignOutAsync();
+        }
+
+        public async Task SignOutAsync(long userId)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            await userManager.UpdateSecurityStampAsync(user);
         }
 
         public async Task<UserModel?> GetUserByEmailAsync(string email)

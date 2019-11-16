@@ -65,7 +65,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword()
         {
             var user = await getUsersService.GetByNameAsync(User.Identity.Name!);
@@ -74,7 +74,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
+        [Authorize]
         public async Task<IActionResult> Detail()
         {
             var user = await getUsersService.GetByNameAsync(User.Identity.Name!);

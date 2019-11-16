@@ -37,8 +37,7 @@ namespace SmartHome.ServiceLoaders
                         .UseMySql(configuration.GetConnectionString("SmartHomeDatabase"), a => a.MigrationsAssembly("SmartHome.Database")));
             }
 
-            LoadConfiguration(services).LoadAuthentication(services)
-                .LoadRepositoriesAndServices(services).LoadAutoMapper(services);
+            LoadAuthentication(services).LoadRepositoriesAndServices(services).LoadAutoMapper(services);
             
             return services;
         }

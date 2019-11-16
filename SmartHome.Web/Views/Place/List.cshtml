@@ -5,7 +5,10 @@
 }
 
 <section>
-    <a asp-action="Create"><ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button></a>
+    @if (Model.CanCreate)
+    {
+        <a asp-action="Create"><ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button></a>
+    }
     
     <ejs-grid id="grid" dataSource="Model.Items">
         <e-grid-columns>

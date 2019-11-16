@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.ServiceLoaders;
+using SmartHome.Web.Configurations;
 using SmartHome.Web.Utils;
 
 namespace SmartHome.Web
@@ -46,6 +47,14 @@ namespace SmartHome.Web
             {
                 options.AddPolicy("AtLeast21", policy =>
                     policy.RequireClaim("EmployeeId"));
+            });
+            
+            services.AddScoped(provider =>
+            {
+                var configurationProvider = provider.GetRequiredService<IConfiguration>();
+                var parsedConfiguration = configurationProvider.GetSection("FileManager").Get<FileManagerConfiguration>();
+                  
+                return parsedConfiguration;
             });
             
             // set up MVC
