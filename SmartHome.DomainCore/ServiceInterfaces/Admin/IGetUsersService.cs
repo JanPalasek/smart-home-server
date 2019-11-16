@@ -10,5 +10,6 @@ namespace SmartHome.DomainCore.ServiceInterfaces.Admin
         Task<UserModel> GetByIdAsync(long id);
         Task<UserModel?> GetByEmailAsync(string email);
         Task<IList<UserModel>> GetAllUsersAsync();
+        Task<UserModel?> GetByNameAsync(string name);
     }
 }

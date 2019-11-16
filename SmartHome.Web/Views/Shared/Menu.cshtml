@@ -41,8 +41,8 @@
         Text = "Administration",
         Items = new List<MenuItem>()
         {
-            new MenuItem() { Text = "Users", Url = Url.Action("UserList", "Admin") },
-            new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Admin") },
+            new MenuItem() { Text = "Users", Url = Url.Action("UserList", "User") },
+            new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Role") },
         }
     });
 
@@ -54,7 +54,7 @@
             Text = "Account",
             Items = new List<MenuItem>()
             {
-                new MenuItem() {Text = "Settings", Url = Url.Action("ChangePassword", "Admin")},
+                new MenuItem() {Text = "Settings", Url = Url.Action("ChangePassword", "Account")},
                 new MenuItem() {Text = "Log Out", Url = Url.Action("LogOut", "Account")}
             }
         });

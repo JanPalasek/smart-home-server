@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
+using SmartHome.DomainCore.ServiceInterfaces.Admin;
 using SmartHome.Web.Models.Account;
 
 namespace SmartHome.Web.Controllers
@@ -14,11 +15,15 @@ namespace SmartHome.Web.Controllers
     {
         private readonly ISignInService signInService;
         private readonly ISignOutService signOutService;
+        private readonly IGetUsersService getUsersService;
 
-        public AccountController(ISignInService signInService, ISignOutService signOutService)
+        public AccountController(ISignInService signInService,
+            ISignOutService signOutService,
+            IGetUsersService getUsersService)
         {
             this.signInService = signInService;
             this.signOutService = signOutService;
+            this.getUsersService = getUsersService;
         }
 
         [HttpPost]
@@ -57,6 +62,14 @@ namespace SmartHome.Web.Controllers
         {
             await signOutService.SignOutAsync();
             return RedirectToAction("Overview", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            var user = await getUsersService.GetByNameAsync(User.Identity.Name!);
+            
+            return RedirectToAction("ChangePassword", "User", new {id = user!.Id});
         }
     }
 }

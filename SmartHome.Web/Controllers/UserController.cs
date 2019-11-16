@@ -1,39 +1,31 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
-using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Admin;
-using SmartHome.Web.Models.Admin;
-using SmartHome.Web.Utils;
+using SmartHome.Web.Models.Role;
+using SmartHome.Web.Models.User;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize]
-    public class AdminController : Controller
+    public class UserController : Controller
     {
         private readonly ICreateUserService createUserService;
         private readonly IGetUsersService getUsersService;
         private readonly IUpdateUserService updateUserService;
         private readonly IChangePasswordService changePasswordService;
-        private readonly ICreateRoleService createRoleService;
-        private readonly IUpdateRoleService updateRoleService;
         private readonly IGetRolesService getRolesService;
 
-        public AdminController(ICreateUserService createUserService, IGetUsersService getUsersService,
-            IChangePasswordService changePasswordService, ICreateRoleService createRoleService,
-            IUpdateRoleService updateRoleService, IGetRolesService getRolesService, IUpdateUserService updateUserService)
+        public UserController(ICreateUserService createUserService, IGetUsersService getUsersService,
+            IUpdateUserService updateUserService, IChangePasswordService changePasswordService,
+            IGetRolesService getRolesService)
         {
             this.createUserService = createUserService;
             this.getUsersService = getUsersService;
-            this.changePasswordService = changePasswordService;
-            this.createRoleService = createRoleService;
-            this.updateRoleService = updateRoleService;
-            this.getRolesService = getRolesService;
             this.updateUserService = updateUserService;
+            this.changePasswordService = changePasswordService;
+            this.getRolesService = getRolesService;
         }
 
         [HttpGet]
@@ -137,69 +129,6 @@ namespace SmartHome.Web.Controllers
             }
 
             return View("ChangePassword", new ChangePasswordViewModel(model));
-        }
-
-        [HttpGet]
-        public IActionResult RoleCreate()
-        {
-            return View("RoleCreate", new CreateRoleViewModel(new CreateRoleModel()));
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> RoleCreate(CreateRoleModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await createRoleService.CreateRoleAsync(model);
-                if (result.Succeeded)
-                {
-                    long roleId = (await getRolesService.GetRoleByNameAsync(model.Name!)).Id;
-                    return RedirectToAction("RoleDetail", new {id = roleId});
-                }
-                
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-            }
-
-            return View("RoleCreate", new CreateRoleViewModel(model));
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> RoleDetail(int id)
-        {
-            var role = await getRolesService.GetRoleByIdAsync(id);
-
-            return View("RoleDetail", new DetailRoleViewModel(role));
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> RoleUpdate(RoleModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await updateRoleService.UpdateRoleAsync(model);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("RoleDetail", new {id = model.Id});
-                }
-                
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-            }
-
-            return View("RoleDetail", new DetailRoleViewModel(model));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> RoleList()
-        {
-            var roles = await getRolesService.GetAllRolesAsync();
-
-            return View("RoleList", new RoleListViewModel(roles));
         }
     }
 }

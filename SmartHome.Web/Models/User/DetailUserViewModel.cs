@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
 
-namespace SmartHome.Web.Models.Admin
+namespace SmartHome.Web.Models.User
 {
     public class DetailUserViewModel
     {

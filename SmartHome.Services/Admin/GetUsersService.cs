@@ -29,5 +29,10 @@ namespace SmartHome.Services.Admin
         {
             return repository.GetAllAsync();
         }
+
+        public async Task<UserModel?> GetByNameAsync(string name)
+        {
+            return await repository.GetUserByNameAsync(name);
+        }
     }
 }

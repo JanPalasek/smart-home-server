@@ -1,6 +1,6 @@
 using SmartHome.DomainCore.Data.Models;
 
-namespace SmartHome.Web.Models.Admin
+namespace SmartHome.Web.Models.Role
 {
     public class CreateUserViewModel
     {
