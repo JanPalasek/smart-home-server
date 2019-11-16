@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
-using SmartHome.DomainCore.ServiceInterfaces.Admin;
+using SmartHome.DomainCore.ServiceInterfaces.User;
 
-namespace SmartHome.Services.Admin
+namespace SmartHome.Services.User
 {
     public class CreateUserService : ICreateUserService
     {

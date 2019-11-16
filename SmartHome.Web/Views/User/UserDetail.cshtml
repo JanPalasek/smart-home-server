@@ -10,10 +10,15 @@
     <input asp-for="Model.Id" type="hidden"/>
     <div class="form-group">
         <ejs-button id="update" content="Update" type="submit" cssClass="e-primary"></ejs-button>
-        <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
-            <ejs-button id="password-change" content="Change password" type="button">
-            </ejs-button>
+        <a href="@Url.Action("UserDelete", new {id = Model.Model.Id})">
+            <ejs-button id="delete-button" content="Delete" type="button"></ejs-button>
         </a>
+    </div>
+    <div class="form-group">
+        <a href="@Url.Action("ChangePassword", new {id = Model.Model.Id})">
+                    <ejs-button id="password-change" content="Change password" type="button">
+                    </ejs-button>
+                </a>
     </div>
     <section class="section control-section">
         <div class="form-group">

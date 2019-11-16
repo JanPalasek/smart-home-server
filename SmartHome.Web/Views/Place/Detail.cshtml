@@ -5,8 +5,13 @@
 
 <div asp-validation-summary="All"></div>
 
-<section class="section control-section form-section">
-    <form method="post">
+<section class="control-section form-section">
+    <div class="form-group">
+        <a href="@Url.Action("Delete", new {id = Model.Model.Id})">
+            <ejs-button id="delete-button" content="Delete"></ejs-button>
+        </a>
+    </div>
+    <form method="post" class="section">
         <input type="hidden" asp-for="Model.Id"/>
         <div class="form-group">
             <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>

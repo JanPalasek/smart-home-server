@@ -56,7 +56,7 @@ CREATE TABLE `AspNetRoles` (
   `ConcurrencyStamp` longtext,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `RoleNameIndex` (`NormalizedName`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +65,7 @@ CREATE TABLE `AspNetRoles` (
 
 LOCK TABLES `AspNetRoles` WRITE;
 /*!40000 ALTER TABLE `AspNetRoles` DISABLE KEYS */;
+INSERT INTO `AspNetRoles` VALUES (1,'Admin','ADMIN','c1c0b684-517d-4409-bb07-72b23df0498c'),(2,'User','USER','49ed20ba-25d5-433c-be2e-af25d9b50009');
 /*!40000 ALTER TABLE `AspNetRoles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,6 +146,7 @@ CREATE TABLE `AspNetUserRoles` (
 
 LOCK TABLES `AspNetUserRoles` WRITE;
 /*!40000 ALTER TABLE `AspNetUserRoles` DISABLE KEYS */;
+INSERT INTO `AspNetUserRoles` VALUES (3,1),(3,2);
 /*!40000 ALTER TABLE `AspNetUserRoles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +202,7 @@ CREATE TABLE `AspNetUsers` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `UserNameIndex` (`NormalizedUserName`),
   KEY `EmailIndex` (`NormalizedEmail`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +211,7 @@ CREATE TABLE `AspNetUsers` (
 
 LOCK TABLES `AspNetUsers` WRITE;
 /*!40000 ALTER TABLE `AspNetUsers` DISABLE KEYS */;
-INSERT INTO `AspNetUsers` VALUES (1,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEF19wTR6dzsUw4HKccl3FOI5dIJXeZ6MbN3Hajjl1tzV3gs7+0czrWkifYaft4BW8A==','YQSLUSWC7FRFW6X3IGOFMDOQ7JBECCES','f304cb0b-1d1c-4ebd-88c4-8bee095d66ad',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
+INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
 /*!40000 ALTER TABLE `AspNetUsers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -326,7 +328,6 @@ CREATE TABLE `Place` (
 
 LOCK TABLES `Place` WRITE;
 /*!40000 ALTER TABLE `Place` DISABLE KEYS */;
-INSERT INTO `Place` VALUES (1,'Place nam',_binary '\0','aaaa\r\n10f');
 /*!40000 ALTER TABLE `Place` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,4 +452,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-12 22:24:03
+-- Dump completed on 2019-11-16 14:37:35

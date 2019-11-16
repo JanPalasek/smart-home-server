@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
-using SmartHome.DomainCore.ServiceInterfaces.Admin;
+using SmartHome.DomainCore.ServiceInterfaces.Role;
 
-namespace SmartHome.Services.Admin
+namespace SmartHome.Services.Role
 {
     public class CreateRoleService : ICreateRoleService
     {

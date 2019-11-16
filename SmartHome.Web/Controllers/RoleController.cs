@@ -1,12 +1,14 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
-using SmartHome.DomainCore.ServiceInterfaces.Admin;
+using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.Web.Models.Role;
 using SmartHome.Web.Models.User;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly ICreateRoleService createRoleService;

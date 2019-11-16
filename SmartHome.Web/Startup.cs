@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.HttpOverrides;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.ServiceLoaders;
 using SmartHome.Web.Utils;
@@ -39,6 +41,12 @@ namespace SmartHome.Web
         public void ConfigureServices(IServiceCollection services)
         {
             new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
+            
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AtLeast21", policy =>
+                    policy.RequireClaim("EmployeeId"));
+            });
             
             // set up MVC
             var mvcConfiguration = services.AddMvc(options =>

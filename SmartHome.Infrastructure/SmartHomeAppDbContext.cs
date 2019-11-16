@@ -30,7 +30,7 @@ namespace SmartHome.Infrastructure
         public async Task DeleteAsync<TEntity>(TEntity entity)
             where TEntity : class, IId<long>, new()
         {
-            var dbEntity = SingleOrDefaultAsync<TEntity>(entity.Id);
+            var dbEntity = await SingleOrDefaultAsync<TEntity>(entity.Id);
 
             // didn't find anything => exception
             if (dbEntity == null)

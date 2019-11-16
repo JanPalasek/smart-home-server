@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
-using SmartHome.DomainCore.ServiceInterfaces.Admin;
+using SmartHome.DomainCore.ServiceInterfaces.User;
 using SmartHome.Web.Models.Account;
 
 namespace SmartHome.Web.Controllers
@@ -65,11 +65,21 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> ChangePassword()
         {
             var user = await getUsersService.GetByNameAsync(User.Identity.Name!);
             
             return RedirectToAction("ChangePassword", "User", new {id = user!.Id});
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Detail()
+        {
+            var user = await getUsersService.GetByNameAsync(User.Identity.Name!);
+            
+            return RedirectToAction("UserDetail", "User", new {id = user!.Id});
         }
     }
 }

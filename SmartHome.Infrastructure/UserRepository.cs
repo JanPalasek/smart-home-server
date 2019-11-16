@@ -37,6 +37,12 @@ namespace SmartHome.Infrastructure
             throw new NotSupportedException();
         }
 
+        public async Task<IdentityResult> DeleteUserAsync(long id)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(id);
+            return await userManager.DeleteAsync(user);
+        }
+
         public async Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe)
         {
             var user = await SingleAsync(model.Id);

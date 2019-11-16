@@ -10,12 +10,14 @@ using SmartHome.DomainCore.Data.Configurations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
-using SmartHome.DomainCore.ServiceInterfaces.Admin;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
+using SmartHome.DomainCore.ServiceInterfaces.Role;
+using SmartHome.DomainCore.ServiceInterfaces.User;
 using SmartHome.Infrastructure;
 using SmartHome.Services.Account;
-using SmartHome.Services.Admin;
 using SmartHome.Services.Place;
+using SmartHome.Services.Role;
+using SmartHome.Services.User;
 
 namespace SmartHome.ServiceLoaders
 {
@@ -61,6 +63,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ICreatePlaceService, CreatePlaceService>();
             services.AddScoped<IGetPlacesService, GetPlacesService>();
             services.AddScoped<IUpdatePlaceService, UpdatePlaceService>();
+            services.AddScoped<IDeletePlaceService, DeletePlaceService>();
 
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<ISignOutService, SignOutService>();
@@ -69,6 +72,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ICreateUserService, CreateUserService>();
             services.AddScoped<IUpdateUserService, UpdateUserService>();
             services.AddScoped<IGetUsersService, GetUsersService>();
+            services.AddScoped<IDeleteUserService, DeleteUserService>();
 
             services.AddScoped<IGetRolesService, GetRolesService>();
             services.AddScoped<ICreateRoleService, CreateRoleService>();

@@ -10,6 +10,8 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
         Task<IdentityResult> CreateUserAsync(CreateUserModel model);
 
         Task<IdentityResult> UpdateUserAsync(UserModel model);
+
+        Task<IdentityResult> DeleteUserAsync(long id);
         Task<SignInResult> SignInAsync(UserModel model, string password, bool rememberMe);
         
         Task SignOutAsync();
