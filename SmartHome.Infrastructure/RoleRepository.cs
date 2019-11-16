@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 
 namespace SmartHome.Infrastructure

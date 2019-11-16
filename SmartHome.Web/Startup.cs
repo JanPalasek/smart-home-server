@@ -53,6 +53,8 @@ namespace SmartHome.Web
             {
                 var configurationProvider = provider.GetRequiredService<IConfiguration>();
                 var parsedConfiguration = configurationProvider.GetSection("FileManager").Get<FileManagerConfiguration>();
+                
+                // TODO: verify it has all properties not null and not empty
                   
                 return parsedConfiguration;
             });

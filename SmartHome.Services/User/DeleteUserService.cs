@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 
@@ -14,9 +15,9 @@ namespace SmartHome.Services.User
             this.repository = repository;
         }
 
-        public async Task<IdentityResult> DeleteUserAsync(long id)
+        public async Task<SmartHomeValidationResult> DeleteUserAsync(long id)
         {
-            return await repository.DeleteUserAsync(id);
+            return SmartHomeValidationResult.FromIdentityResult(await repository.DeleteUserAsync(id));
         }
     }
 }

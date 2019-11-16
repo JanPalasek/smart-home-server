@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 
@@ -19,12 +20,12 @@ namespace SmartHome.Services.User
             this.roleRepository = roleRepository;
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(UserModel model)
+        public async Task<SmartHomeValidationResult> UpdateUserAsync(UserModel model)
         {
-            return await repository.UpdateUserAsync(model);
+            return SmartHomeValidationResult.FromIdentityResult(await repository.UpdateUserAsync(model));
         }
 
-        public async Task<IdentityResult> AddToOrRemoveFromRolesAsync(long userId, IEnumerable<long> roleIds)
+        public async Task<SmartHomeValidationResult> AddToOrRemoveFromRolesAsync(long userId, IEnumerable<long> roleIds)
         {
             var allUserRoles = await roleRepository.GetUserRolesAsync(userId);
 
@@ -34,12 +35,13 @@ namespace SmartHome.Services.User
             
             if (rolesToAdd.Count > 0 && rolesToRemove.Count > 0)
             {
-                // TODO: merge
-                await repository.AddToRolesAsync(userId, rolesToAdd);
-                return await repository.RemoveFromRolesAsync(userId, rolesToRemove);
+                var validationResult = SmartHomeValidationResult.FromIdentityResult(await repository.AddToRolesAsync(userId, rolesToAdd));
+                validationResult = validationResult.Merge(SmartHomeValidationResult.FromIdentityResult(
+                    await repository.RemoveFromRolesAsync(userId, rolesToRemove)));
+                return validationResult;
             }
             
-            return IdentityResult.Failed();
+            return SmartHomeValidationResult.Success;
         }
     }
 }

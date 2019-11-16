@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 
@@ -17,31 +18,28 @@ namespace SmartHome.Services.User
             this.repository = repository;
         }
 
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel)
+        public async Task<SmartHomeValidationResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel)
         {
             var errors = await ValidateAsync(changePasswordModel);
-            if (errors.Count > 0)
+            if (!errors.Succeeded)
             {
-                return IdentityResult.Failed(errors.ToArray());
+                return errors;
             }
             
-            return await repository.ChangePasswordAsync(changePasswordModel);
+            return SmartHomeValidationResult.FromIdentityResult(await repository.ChangePasswordAsync(changePasswordModel));
         }
 
-        private async Task<IList<IdentityError>> ValidateAsync(ChangePasswordModel model)
+        private async Task<SmartHomeValidationResult> ValidateAsync(ChangePasswordModel model)
         {
-            var errors = new List<IdentityError>();
+            var errors = new List<SmartHomeValidation>();
 
             if (string.Equals(model.OldPassword, model.NewPassword))
             {
-                errors.Add(new IdentityError()
-                {
-                    Code = nameof(model.NewPassword),
-                    Description = "Old password cannot be same as the new password."
-                });
+                errors.Add(new SmartHomeValidation(nameof(model.NewPassword),
+                    "Old password cannot be same as the new password."));
             }
 
-            return errors;
+            return SmartHomeValidationResult.Failed(errors);
         }
     }
 }

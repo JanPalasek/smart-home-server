@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 
@@ -15,9 +16,9 @@ namespace SmartHome.Services.Role
             this.roleRepository = roleRepository;
         }
 
-        public async Task<IdentityResult> CreateRoleAsync(CreateRoleModel model)
+        public async Task<SmartHomeValidationResult> CreateRoleAsync(CreateRoleModel model)
         {
-            return await roleRepository.CreateRoleAsync(model);
+            return SmartHomeValidationResult.FromIdentityResult(await roleRepository.CreateRoleAsync(model));
         }
     }
 }

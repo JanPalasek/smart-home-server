@@ -11,6 +11,7 @@ using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 using SmartHome.Web.Models.Role;
 using SmartHome.Web.Models.User;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
@@ -84,10 +85,7 @@ namespace SmartHome.Web.Controllers
                     return RedirectToAction("UserDetail", new {id = model.Id});
                 }
                 
-                foreach (var identityError in result.Errors)
-                {
-                    ModelState.AddModelError(identityError.Code, identityError.Description);
-                }
+                ModelState.AddValidationErrors(result);
             }
             
             var availableRoles = await getRolesService.GetAllRolesAsync();
@@ -129,11 +127,7 @@ namespace SmartHome.Web.Controllers
                     return RedirectToAction("UserDetail", new { id = (await getUsersService.GetByEmailAsync(model.Email!))!.Id });
                 }
                 
-                // print errors
-                foreach (var identityError in result.Errors)
-                {
-                    ModelState.AddModelError(identityError.Code, identityError.Description);
-                }
+                ModelState.AddValidationErrors(result);
             }
 
             return View("UserCreate", new CreateUserViewModel(model));
@@ -144,7 +138,7 @@ namespace SmartHome.Web.Controllers
         public async Task<IActionResult> UserDelete(long id)
         {
             // cannot delete your own account
-            if ((await getUsersService.GetByNameAsync(User.Identity.Name))?.Id == id)
+            if ((await getUsersService.GetByNameAsync(User.Identity.Name!))?.Id == id)
             {
                 return Unauthorized();
             }
@@ -192,10 +186,7 @@ namespace SmartHome.Web.Controllers
                     return RedirectToAction("UserDetail", new {id = model.Id});
                 }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
+                ModelState.AddValidationErrors(result);
             }
 
             return View("ChangePassword", new ChangePasswordViewModel(model));

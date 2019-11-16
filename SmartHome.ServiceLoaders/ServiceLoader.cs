@@ -9,13 +9,19 @@ using SmartHome.Database.Entities;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
+using SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
+using SmartHome.DomainCore.ServiceInterfaces.Sensor;
+using SmartHome.DomainCore.ServiceInterfaces.SensorType;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 using SmartHome.Infrastructure;
 using SmartHome.Services.Account;
+using SmartHome.Services.BatteryPowerSourceType;
 using SmartHome.Services.Place;
 using SmartHome.Services.Role;
+using SmartHome.Services.Sensor;
+using SmartHome.Services.SensorType;
 using SmartHome.Services.User;
 
 namespace SmartHome.ServiceLoaders
@@ -76,6 +82,15 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IGetRolesService, GetRolesService>();
             services.AddScoped<ICreateRoleService, CreateRoleService>();
             services.AddScoped<IUpdateRoleService, UpdateRoleService>();
+
+            services.AddScoped<ICreateSensorService, CreateSensorService>();
+            services.AddScoped<IUpdateSensorService, UpdateSensorService>();
+            services.AddScoped<IDeleteSensorService, DeleteSensorService>();
+            services.AddScoped<IGetSensorsService, GetSensorsService>();
+
+            services.AddScoped<IGetSensorTypesService, GetSensorTypesService>();
+
+            services.AddScoped<IGetBatteryPowerSourceTypesService, GetBatteryPowerSourceTypesService>();
 
             return this;
         }

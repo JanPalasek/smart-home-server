@@ -1,22 +1,39 @@
 @model SmartHome.Web.Models.Sensor.SensorViewModel
 
+@{
+    ViewBag.Header = "Sensor";
+}
+
 <div asp-validation-summary="All"></div>
 
-<section class="section control-section form-section">
-    <form asp-action="Create" method="post">
+<section class="control-section form-section">
+    @if (!Model.IsCreatePage)
+    {
+        <div class="form-group">
+            <a href="@Url.Action("Delete", new {id = Model.Model.Id})">
+                <ejs-button id="delete-button" content="Delete"></ejs-button>
+            </a>
+        </div>
+    }
+    <form method="post" class="section">
         <input type="hidden" asp-for="Model.Id"/>
-        <div>
-            <label asp-for="Model.PlaceId"></label>
-            <select asp-for="Model.PlaceId" asp-items="Model.Places"></select>
+        <div class="form-group">
+            <ejs-dropdownlist id="place" ejs-for="Model.PlaceId" dataSource="@Model.Places" placeholder="Place" floatLabelType="Auto">
+                <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
         </div>
-        <div>
-            <label asp-for="Model.SensorTypeId"></label>
-            <select asp-for="Model.SensorTypeId" asp-items="Model.SensorTypes"></select>
+        <div class="form-group">
+            <ejs-dropdownlist id="sensor-type" ejs-for="Model.SensorTypeId" dataSource="@Model.SensorTypes" placeholder="Sensor type" floatLabelType="Auto">
+                <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
         </div>
-        <div>
-            <label asp-for="Model.BatteryPowerSourceTypeId"></label>
-            <select asp-for="Model.BatteryPowerSourceTypeId" asp-items="Model.BatteryPowerSourceTypes"></select>
+        <div class="form-group">
+            @* TODO *@
+            <ejs-dropdownlist id="battery-power-source-type" ejs-for="Model.BatteryPowerSourceTypeId" dataSource="@Model.BatteryPowerSourceTypes"
+                              placeholder="Battery power source type" floatLabelType="Auto">
+                <e-dropdownlist-fields text="BatteryType" value="Id"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
         </div>
-        <button class="btn btn-primary" type="submit">TODO</button>
+        <ejs-button id="submit-button" type="submit" content="Submit" cssClass="e-primary"></ejs-button>
     </form>
 </section>

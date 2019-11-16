@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 
@@ -17,40 +18,34 @@ namespace SmartHome.Services.User
             this.repository = repository;
         }
 
-        public async Task<IdentityResult> CreateUserAsync(CreateUserModel model)
+        public async Task<SmartHomeValidationResult> CreateUserAsync(CreateUserModel model)
         {
-            var identityErrors = await ValidateAsync(model);
+            var validationResult = await ValidateAsync(model);
             
-            if (identityErrors.Count > 0)
+            if (!validationResult.Succeeded)
             {
-                return IdentityResult.Failed(identityErrors.ToArray());
+                return validationResult;
             }
             
-            return await repository.CreateUserAsync(model);
+            return SmartHomeValidationResult.FromIdentityResult(await repository.CreateUserAsync(model));
         }
 
-        private async Task<IList<IdentityError>> ValidateAsync(CreateUserModel model)
+        private async Task<SmartHomeValidationResult> ValidateAsync(CreateUserModel model)
         {
-            var identityErrors = new List<IdentityError>();
+            var identityErrors = new List<SmartHomeValidation>();
             if (await repository.GetUserByNameAsync(model.UserName!) != null)
             {
-                identityErrors.Add(new IdentityError()
-                {
-                    Code = nameof(model.UserName),
-                    Description = $"User with name {model.UserName} already exists."
-                });
+                identityErrors.Add(new SmartHomeValidation(nameof(model.UserName),
+                    $"User with name {model.UserName} already exists."));
             }
             
             if (await repository.GetUserByEmailAsync(model.Email!) != null)
             {
-                identityErrors.Add(new IdentityError()
-                {
-                    Code = nameof(model.Email),
-                    Description = $"User with email {model.Email} already exists."
-                });
+                identityErrors.Add(new SmartHomeValidation(nameof(model.Email),
+                    $"User with email {model.Email} already exists."));
             }
 
-            return identityErrors;
+            return SmartHomeValidationResult.Failed(identityErrors);
         }
     }
 }

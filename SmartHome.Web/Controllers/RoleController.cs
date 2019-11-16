@@ -5,6 +5,7 @@ using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.Web.Models.Role;
 using SmartHome.Web.Models.User;
+using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
@@ -43,10 +44,7 @@ namespace SmartHome.Web.Controllers
                     return RedirectToAction("RoleDetail", new {id = roleId});
                 }
                 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
+                ModelState.AddValidationErrors(result);
             }
 
             return View("RoleCreate", new CreateRoleViewModel(model));
@@ -71,10 +69,7 @@ namespace SmartHome.Web.Controllers
                     return RedirectToAction("RoleDetail", new {id = model.Id});
                 }
                 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
+                ModelState.AddValidationErrors(result);
             }
 
             return View("RoleDetail", new DetailRoleViewModel(model));

@@ -4,6 +4,7 @@ namespace SmartHome.Web.Models.Place
 {
     public class PlaceViewModel
     {
+        public bool IsCreatePage { get; set; }
         public bool CanEdit { get; set; }
         
         public PlaceModel Model { get; set; }

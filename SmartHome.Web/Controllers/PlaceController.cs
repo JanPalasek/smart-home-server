@@ -60,7 +60,7 @@ namespace SmartHome.Web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            return View("Detail", new PlaceViewModel(new PlaceModel()) {CanEdit = User.IsInRole("Admin")});
+            return View("Detail", new PlaceViewModel(new PlaceModel()) {CanEdit = User.IsInRole("Admin"), IsCreatePage = true});
         }
 
         [HttpPost]
@@ -69,7 +69,7 @@ namespace SmartHome.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Detail", new PlaceViewModel(model) { CanEdit = User.IsInRole("Admin") });
+                return View("Detail", new PlaceViewModel(model) { CanEdit = User.IsInRole("Admin"), IsCreatePage = true});
             }
 
             long id = await createPlaceService.CreateAsync(model);
