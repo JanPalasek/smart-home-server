@@ -19,5 +19,10 @@ namespace SmartHome.Services.BatteryPowerSourceType
         {
             return repository.GetAllAsync();
         }
+
+        public async Task<BatteryPowerSourceTypeModel> GetByIdAsync(long id)
+        {
+            return await repository.GetByIdAsync(id);
+        }
     }
 }

@@ -89,8 +89,14 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IGetSensorsService, GetSensorsService>();
 
             services.AddScoped<IGetSensorTypesService, GetSensorTypesService>();
+            services.AddScoped<ICreateSensorTypeService, CreateSensorTypeService>();
+            services.AddScoped<IUpdateSensorTypeService, UpdateSensorTypeService>();
+            services.AddScoped<IDeleteSensorTypeService, DeleteSensorTypeService>();
 
             services.AddScoped<IGetBatteryPowerSourceTypesService, GetBatteryPowerSourceTypesService>();
+            services.AddScoped<ICreateBatteryPowerSourceTypeService, CreateBatteryPowerSourceTypeService>();
+            services.AddScoped<IDeleteBatteryPowerSourceTypeService, DeleteBatteryPowerSourceTypeService>();
+            services.AddScoped<IUpdateBatteryPowerSourceTypeService, UpdateBatteryPowerSourceTypeService>();
 
             return this;
         }

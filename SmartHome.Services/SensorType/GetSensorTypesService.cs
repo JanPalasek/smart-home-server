@@ -20,5 +20,10 @@ namespace SmartHome.Services.SensorType
         {
             return repository.GetAllAsync();
         }
+
+        public async Task<SensorTypeModel> GetByIdAsync(long id)
+        {
+            return await repository.GetByIdAsync(id);
+        }
     }
 }

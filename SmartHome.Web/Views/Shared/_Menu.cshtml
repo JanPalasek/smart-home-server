@@ -38,9 +38,11 @@
             Text = "Enumerations",
             Items = new List<MenuItem>()
             {
+                new MenuItem() {Text = "Battery power source types", Url = Url.Action("List", "BatteryPowerSourceType")},
                 new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") },
 //            TODO
-                new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")}
+                new MenuItem() { Text = "Sensors", Url = Url.Action("Create", "Sensor")},
+                new MenuItem() { Text = "Sensor types", Url = Url.Action("List", "SensorType") }
             }
         });
     }

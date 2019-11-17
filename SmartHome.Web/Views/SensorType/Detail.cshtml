@@ -1,20 +1,37 @@
 @model SmartHome.Web.Models.SensorType.SensorTypeViewModel
 
-<div asp-validation-summary="All" class="section"></div>
+@{
+    ViewBag.Header = "Sensor type";
+}
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="Model.Id"/>
-    <div>
-        <label asp-for="Model.Name"></label>
-        <input asp-for="Model.Name" />
-    </div>
-    @* <div> *@
-    @*     <label asp-for="Model.MeasurementTypes"></label> *@
-    @*     <select asp-for="Model.MeasurementTypes" asp-items="Model.MeasurementTypes"></select> *@
-    @* </div> *@
-    <div>
-        <label asp-for="Model.Description"></label>
-        <textarea asp-for="Model.Description" rows="5" cols="10"></textarea>
-    </div>
-    <button class="btn btn-primary" type="submit">TODO</button>
-</form>
+@{
+    bool disableFields = !Model.CanEdit;
+}
+
+<div asp-validation-summary="All"></div>
+
+<section class="control-section form-section">
+    @if (!disableFields && !Model.IsCreatePage)
+    {
+        <div class="form-group">
+            <a href="@Url.Action("Delete", new {id = Model.Model.Id})">
+                <ejs-button id="delete-button" content="Delete"></ejs-button>
+            </a>
+        </div>
+    }
+
+    <form method="post" class="section">
+        <input type="hidden" asp-for="Model.Id"/>
+        <div class="form-group">
+            <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto" readonly="@disableFields"></ejs-textbox>
+        </div>
+        <div class="form-group">
+            <ejs-textbox ejs-for="Model.Description" id="description" placeholder="Note"
+                         multiline="true" floatLabelType="Auto" readonly="@disableFields"></ejs-textbox>
+        </div>
+        @if (!disableFields)
+        {
+            <ejs-button id="button" type="submit" content="Submit" cssClass="e-primary"></ejs-button>
+        }
+    </form>
+</section>

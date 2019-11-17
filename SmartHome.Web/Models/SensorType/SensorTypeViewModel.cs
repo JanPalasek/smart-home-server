@@ -11,6 +11,9 @@ namespace SmartHome.Web.Models.SensorType
             Model = model;
         }
         
+        public bool IsCreatePage { get; set; }
+        public bool CanEdit { get; set; }
+        
         public SensorTypeModel Model { get; set; }
     }
 }

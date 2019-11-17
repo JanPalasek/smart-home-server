@@ -1,33 +1,51 @@
 @using SmartHome.DomainCore.Data
 @model SmartHome.Web.Models.BatteryPowerSourceType.BatteryPowerSourceTypeViewModel
 
-@* TODO  *@
+@{
+    ViewBag.Header = "Battery power source type";
+}
+
+@{
+    bool disableFields = !Model.CanEdit;
+}
 
 <div asp-validation-summary="All"></div>
 
-<form asp-action="Create" method="post">
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.BatteryType"></label>
-            <select asp-for="Model.BatteryType" asp-items="Html.GetEnumSelectList<BatteryType>()"></select>
+<section class="control-section form-section">
+    @if (!disableFields && !Model.IsCreatePage)
+    {
+        <div class="form-group">
+            <a href="@Url.Action("Delete", new {id = Model.Model.Id})">
+                <ejs-button id="delete-button" content="Delete"></ejs-button>
+            </a>
         </div>
-    </div>
+    }
 
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.MinimumVoltage"></label>
-            <input asp-for="Model.MinimumVoltage" />
+    <form method="post" class="section">
+        <input type="hidden" asp-for="Model.Id"/>
+        <div class="form-group">
+            @{
+                var enumResources = Enum.GetValues(typeof(BatteryType)).Cast<BatteryType>()
+                    .Select(x => new EntityReference((int)x, x.ToString()))
+                    .ToArray();
+            }
+            <ejs-dropdownlist id="battery-type" ejs-for="Model.BatteryType" placeholder="Battery type" floatLabelType="Auto"
+                              dataSource="@enumResources" readonly="@disableFields">
+                <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
         </div>
-    </div>
-
-    <div class="form-row">
-        <div class="col">
-            <label asp-for="Model.MaximumVoltage"></label>
-            <input asp-for="Model.MaximumVoltage" />
+        <div class="form-group">
+            <ejs-numerictextbox ejs-for="Model.MinimumVoltage" id="min-voltage" placeholder="Minimum voltage"
+                                floatLabelType="Auto" readonly="@disableFields"></ejs-numerictextbox>
         </div>
-    </div>
-
-    <div class="form-row">
-        <button class="btn btn-primary mb-2 mr-sm-2" type="submit">Submit</button>
-    </div>
-</form>
+        <div class="form-group">
+            <ejs-numerictextbox ejs-for="Model.MaximumVoltage" id="max-voltage" placeholder="Maximum voltage"
+                                floatLabelType="Auto" readonly="@disableFields">
+            </ejs-numerictextbox>
+        </div>
+        @if (!disableFields)
+        {
+            <ejs-button id="button" type="submit" content="Submit" cssClass="e-primary"></ejs-button>
+        }
+    </form>
+</section>

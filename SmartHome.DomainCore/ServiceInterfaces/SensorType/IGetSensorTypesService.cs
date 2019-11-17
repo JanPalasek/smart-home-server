@@ -8,5 +8,6 @@ namespace SmartHome.DomainCore.ServiceInterfaces.SensorType
     public interface IGetSensorTypesService
     {
         Task<IList<SensorTypeModel>> GetAllSensorTypesAsync();
+        Task<SensorTypeModel> GetByIdAsync(long id);
     }
 }

@@ -1,0 +1,27 @@
+@model SmartHome.Web.Models.BatteryPowerSourceType.BatteryPowerSourceTypeListViewModel
+
+@{
+    ViewBag.Header = "Battery power source type";
+}
+
+<section>
+    @if (Model.CanCreate)
+    {
+        <a asp-action="Create">
+            <ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button>
+        </a>
+    }
+
+    <ejs-grid id="grid" dataSource="Model.Items">
+        <e-grid-columns>
+            <e-grid-column field="BatteryType" headerText="Battery type"></e-grid-column>
+            <e-grid-column field="MinimumVoltage" headerText="Minimum voltage"></e-grid-column>
+            <e-grid-column field="MaximumVoltage" headerText="Maximum voltage"></e-grid-column>
+            <e-grid-column template="#detail-template" textAlign="Right"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>
+
+<script id="detail-template" type="text/x-template">
+    <a href="Detail/${Id}"><button class="e-control e-btn e-lib">Detail</button></a>
+</script>

@@ -8,5 +8,6 @@ namespace SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType
     public interface IGetBatteryPowerSourceTypesService
     {
         Task<IList<BatteryPowerSourceTypeModel>> GetAllPowerSourceTypesAsync();
+        Task<BatteryPowerSourceTypeModel> GetByIdAsync(long id);
     }
 }
