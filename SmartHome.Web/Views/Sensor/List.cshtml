@@ -1,1 +1,29 @@
 @model SmartHome.Web.Models.Sensor.SensorListViewModel
+
+
+@{
+    ViewBag.Header = "Sensor";
+}
+
+<section>
+    @if (Model.CanCreate)
+    {
+        <a asp-action="Create">
+            <ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button>
+        </a>
+    }
+
+    <ejs-grid id="grid" dataSource="Model.Items">
+        <e-grid-columns>
+            <e-grid-column field="BatteryPowerSourceTypeId" headerText="Battery power source"></e-grid-column>
+            <e-grid-column field="SensorTypeId" headerText="Sensor type"></e-grid-column>
+            <e-grid-column field="PlaceId" headerText="Place"></e-grid-column>
+            <e-grid-column field="MinimumRequiredVoltage" headerText="Minimum required voltage"></e-grid-column>
+            <e-grid-column template="#detail-template" textAlign="Right"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>
+
+<script id="detail-template" type="text/x-template">
+    <a href="Detail/${Id}"><button class="e-control e-btn e-lib">Detail</button></a>
+</script>

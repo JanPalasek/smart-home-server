@@ -62,6 +62,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var vm = new SensorTypeViewModel(new SensorTypeModel())

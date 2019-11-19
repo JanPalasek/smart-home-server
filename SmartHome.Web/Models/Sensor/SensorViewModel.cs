@@ -16,6 +16,8 @@ namespace SmartHome.Web.Models.Sensor
 
         public bool IsCreatePage { get; set; }
         
+        public bool CanEdit { get; set; }
+        
         public SensorModel Model { get; set; }
 
         public IEnumerable<BatteryPowerSourceTypeModel> BatteryPowerSourceTypes { get; set; } = Enumerable.Empty<BatteryPowerSourceTypeModel>();

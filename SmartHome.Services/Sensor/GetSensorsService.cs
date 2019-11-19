@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
@@ -17,6 +18,11 @@ namespace SmartHome.Services.Sensor
         public async Task<SensorModel> GetSensorByIdAsync(long sensorId)
         {
             return await repository.GetByIdAsync(sensorId);
+        }
+
+        public async Task<IList<SensorModel>> GetAllSensorsAsync()
+        {
+            return await repository.GetAllAsync();
         }
     }
 }

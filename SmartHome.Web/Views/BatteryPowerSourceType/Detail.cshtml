@@ -1,3 +1,4 @@
+@using SmartHome.Common.Helpers
 @using SmartHome.DomainCore.Data
 @model SmartHome.Web.Models.BatteryPowerSourceType.BatteryPowerSourceTypeViewModel
 
@@ -25,7 +26,7 @@
         <input type="hidden" asp-for="Model.Id"/>
         <div class="form-group">
             @{
-                var enumResources = Enum.GetValues(typeof(BatteryType)).Cast<BatteryType>()
+                var enumResources = EnumHelper.GetAllValues<BatteryType>()
                     .Select(x => new EntityReference((int)x, x.ToString()))
                     .ToArray();
             }

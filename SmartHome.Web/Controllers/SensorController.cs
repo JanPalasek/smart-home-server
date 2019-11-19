@@ -60,7 +60,7 @@ namespace SmartHome.Web.Controllers
                 var result = await updateSensorService.UpdateSensorAsync(model);
                 if (result.ValidationResult.Succeeded)
                 {
-                    return RedirectToAction("Detail", new { Result = result.Value });
+                    return RedirectToAction("Detail", new { Id = result.Value });
                 }
 
                 ModelState.AddValidationErrors(result.ValidationResult);
@@ -87,7 +87,7 @@ namespace SmartHome.Web.Controllers
                 var result = await createSensorService.CreateSensorAsync(model);
                 if (result.ValidationResult.Succeeded)
                 {
-                    return RedirectToAction("Detail", new { Result = result.Value });
+                    return RedirectToAction("Detail", new { Id = result.Value });
                 }
 
                 ModelState.AddValidationErrors(result.ValidationResult);
@@ -106,16 +106,22 @@ namespace SmartHome.Web.Controllers
         
         [HttpGet]
 
-        public Task<IActionResult> List()
+        public async Task<IActionResult> List()
         {
-            throw new NotImplementedException();
+            var items = await getSensorsService.GetAllSensorsAsync();
+            
+            return View("List", new SensorListViewModel(items)
+            {
+                CanCreate = User.IsInRole("Admin")
+            });
         }
 
         private async Task<SensorViewModel> CreateAndFillViewModelAsync(SensorModel model, bool isCreatePage)
         {
             var viewModel = new SensorViewModel(model)
             {
-                IsCreatePage = isCreatePage
+                IsCreatePage = isCreatePage,
+                CanEdit = User.IsInRole("Admin")
             };
 
             viewModel.BatteryPowerSourceTypes = await getBatteryPowerSourceTypesService.GetAllPowerSourceTypesAsync();
