@@ -20,7 +20,7 @@ namespace SmartHome.Services.User
 
         public async Task<SmartHomeValidationResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel)
         {
-            var errors = await ValidateAsync(changePasswordModel);
+            var errors = Validate(changePasswordModel);
             if (!errors.Succeeded)
             {
                 return errors;
@@ -29,7 +29,7 @@ namespace SmartHome.Services.User
             return SmartHomeValidationResult.FromIdentityResult(await repository.ChangePasswordAsync(changePasswordModel));
         }
 
-        private async Task<SmartHomeValidationResult> ValidateAsync(ChangePasswordModel model)
+        private SmartHomeValidationResult Validate(ChangePasswordModel model)
         {
             var errors = new List<SmartHomeValidation>();
 

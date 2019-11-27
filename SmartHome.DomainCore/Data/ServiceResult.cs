@@ -12,5 +12,7 @@ namespace SmartHome.DomainCore.Data
 
         public TType Value { get; }
         public SmartHomeValidationResult ValidationResult { get; }
+
+        public bool Succeeded => ValidationResult.Succeeded;
     }
 }

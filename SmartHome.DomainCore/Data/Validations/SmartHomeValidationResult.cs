@@ -38,5 +38,10 @@ namespace SmartHome.DomainCore.Data.Validations
         {
             return new SmartHomeValidationResult(Errors.Concat(result.Errors).ToList());
         }
+
+        public override string ToString()
+        {
+            return string.Join(',', Errors.Select(x => x.ToString()));
+        }
     }
 }

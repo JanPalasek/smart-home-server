@@ -9,19 +9,23 @@ using SmartHome.Database.Entities;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
+using SmartHome.DomainCore.ServiceInterfaces.BatteryMeasurement;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.DomainCore.ServiceInterfaces.Sensor;
 using SmartHome.DomainCore.ServiceInterfaces.SensorType;
+using SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement;
 using SmartHome.DomainCore.ServiceInterfaces.User;
 using SmartHome.Infrastructure;
 using SmartHome.Services.Account;
+using SmartHome.Services.BatteryMeasurement;
 using SmartHome.Services.BatteryPowerSourceType;
 using SmartHome.Services.Place;
 using SmartHome.Services.Role;
 using SmartHome.Services.Sensor;
 using SmartHome.Services.SensorType;
+using SmartHome.Services.TemperatureMeasurement;
 using SmartHome.Services.User;
 
 namespace SmartHome.ServiceLoaders
@@ -97,6 +101,14 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<ICreateBatteryPowerSourceTypeService, CreateBatteryPowerSourceTypeService>();
             services.AddScoped<IDeleteBatteryPowerSourceTypeService, DeleteBatteryPowerSourceTypeService>();
             services.AddScoped<IUpdateBatteryPowerSourceTypeService, UpdateBatteryPowerSourceTypeService>();
+            
+            // measurements
+            services.AddScoped<ICreateTemperatureMeasurementService, CreateTemperatureMeasurementService>();
+            services.AddScoped<IGetTemperatureMeasurementsService, GetTemperatureMeasurementsService>();
+            services.AddScoped<IDeleteTemperatureMeasurementService, DeleteTemperatureMeasurementService>();
+            services.AddScoped<IUpdateTemperatureMeasurementService, UpdateTemperatureMeasurementService>();
+            
+            services.AddScoped<ICreateBatteryMeasurementService, CreateBatteryMeasurementService>();
 
             return this;
         }

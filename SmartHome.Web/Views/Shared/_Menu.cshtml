@@ -46,6 +46,18 @@
         });
     }
 
+    if (isUser)
+    {
+        leftMenuItems.Add(new MenuItem()
+        {
+            Text = "Measurements",
+            Items = new List<MenuItem>()
+            {
+                new MenuItem() {Text = "Temperature", Url = Url.Action("List", "TemperatureMeasurement")}
+            }
+        });
+    }
+
     if (isAdmin)
     {
         leftMenuItems.Add(new MenuItem()

@@ -4,40 +4,47 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.DomainCore.ServiceInterfaces.BatteryMeasurement;
+using SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement;
 
 namespace SmartHome.Web.Controllers.ApiControllers
 {
     public class TemperaturesController : ControllerBase
     {
-        private readonly ITemperatureMeasurementRepository temperatureMeasurementRepository;
-        private readonly IBatteryMeasurementRepository batteryMeasurementRepository;
-        private readonly ISensorRepository sensorRepository;
+        private readonly ICreateBatteryMeasurementService batteryMeasurementService;
+        private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
+        private readonly ICreateTemperatureMeasurementService createTemperatureMeasurementService;
 
         public TemperaturesController(
-            ITemperatureMeasurementRepository temperatureMeasurementRepository,
-            IBatteryMeasurementRepository batteryMeasurementRepository,
-            ISensorRepository sensorRepository)
+            IGetTemperatureMeasurementsService getTemperatureMeasurementsService,
+            ICreateTemperatureMeasurementService createTemperatureMeasurementService,
+            ICreateBatteryMeasurementService batteryMeasurementService)
         {
-            this.temperatureMeasurementRepository = temperatureMeasurementRepository;
-            this.batteryMeasurementRepository = batteryMeasurementRepository;
-            this.sensorRepository = sensorRepository;
+            this.getTemperatureMeasurementsService = getTemperatureMeasurementsService;
+            this.createTemperatureMeasurementService = createTemperatureMeasurementService;
+            this.batteryMeasurementService = batteryMeasurementService;
         }
         
         [HttpPost("api/sensors/{sensorId:int}/temperatures")]
         [HttpPost("api/temperatures")]
         public async Task<IActionResult> Temperature(int sensorId, double temperature, double? voltage)
         {
-            if (!await sensorRepository.AnyAsync(sensorId))
+            var result =
+                await createTemperatureMeasurementService.CreateAsync(sensorId, temperature, DateTime.Now);
+            if (!result.Succeeded)
             {
-                return BadRequest($"Sensor with id {sensorId} does not exist.");
+                return BadRequest(result.ValidationResult.ToString());
             }
             
-            await temperatureMeasurementRepository.AddAsync(sensorId, temperature, DateTime.Now);
-            
-            // if voltage has been measured and the sensor is currently on a battery source => add battery voltage measurement
-            if (voltage != null && await sensorRepository.AnyWithBatteryPowerSourceAsync(sensorId))
+            // if voltage has been measured 
+            if (voltage != null)
             {
-                await batteryMeasurementRepository.AddAsync(sensorId, voltage.Value, DateTime.Now);
+                var validationResult = await batteryMeasurementService.CreateAsync(sensorId, voltage.Value, DateTime.Now);
+
+                if (!validationResult.Succeeded)
+                {
+                    return BadRequest(validationResult.ToString());
+                }
             }
 
             return Ok();
@@ -54,7 +61,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
                 SensorId = sensorId
             };
 
-            var temperatureMeasurements = await temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
+            var temperatureMeasurements = await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(filter);
 
             return Ok(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
         }
@@ -62,7 +69,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [HttpGet("api/sensors/{sensorId:int}/temperatures/last")]
         public async Task<IActionResult> LastSensorTemperature(int sensorId)
         {
-            var temperatureMeasurement = await temperatureMeasurementRepository.GetSensorLastTemperatureMeasurementAsync(sensorId);
+            var temperatureMeasurement = await getTemperatureMeasurementsService.GetLastMeasurementAsync(sensorId);
 
             if (temperatureMeasurement == null)
             {

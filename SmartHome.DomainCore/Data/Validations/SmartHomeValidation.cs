@@ -10,5 +10,10 @@ namespace SmartHome.DomainCore.Data.Validations
 
         public string Field { get; }
         public string Message { get; }
+
+        public override string ToString()
+        {
+            return $"{Field}: {Message}";
+        }
     }
 }

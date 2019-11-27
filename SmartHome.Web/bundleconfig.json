@@ -14,35 +14,6 @@
   },
   
   {
-    "outputFileName": "wwwroot/lib/css/ej2.css",
-    "inputFiles": [
-      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
-    ],
-    "minify": { "enabled": false }
-  },
-  {
-    "outputFileName": "wwwroot/lib/css/ej2.min.css",
-    "inputFiles": [
-      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
-    ],
-    "minify": { "enabled": true }
-  },
-  {
-    "outputFileName": "wwwroot/lib/js/ej2.js",
-    "inputFiles": [
-      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
-    ],
-    "minify": { "enabled": false }
-  },
-  {
-    "outputFileName": "wwwroot/lib/js/ej2.min.js",
-    "inputFiles": [
-      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
-    ],
-    "minify": { "enabled": false }
-  },
-
-  {
     "outputFileName": "wwwroot/lib/css/bootstrap.css",
     "inputFiles": [
       "node_modules/bootstrap/dist/css/bootstrap.css"
@@ -86,5 +57,33 @@
       "wwwroot/js/global.js"
     ],
     "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/lib/css/ej2.css",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/lib/css/ej2.min.css",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+    ],
+    "minify": { "enabled": true }
+  },
+  {
+    "outputFileName": "wwwroot/lib/js/ej2.js",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/lib/js/ej2.min.js",
+    "inputFiles": [
+      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
+    ],
+    "minify": { "enabled": false }
   }
 ]

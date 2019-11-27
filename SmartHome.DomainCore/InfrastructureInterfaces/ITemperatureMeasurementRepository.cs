@@ -6,9 +6,11 @@ using SmartHome.DomainCore.Data.Models;
 
 namespace SmartHome.DomainCore.InfrastructureInterfaces
 {
-    public interface ITemperatureMeasurementRepository
+    public interface ITemperatureMeasurementRepository : IGetAllRepository<TemperatureMeasurementModel>,
+        IGetByIdRepository<TemperatureMeasurementModel>
     {
-        Task<long> AddAsync(long sensorId, double temperature, DateTime measurementDateTime);
+        Task<long> AddOrUpdateAsync(TemperatureMeasurementModel temperatureMeasurementModel);
+        
         Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter);
         
         /// <summary>
@@ -16,12 +18,14 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
         /// </summary>
         /// <param name="sensorId"></param>
         /// <returns></returns>
-        Task<TemperatureMeasurementModel> GetSensorLastTemperatureMeasurementAsync(long sensorId);
+        Task<TemperatureMeasurementModel?> GetSensorLastTemperatureMeasurementAsync(long sensorId);
 
         /// <summary>
         /// Obtains last temperature measurement of all sensors.
         /// </summary>
         /// <returns></returns>
         Task<IList<OverviewTemperatureMeasurementModel>> GetAllSensorsLastTemperatureMeasurementAsync();
+
+        Task DeleteAsync(long id);
     }
 }

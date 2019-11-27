@@ -18,21 +18,7 @@ namespace SmartHome.Infrastructure
         {
         }
 
-        public async Task<long> AddAsync(long sensorId, double temperature, DateTime measurementDateTime)
-        {
-            var sensor = await SmartHomeAppDbContext.SingleAsync<Sensor>(sensorId);
-            
-            var temperatureMeasurement = new TemperatureMeasurement()
-            {
-                MeasurementDateTime = measurementDateTime,
-                Temperature = temperature,
-                SensorId = sensor.Id
-            };
-
-            return await AddOrUpdateAsync(temperatureMeasurement);
-        }
-
-        public async Task<TemperatureMeasurementModel> GetSensorLastTemperatureMeasurementAsync(long sensorId)
+        public async Task<TemperatureMeasurementModel?> GetSensorLastTemperatureMeasurementAsync(long sensorId)
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>()
                 .Where(x => x.SensorId == sensorId);
@@ -64,9 +50,27 @@ namespace SmartHome.Infrastructure
             return lastTemperatureMeasurements.Select(x => Mapper.Map<OverviewTemperatureMeasurementModel>(x)).ToList();
         }
 
+        public async Task<long> AddOrUpdateAsync(TemperatureMeasurementModel temperatureMeasurementModel)
+        {
+            var temperatureMeasurement = Mapper.Map<TemperatureMeasurement>(temperatureMeasurementModel);
+
+            return await AddOrUpdateAsync(temperatureMeasurement);
+        }
+
         public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
         {
-            return await GetTemperatureMeasurementsQuery(filter).ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider).ToListAsync();
+            return await GetTemperatureMeasurementsQuery(filter)
+                .ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider)
+                .OrderByDescending(x => x.MeasurementDateTime)
+                .ToListAsync();
+        }
+
+        public async Task<IList<TemperatureMeasurementModel>> GetAllAsync()
+        {
+            return await SmartHomeAppDbContext.Query<TemperatureMeasurement>()
+                .ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider)
+                .OrderByDescending(x => x.MeasurementDateTime)
+                .ToListAsync();
         }
 
         private IQueryable<TemperatureMeasurement> GetTemperatureMeasurementsQuery(MeasurementFilter filter)
@@ -89,6 +93,12 @@ namespace SmartHome.Infrastructure
             }
 
             return query;
+        }
+
+        public async Task<TemperatureMeasurementModel> GetByIdAsync(long id)
+        {
+            var temperatureMeasurement = await SmartHomeAppDbContext.SingleAsync<TemperatureMeasurement>(id);
+            return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
         }
     }
 }
