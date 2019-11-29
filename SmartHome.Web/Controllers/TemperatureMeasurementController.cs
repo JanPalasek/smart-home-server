@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Sensor;
@@ -13,6 +15,7 @@ using Syncfusion.EJ2.Base;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class TemperatureMeasurementController : Controller
     {
         private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
@@ -44,6 +47,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var vm = await CreateAndFillViewModelAsync(new TemperatureMeasurementModel(), true);
@@ -52,6 +56,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(TemperatureMeasurementModel model)
         {
             if (ModelState.IsValid)
@@ -69,6 +74,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(long id)
         {
             await deleteTemperatureMeasurementService.DeleteAsync(id);
@@ -87,6 +93,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Detail(TemperatureMeasurementModel model)
         {
             if (ModelState.IsValid)
@@ -105,7 +112,9 @@ namespace SmartHome.Web.Controllers
         
         public async Task<IActionResult> TemperatureMeasurementsDataSource([FromBody]DataManagerRequest dm)
         {
-            var dataSource = await getTemperatureMeasurementsService.GetAllAsync();
+            var result =
+                await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(new MeasurementFilter(),
+                    dm.ToPagingArgs());
 //            DataOperations operation = new DataOperations();
 //            if (dm.Search != null && dm.Search.Count > 0)
 //            {
@@ -128,7 +137,7 @@ namespace SmartHome.Web.Controllers
 //            {
 //                dataSource = operation.PerformTake(dataSource, dm.Take);
 //            }
-            return dm.RequiresCounts ? Json(new { result = dataSource, count = dataSource.Count }) : Json(dataSource);
+            return dm.RequiresCounts ? Json(new { result = result.Items, count = result.Count }) : Json(result.Items);
         }
         
         private async Task<TemperatureMeasurementViewModel> CreateAndFillViewModelAsync(TemperatureMeasurementModel model, bool isCreatePage)

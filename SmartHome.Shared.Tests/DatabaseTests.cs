@@ -46,6 +46,16 @@ namespace SmartHome.Shared.Tests
                 PasswordHash = "asdfghjkl",
             });
 
+            context.Add(new Place()
+            {
+                Name = "Bathroom",
+                Note = "Bathroom note"
+            });
+            context.Add(new Place()
+            {
+                Name = "Living room"
+            });
+
             context.Add(new Role()
             {
                 Name = "Admin",

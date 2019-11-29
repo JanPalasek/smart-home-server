@@ -5,6 +5,8 @@ namespace SmartHome.Database.Entities
     /// </summary>
     public class Sensor : Entity
     {
+        public string Name { get; set; }
+        
         /// <summary>
         /// Type of this particular sensor instance (e.g. temperature sensor DS1820, humidity sensor,...).
         /// </summary>

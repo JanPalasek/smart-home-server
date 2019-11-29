@@ -8,6 +8,8 @@ namespace SmartHome.DomainCore.Data.Models
         [Required]
         public DateTime? MeasurementDateTime { get; set; }
         public long? SensorId { get; set; }
+        public string? SensorName { get; set; }
         public long? PlaceId { get; set; }
+        public string? PlaceName { get; set; }
     }
 }

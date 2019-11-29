@@ -8,6 +8,7 @@ namespace SmartHome.Database.Entities
     /// </summary>
     public class BatteryPowerSourceType : Entity
     {
+        public string Name { get; set; }
         /// <summary>
         /// Represents type of battery used by this power source.
         /// </summary>

@@ -65,8 +65,9 @@ namespace SmartHome.Web.Controllers
 
                 ModelState.AddValidationErrors(result.ValidationResult);
             }
-            
-            return View("Detail", new SensorViewModel(model) {IsCreatePage = false});
+
+            var vm = await CreateAndFillViewModelAsync(model, false);
+            return View("Detail", vm);
         }
 
         [HttpGet]
@@ -92,8 +93,10 @@ namespace SmartHome.Web.Controllers
 
                 ModelState.AddValidationErrors(result.ValidationResult);
             }
+
+            var vm = await CreateAndFillViewModelAsync(model, true);
             
-            return View("Detail", new SensorViewModel(model) {IsCreatePage = true});
+            return View("Detail", vm);
         }
 
         [HttpGet]

@@ -4,6 +4,8 @@ namespace SmartHome.DomainCore.Data.Models
 {
     public class BatteryPowerSourceTypeModel : Model
     {
+        [Required]
+        public string? Name { get; set; }
         /// <summary>
         /// Represents type of battery used by this power source.
         /// </summary>

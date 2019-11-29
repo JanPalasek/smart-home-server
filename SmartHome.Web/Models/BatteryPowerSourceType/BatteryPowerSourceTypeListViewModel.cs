@@ -5,12 +5,12 @@ namespace SmartHome.Web.Models.BatteryPowerSourceType
 {
     public class BatteryPowerSourceTypeListViewModel
     {
-        public BatteryPowerSourceTypeListViewModel(IEnumerable<BatteryPowerSourceTypeModel> items)
+        public BatteryPowerSourceTypeListViewModel(IEnumerable<BatteryPowerSourceTypeGridItemModel> items)
         {
             Items = items;
         }
 
         public bool CanCreate { get; set; }
-        public IEnumerable<BatteryPowerSourceTypeModel> Items { get; }
+        public IEnumerable<BatteryPowerSourceTypeGridItemModel> Items { get; }
     }
 }

@@ -29,6 +29,7 @@ namespace SmartHome.Database
             modelBuilder.Entity<BatteryPowerSourceType>(builder =>
             {
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                builder.Property(x => x.Name).IsRequired();
             });
 
             modelBuilder.Entity<Place>(builder =>
@@ -49,7 +50,8 @@ namespace SmartHome.Database
             modelBuilder.Entity<Sensor>(builder =>
             {
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
-                
+                builder.Property(x => x.Name).IsRequired();
+
                 builder.HasIndex(x => x.PlaceId);
                 builder.HasIndex(x => x.SensorTypeId);
                 builder.HasIndex(x => x.BatteryPowerSourceTypeId);

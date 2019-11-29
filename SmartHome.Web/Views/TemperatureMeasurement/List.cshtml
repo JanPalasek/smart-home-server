@@ -1,3 +1,4 @@
+@using Syncfusion.EJ2.Grids
 @model SmartHome.Web.Models.TemperatureMeasurement.TemperatureMeasurementListViewModel
 
 
@@ -8,17 +9,18 @@
 <section>
     @if (Model.CanCreate)
     {
-        <a asp-action="Create">
+         <a asp-action="Create">
             <ejs-button id="create" content="Create" cssClass="e-primary"></ejs-button>
         </a>
     }
     
     <ejs-grid id="grid" allowPaging="true">
+        <e-grid-pagesettings></e-grid-pagesettings>
         <e-data-manager url="@Url.Action("TemperatureMeasurementsDataSource", "TemperatureMeasurement")" adaptor="UrlAdaptor"></e-data-manager>
         <e-grid-columns>
             <e-grid-column field="temperature" headerText="Temperature"></e-grid-column>
-            <e-grid-column field="placeId" headerText="Place"></e-grid-column>
-            <e-grid-column field="sensorId" headerText="Sensor"></e-grid-column>
+            <e-grid-column field="placeName" headerText="Place"></e-grid-column>
+            <e-grid-column field="sensorName" headerText="Sensor"></e-grid-column>
             <e-grid-column field="measurementDateTime" headerText="Measurement date"></e-grid-column>
             <e-grid-column template="#detail-template" textAlign="Right"></e-grid-column>
         </e-grid-columns>

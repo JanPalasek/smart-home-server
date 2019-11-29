@@ -23,6 +23,9 @@
     <form method="post" class="section">
         <input type="hidden" asp-for="Model.Id"/>
         <div class="form-group">
+            <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto" readonly="@disableFields"></ejs-textbox>
+        </div>
+        <div class="form-group">
             <ejs-numerictextbox ejs-for="Model.MinimumRequiredVoltage" id="min-req-voltage" placeholder="Minimum required voltage" floatLabelType="Auto" readonly="@disableFields"></ejs-numerictextbox>
         </div>
         <div class="form-group">
@@ -36,10 +39,9 @@
             </ejs-dropdownlist>
         </div>
         <div class="form-group">
-            @* TODO *@
             <ejs-dropdownlist id="battery-power-source-type" ejs-for="Model.BatteryPowerSourceTypeId" dataSource="@Model.BatteryPowerSourceTypes"
                               placeholder="Battery power source type" floatLabelType="Auto" readonly="@disableFields">
-                <e-dropdownlist-fields text="BatteryType" value="Id"></e-dropdownlist-fields>
+                <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
         </div>
         @if (!disableFields)

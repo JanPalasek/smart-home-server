@@ -61,9 +61,9 @@ namespace SmartHome.Web.Controllers.ApiControllers
                 SensorId = sensorId
             };
 
-            var temperatureMeasurements = await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(filter);
+            var result = await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(filter);
 
-            return Ok(temperatureMeasurements.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
+            return Ok(result.Select(x => new { x.Temperature, x.MeasurementDateTime, SensorId = x.SensorId }).ToList());
         }
 
         [HttpGet("api/sensors/{sensorId:int}/temperatures/last")]

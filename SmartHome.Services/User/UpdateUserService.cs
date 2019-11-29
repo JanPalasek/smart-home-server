@@ -33,7 +33,7 @@ namespace SmartHome.Services.User
             // roles that user currently has without those sent to the server
             var rolesToRemove = allUserRoles.Select(x => x.Id).Except(roleIds).ToList();
             
-            if (rolesToAdd.Count > 0 && rolesToRemove.Count > 0)
+            if (rolesToAdd.Count > 0 || rolesToRemove.Count > 0)
             {
                 var validationResult = SmartHomeValidationResult.FromIdentityResult(await repository.AddToRolesAsync(userId, rolesToAdd));
                 validationResult = validationResult.Merge(SmartHomeValidationResult.FromIdentityResult(

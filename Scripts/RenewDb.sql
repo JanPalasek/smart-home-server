@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: SmartHome
 -- ------------------------------------------------------
--- Server version	5.7.27-0ubuntu0.18.04.1
+-- Server version	5.7.28-0ubuntu0.18.04.4
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -146,7 +146,7 @@ CREATE TABLE `AspNetUserRoles` (
 
 LOCK TABLES `AspNetUserRoles` WRITE;
 /*!40000 ALTER TABLE `AspNetUserRoles` DISABLE KEYS */;
-INSERT INTO `AspNetUserRoles` VALUES (3,1),(3,2);
+INSERT INTO `AspNetUserRoles` VALUES (3,1),(3,2),(4,2);
 /*!40000 ALTER TABLE `AspNetUserRoles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +202,7 @@ CREATE TABLE `AspNetUsers` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `UserNameIndex` (`NormalizedUserName`),
   KEY `EmailIndex` (`NormalizedEmail`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +211,7 @@ CREATE TABLE `AspNetUsers` (
 
 LOCK TABLES `AspNetUsers` WRITE;
 /*!40000 ALTER TABLE `AspNetUsers` DISABLE KEYS */;
-INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
+INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '\0',0),(4,'User','USER','user@janpalasek.com','USER@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAELghlHWCGXlODnXNTmp4Hzr/2NPFSvz3lRP2q3IzyxKZqIT5fTEQ+AHuJHa6Tz2S0Q==','XLMDUQC4YYW2ZGAMCERWZVWGJLJCWJFX','7374b2f6-1f7d-42ba-8eaa-409b8fd409ae',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
 /*!40000 ALTER TABLE `AspNetUsers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,6 +258,7 @@ DROP TABLE IF EXISTS `BatteryPowerSourceType`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `BatteryPowerSourceType` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Name` longtext NOT NULL,
   `BatteryType` int(11) NOT NULL,
   `MinimumVoltage` double NOT NULL,
   `MaximumVoltage` double NOT NULL,
@@ -319,7 +320,7 @@ CREATE TABLE `Place` (
   `Note` longtext,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_Place_Name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -340,6 +341,7 @@ DROP TABLE IF EXISTS `Sensor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Sensor` (
   `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Name` longtext NOT NULL,
   `SensorTypeId` bigint(20) NOT NULL,
   `BatteryPowerSourceTypeId` bigint(20) DEFAULT NULL,
   `PlaceId` bigint(20) DEFAULT NULL,
@@ -439,7 +441,7 @@ CREATE TABLE `__EFMigrationsHistory` (
 
 LOCK TABLES `__EFMigrationsHistory` WRITE;
 /*!40000 ALTER TABLE `__EFMigrationsHistory` DISABLE KEYS */;
-INSERT INTO `__EFMigrationsHistory` VALUES ('20190905172418_Initial','3.0.0'),('20191112211036_Roles','3.0.0');
+INSERT INTO `__EFMigrationsHistory` VALUES ('20191129191030_Initial','3.0.0');
 /*!40000 ALTER TABLE `__EFMigrationsHistory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -452,4 +454,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-16 14:37:35
+-- Dump completed on 2019-11-29 21:37:51

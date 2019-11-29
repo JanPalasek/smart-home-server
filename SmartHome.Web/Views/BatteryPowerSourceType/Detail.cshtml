@@ -25,9 +25,12 @@
     <form method="post" class="section">
         <input type="hidden" asp-for="Model.Id"/>
         <div class="form-group">
+            <div class="form-group">
+                <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto" readonly="@disableFields"></ejs-textbox>
+            </div>
             @{
                 var enumResources = EnumHelper.GetAllValues<BatteryType>()
-                    .Select(x => new EntityReference((int)x, x.ToString()))
+                    .Select(x => new EntityReference((int) x, x.ToString()))
                     .ToArray();
             }
             <ejs-dropdownlist id="battery-type" ejs-for="Model.BatteryType" placeholder="Battery type" floatLabelType="Auto"

@@ -11,8 +11,9 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
     {
         Task<long> AddOrUpdateAsync(TemperatureMeasurementModel temperatureMeasurementModel);
         
-        Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter);
-        
+        Task<CountedResult<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter, PagingArgs pagingArgs);
+
+        Task<IList<Data.Models.TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter);
         /// <summary>
         /// Obtains last temperature measurement of specified sensor.
         /// </summary>

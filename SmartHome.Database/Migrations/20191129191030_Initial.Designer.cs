@@ -9,8 +9,8 @@ using SmartHome.Database;
 namespace SmartHome.Database.Migrations
 {
     [DbContext(typeof(SmartHomeDbContext))]
-    [Migration("20191112211036_Roles")]
-    partial class Roles
+    [Migration("20191129191030_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,10 @@ namespace SmartHome.Database.Migrations
                     b.Property<double>("MinimumVoltage")
                         .HasColumnType("double");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("BatteryPowerSourceType");
@@ -263,6 +267,10 @@ namespace SmartHome.Database.Migrations
 
                     b.Property<double?>("MinimumRequiredVoltage")
                         .HasColumnType("double");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<long?>("PlaceId")
                         .HasColumnType("bigint");

@@ -9,6 +9,7 @@ using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
+using SmartHome.Infrastructure.Extensions;
 
 namespace SmartHome.Infrastructure
 {
@@ -16,6 +17,15 @@ namespace SmartHome.Infrastructure
     {
         public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
         {
+        }
+
+        public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
+        {
+            var query = GetTemperatureMeasurementsQuery(filter);
+
+            return await query.OrderByDescending(x => x.MeasurementDateTime)
+                .ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<TemperatureMeasurementModel?> GetSensorLastTemperatureMeasurementAsync(long sensorId)
@@ -57,12 +67,18 @@ namespace SmartHome.Infrastructure
             return await AddOrUpdateAsync(temperatureMeasurement);
         }
 
-        public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
+        public async Task<CountedResult<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter,
+            PagingArgs? pagingArgs)
         {
-            return await GetTemperatureMeasurementsQuery(filter)
-                .ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider)
-                .OrderByDescending(x => x.MeasurementDateTime)
-                .ToListAsync();
+            var query = GetTemperatureMeasurementsQuery(filter);
+
+            int count = await query.CountAsync();
+            
+            query = query.OrderByDescending(x => x.MeasurementDateTime).ThenBy(x => x.Id);
+            query = query.PageBy(pagingArgs);
+
+            return new CountedResult<TemperatureMeasurementModel>(count,
+                await query.ProjectTo<TemperatureMeasurementModel>(Mapper.ConfigurationProvider).ToListAsync());
         }
 
         public async Task<IList<TemperatureMeasurementModel>> GetAllAsync()

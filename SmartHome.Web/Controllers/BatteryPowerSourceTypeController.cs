@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
@@ -8,22 +10,24 @@ using SmartHome.Web.Models.BatteryPowerSourceType;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,User")]
     public class BatteryPowerSourceTypeController : Controller
     {
         private readonly IUpdateBatteryPowerSourceTypeService updateBatteryPowerSourceTypeService;
         private readonly ICreateBatteryPowerSourceTypeService createBatteryPowerSourceTypeService;
         private readonly IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService;
         private readonly IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService;
+        private readonly IMapper mapper;
         public BatteryPowerSourceTypeController(IUpdateBatteryPowerSourceTypeService updateBatteryPowerSourceTypeService,
             ICreateBatteryPowerSourceTypeService createBatteryPowerSourceTypeService,
             IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService,
-            IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService)
+            IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService, IMapper mapper)
         {
             this.updateBatteryPowerSourceTypeService = updateBatteryPowerSourceTypeService;
             this.createBatteryPowerSourceTypeService = createBatteryPowerSourceTypeService;
             this.getBatteryPowerSourceTypesService = getBatteryPowerSourceTypesService;
             this.deleteBatteryPowerSourceTypeService = deleteBatteryPowerSourceTypeService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -59,6 +63,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var vm = new BatteryPowerSourceTypeViewModel(new BatteryPowerSourceTypeModel())
@@ -95,7 +100,10 @@ namespace SmartHome.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var sensorTypes = await getBatteryPowerSourceTypesService.GetAllPowerSourceTypesAsync();
+            var batteryPowerSourceTypes = await getBatteryPowerSourceTypesService.GetAllPowerSourceTypesAsync();
+            var sensorTypes = batteryPowerSourceTypes
+                .Select(x => mapper.Map<BatteryPowerSourceTypeGridItemModel>(x))
+                .ToList();
             return View("List", new BatteryPowerSourceTypeListViewModel(sensorTypes) { CanCreate = User.IsInRole("Admin") });
         }
     }

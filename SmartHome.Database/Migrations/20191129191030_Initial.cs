@@ -55,6 +55,7 @@ namespace SmartHome.Database.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
                     BatteryType = table.Column<int>(nullable: false),
                     MinimumVoltage = table.Column<double>(nullable: false),
                     MaximumVoltage = table.Column<double>(nullable: false)
@@ -205,6 +206,7 @@ namespace SmartHome.Database.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: false),
                     SensorTypeId = table.Column<long>(nullable: false),
                     BatteryPowerSourceTypeId = table.Column<long>(nullable: true),
                     PlaceId = table.Column<long>(nullable: true),

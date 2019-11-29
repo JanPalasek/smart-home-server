@@ -17,10 +17,15 @@ namespace SmartHome.Services.TemperatureMeasurement
             this.temperatureMeasurementRepository = temperatureMeasurementRepository;
         }
 
-        public Task<IList<TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(
-            MeasurementFilter filter)
+        public Task<CountedResult<TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(
+            MeasurementFilter filter, PagingArgs pagingArgs)
         {
-            return temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
+            return temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter, pagingArgs);
+        }
+
+        public async Task<IList<TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(MeasurementFilter filter)
+        {
+            return await temperatureMeasurementRepository.GetTemperatureMeasurementsAsync(filter);
         }
 
         public async Task<IList<TemperatureMeasurementModel>> GetAllAsync()
