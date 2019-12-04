@@ -87,6 +87,28 @@ namespace SmartHome.Database
             });
             
             #endregion
+
+            modelBuilder.Entity<Permission>(builder =>
+            {
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+                builder.Property(x => x.Name).IsRequired();
+
+                builder.HasIndex(x => x.Name).IsUnique();
+            });
+
+            modelBuilder.Entity<UserPermission>(builder =>
+            {
+                builder.Property(x => x.Id);
+                
+                builder.HasIndex(x => new {x.PermissionId, x.UserId}).IsUnique();
+            });
+            
+            modelBuilder.Entity<RolePermission>(builder =>
+            {
+                builder.Property(x => x.Id);
+                
+                builder.HasIndex(x => new {x.PermissionId, x.RoleId}).IsUnique();
+            });
             
             base.OnModelCreating(modelBuilder);
         }

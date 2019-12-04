@@ -102,6 +102,27 @@ namespace SmartHome.Infrastructure
             return await userManager.AddToRolesAsync(user, roleNames);
         }
 
+        public async Task AddPermissionsToUserAsync(long userId, List<int> permissionIds)
+        {
+            var entities = permissionIds.Select(x => new UserPermission()
+            {
+                UserId = userId,
+                PermissionId = x
+            });
+            await SmartHomeAppDbContext.AddRangeAsync(entities);
+        }
+        
+        public async Task RemovePermissionsFromUserAsync(long userId, List<int> permissionIds)
+        {
+            var entities = permissionIds.Select(x => new UserPermission()
+            {
+                UserId = userId,
+                PermissionId = x
+            });
+            await SmartHomeAppDbContext.DeleteRangeAsync(entities);
+        }
+
+
         public async Task<IdentityResult> RemoveFromRoleAsync(long userId, long roleId)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);

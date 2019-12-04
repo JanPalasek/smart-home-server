@@ -110,6 +110,16 @@ LOCK TABLES `HumidityMeasurement` WRITE;
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `Permission`
+--
+
+LOCK TABLES `Permission` WRITE;
+/*!40000 ALTER TABLE `Permission` DISABLE KEYS */;
+INSERT INTO `Permission` VALUES (2,'Measurement.Temperature.Edit'),(1,'Measurement.Temperature.View');
+/*!40000 ALTER TABLE `Permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `Place`
 --
 
@@ -117,6 +127,15 @@ LOCK TABLES `Place` WRITE;
 /*!40000 ALTER TABLE `Place` DISABLE KEYS */;
 INSERT INTO `Place` VALUES (1,'Bathroom',_binary '',NULL),(2,'Living room',_binary '',NULL);
 /*!40000 ALTER TABLE `Place` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `RolePermission`
+--
+
+LOCK TABLES `RolePermission` WRITE;
+/*!40000 ALTER TABLE `RolePermission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `RolePermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -150,12 +169,21 @@ INSERT INTO `TemperatureMeasurement` VALUES (1,1,'2019-11-06 00:00:00.000000',2,
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `UserPermission`
+--
+
+LOCK TABLES `UserPermission` WRITE;
+/*!40000 ALTER TABLE `UserPermission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `UserPermission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `__EFMigrationsHistory`
 --
 
 LOCK TABLES `__EFMigrationsHistory` WRITE;
 /*!40000 ALTER TABLE `__EFMigrationsHistory` DISABLE KEYS */;
-INSERT INTO `__EFMigrationsHistory` VALUES ('20191129191030_Initial','3.0.0');
+INSERT INTO `__EFMigrationsHistory` VALUES ('20191129191030_Initial','3.0.0'),('20191204133228_Permissions','3.0.0');
 /*!40000 ALTER TABLE `__EFMigrationsHistory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -168,4 +196,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-29 22:45:42
+-- Dump completed on 2019-12-04 14:53:14

@@ -11,6 +11,7 @@ using SmartHome.DomainCore.ServiceInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryMeasurement;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.DomainCore.ServiceInterfaces.Sensor;
@@ -21,6 +22,7 @@ using SmartHome.Infrastructure;
 using SmartHome.Services.Account;
 using SmartHome.Services.BatteryMeasurement;
 using SmartHome.Services.BatteryPowerSourceType;
+using SmartHome.Services.Permission;
 using SmartHome.Services.Place;
 using SmartHome.Services.Role;
 using SmartHome.Services.Sensor;
@@ -68,6 +70,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPlaceRepository, PlaceRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
 
             services.AddScoped<ICreatePlaceService, CreatePlaceService>();
             services.AddScoped<IGetPlacesService, GetPlacesService>();
@@ -86,6 +89,11 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IGetRolesService, GetRolesService>();
             services.AddScoped<ICreateRoleService, CreateRoleService>();
             services.AddScoped<IUpdateRoleService, UpdateRoleService>();
+
+            services.AddScoped<ICreatePermissionService, CreatePermissionService>();
+            services.AddScoped<IUpdatePermissionService, UpdatePermissionService>();
+            services.AddScoped<IDeletePermissionService, DeletePermissionService>();
+            services.AddScoped<IGetPermissionsService, GetPermissionsService>();
 
             services.AddScoped<ICreateSensorService, CreateSensorService>();
             services.AddScoped<IUpdateSensorService, UpdateSensorService>();

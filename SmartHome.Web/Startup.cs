@@ -45,8 +45,7 @@ namespace SmartHome.Web
             
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AtLeast21", policy =>
-                    policy.RequireClaim("EmployeeId"));
+                // TODO: add all policies from database
             });
             
             services.AddScoped(provider =>
