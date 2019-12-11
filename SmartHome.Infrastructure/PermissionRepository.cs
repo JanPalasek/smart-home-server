@@ -42,7 +42,7 @@ namespace SmartHome.Infrastructure
             return await rolePermissions.ToListAsync();
         }
 
-        public async Task<PermissionModel?> GetByName(string name)
+        public async Task<PermissionModel?> GetByNameAsync(string name)
         {
             var permission = await SmartHomeAppDbContext.Query<Permission>().SingleOrDefaultAsync(x => x.Name == name);
 

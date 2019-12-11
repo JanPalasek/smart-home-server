@@ -6,6 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SmartHome.Common;
 using SmartHome.Common.Extensions;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data.Models;
@@ -108,12 +109,24 @@ namespace SmartHome.Infrastructure
                 .Where(x => permissions.Contains(x.Name))
                 .Select(x => x.Id)
                 .ToListAsync();
-            
+
             var entities = permissionIds.Select(x => new UserPermission()
             {
                 UserId = userId,
                 PermissionId = x
             });
+
+            // get already existing user permissions from the database
+            var existingUserPermissions = await SmartHomeAppDbContext.Query<UserPermission>()
+                .Where(x => x.UserId == userId)
+                .Where(x => permissionIds.Contains(x.PermissionId))
+                .ToListAsync();
+            
+            // insert only those that are not in the database
+            entities = entities.Except(existingUserPermissions, EqualityComparerFactory.Create<UserPermission>(
+                    x => x.PermissionId.GetHashCode(),
+                    (x, y) => x.PermissionId == y.PermissionId && x.UserId == y.UserId));
+            
             await SmartHomeAppDbContext.AddRangeAsync(entities);
         }
         

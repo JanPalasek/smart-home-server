@@ -23,7 +23,7 @@ namespace SmartHome.Services.Permission
                 throw new ArgumentException(nameof(model.Id), "Invalid model Id.");
             }
 
-            var dbModel = await repository.GetByName(model.Name);
+            var dbModel = await repository.GetByNameAsync(model.Name);
             // if we don't change anything => return success
             if (dbModel != default && dbModel.Id == model.Id)
             {

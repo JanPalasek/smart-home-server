@@ -8,7 +8,7 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
     {
         Task<IList<PermissionModel>> GetUserOnlyPermissionsAsync(long userId);
         Task<IList<PermissionModel>> GetRolePermissionsAsync(long roleId);
-        Task<PermissionModel?> GetByName(string name);
+        Task<PermissionModel?> GetByNameAsync(string name);
         Task<IList<PermissionRoleModel>> GetPermissionsAsync(long userId);
     }
 }
