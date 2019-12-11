@@ -102,8 +102,13 @@ namespace SmartHome.Infrastructure
             return await userManager.AddToRolesAsync(user, roleNames);
         }
 
-        public async Task AddPermissionsToUserAsync(long userId, List<int> permissionIds)
+        public async Task AddPermissionsToUserAsync(long userId, List<string> permissions)
         {
+            var permissionIds = await SmartHomeAppDbContext.Query<Permission>()
+                .Where(x => permissions.Contains(x.Name))
+                .Select(x => x.Id)
+                .ToListAsync();
+            
             var entities = permissionIds.Select(x => new UserPermission()
             {
                 UserId = userId,
@@ -112,14 +117,14 @@ namespace SmartHome.Infrastructure
             await SmartHomeAppDbContext.AddRangeAsync(entities);
         }
         
-        public async Task RemovePermissionsFromUserAsync(long userId, List<int> permissionIds)
+        public async Task RemovePermissionsFromUserAsync(long userId, List<long> permissions)
         {
-            var entities = permissionIds.Select(x => new UserPermission()
-            {
-                UserId = userId,
-                PermissionId = x
-            });
-            await SmartHomeAppDbContext.DeleteRangeAsync(entities);
+            var permissionsToRemove = await SmartHomeAppDbContext.Query<UserPermission>()
+                .Where(x => x.UserId == userId)
+                .Where(x => permissions.Contains(x.Permission.Id))
+                .ToListAsync();
+            
+            await SmartHomeAppDbContext.DeleteRangeAsync(permissionsToRemove);
         }
 
 

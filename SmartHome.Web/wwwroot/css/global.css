@@ -11,6 +11,21 @@ main {
     position: relative;
 }
 
+.small-layout {
+    max-width: 300px;
+    margin: auto;
+}
+
+.medium-layout {
+    max-width: 500px;
+    margin: auto;
+}
+
+.large-layout {
+    max-width: 800px;
+    margin: auto;
+}
+
 .section {
     background-color: white;
     margin: 1em 0 4em;

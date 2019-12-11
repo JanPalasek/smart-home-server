@@ -16,9 +16,9 @@ namespace SmartHome.Services.Permission
             this.repository = repository;
         }
 
-        public Task<IList<PermissionModel>> GetPermissionsAsync(long userId)
+        public Task<IList<PermissionModel>> GetUserOnlyPermissionsAsync(long userId)
         {
-            return repository.GetUserPermissionsAsync(userId);
+            return repository.GetUserOnlyPermissionsAsync(userId);
         }
 
         public Task<IList<PermissionModel>> GetAllPermissionsAsync()
@@ -29,6 +29,11 @@ namespace SmartHome.Services.Permission
         public async Task<PermissionModel> GetByIdAsync(long id)
         {
             return await repository.GetByIdAsync(id);
+        }
+
+        public async Task<IList<PermissionRoleModel>> GetAllPermissionsAsync(long userId)
+        {
+            return await repository.GetPermissionsAsync(userId);
         }
     }
 }

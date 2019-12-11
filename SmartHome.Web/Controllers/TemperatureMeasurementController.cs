@@ -115,28 +115,6 @@ namespace SmartHome.Web.Controllers
             var result =
                 await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(new MeasurementFilter(),
                     dm.ToPagingArgs());
-//            DataOperations operation = new DataOperations();
-//            if (dm.Search != null && dm.Search.Count > 0)
-//            {
-//                dataSource = operation.PerformSearching(dataSource, dm.Search);  //Search
-//            }
-//            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
-//            {
-//                dataSource = operation.PerformSorting(dataSource, dm.Sorted);
-//            }
-//            if (dm.Where != null && dm.Where.Count > 0) //Filtering
-//            {
-//                dataSource = operation.PerformFiltering(dataSource, dm.Where, dm.Where[0].Operator);
-//            }
-//            int count = dataSource.Cast<TemperatureMeasurementModel>().Count();
-//            if (dm.Skip != 0)
-//            {
-//                dataSource = operation.PerformSkip(dataSource, dm.Skip);         //Paging
-//            }
-//            if (dm.Take != 0)
-//            {
-//                dataSource = operation.PerformTake(dataSource, dm.Take);
-//            }
             return dm.RequiresCounts ? Json(new { result = result.Items, count = result.Count }) : Json(result.Items);
         }
         

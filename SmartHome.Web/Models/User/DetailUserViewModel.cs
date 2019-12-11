@@ -11,12 +11,14 @@ namespace SmartHome.Web.Models.User
         
         public UserModel Model { get; set; }
         public List<long> Roles { get; set; }
+        public List<PermissionRoleModel> Permissions { get; set; }
         
-        public DetailUserViewModel(UserModel model, List<long> roles, List<RoleModel> availableRoles)
+        public DetailUserViewModel(UserModel model, List<long> roles, List<RoleModel> availableRoles, List<PermissionRoleModel> permissions)
         {
             Model = model;
             Roles = roles;
             AvailableRoles = availableRoles;
+            Permissions = permissions;
         }
     }
 }

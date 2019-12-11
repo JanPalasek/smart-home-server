@@ -10,5 +10,10 @@ namespace SmartHome.DomainCore.ServiceInterfaces.User
     {
         Task<SmartHomeValidationResult> UpdateUserAsync(UserModel model);
         Task<SmartHomeValidationResult> AddToOrRemoveFromRolesAsync(long userId, IEnumerable<long> roleIds);
+
+        Task<SmartHomeValidationResult> UpdatePermissionsAsync(long userId,
+            IEnumerable<long> removedPermissions,
+            IEnumerable<(long OldPermissionsId, string NewPermissionValue)> updatePermissions,
+            IEnumerable<string> addedPermissions);
     }
 }

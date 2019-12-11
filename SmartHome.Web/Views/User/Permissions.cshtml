@@ -1,0 +1,29 @@
+@model SmartHome.Web.Models.User.UserPermissionsViewModel
+
+@{
+    ViewBag.Header = "User";
+    var permissionOptionsDropdown = new Syncfusion.EJ2.DropDowns.DropDownList()
+    {
+        DataSource = Model.PermissionOptions,
+        Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "Name", Text = "Name" },
+        Query = "new ej.data.Query()",
+        AllowFiltering = true
+    };
+    
+    List<object> commands = new List<object>();
+    commands.Add(new {type = "Delete", buttonOption = new {iconCss = "e-icons e-delete", cssClass = "e-flat"}});
+}
+
+<section class="large-layout">
+    <ejs-grid id="permission-grid" toolbar="@(new List<string>() { "Add", "Delete","Update", "Cancel"})">
+        <e-data-manager url="@Url.Action("PermissionsDataSource", new { userId = Model.UserId })"
+                        batchUrl="@Url.Action("PermissionsUpdate", new { userId = Model.UserId })" adaptor="UrlAdaptor"></e-data-manager>
+        <e-grid-editSettings allowAdding="true" allowEditing="true" allowDeleting="true" mode="Batch"></e-grid-editSettings>
+        <e-grid-pagesettings></e-grid-pagesettings>
+        <e-grid-columns>
+            <e-grid-column field="name" headerText="Name" editType="dropdownedit" edit="new {@params = permissionOptionsDropdown}"
+            ></e-grid-column>
+            <e-grid-column width="120" commands=commands></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>

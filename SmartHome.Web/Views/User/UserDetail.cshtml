@@ -10,7 +10,7 @@
 
 <div asp-validation-summary="All"></div>
 
-<form class="form-section" method="post" asp-action="UserUpdate">
+<form class="small-layout" method="post" asp-action="UserUpdate">
     <input asp-for="Model.Id" type="hidden"/>
     <div class="form-group">
         <ejs-button id="update" content="Update" type="submit" cssClass="e-primary"></ejs-button>
@@ -41,3 +41,19 @@
         </div>
     </section>
 </form>
+
+<section class="medium-layout">
+    <h3>Permissions</h3>
+    @if (Model.CanEditRoles)
+    {
+        <a asp-action="Permissions" asp-route-userId="@Model.Model.Id">
+            <ejs-button id="permission-button" content="Add permission" type="button"></ejs-button>
+        </a>
+    }
+    <ejs-grid id="permission-grid" dataSource="Model.Permissions">
+        <e-grid-columns>
+            <e-grid-column field="PermissionName" headerText="Name"></e-grid-column>
+            <e-grid-column field="RoleName" headerText="Role" textAlign="Right"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>

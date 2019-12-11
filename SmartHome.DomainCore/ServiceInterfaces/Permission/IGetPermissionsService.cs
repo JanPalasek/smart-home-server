@@ -6,8 +6,9 @@ namespace SmartHome.DomainCore.ServiceInterfaces.Permission
 {
     public interface IGetPermissionsService
     {
-        Task<IList<PermissionModel>> GetPermissionsAsync(long userId);
+        Task<IList<PermissionModel>> GetUserOnlyPermissionsAsync(long userId);
         Task<IList<PermissionModel>> GetAllPermissionsAsync();
         Task<PermissionModel> GetByIdAsync(long id);
+        Task<IList<PermissionRoleModel>> GetAllPermissionsAsync(long userId);
     }
 }

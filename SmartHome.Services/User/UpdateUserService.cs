@@ -43,5 +43,23 @@ namespace SmartHome.Services.User
             
             return SmartHomeValidationResult.Success;
         }
+
+        public async Task<SmartHomeValidationResult> UpdatePermissionsAsync(long userId,
+            IEnumerable<long> removedPermissions,
+            IEnumerable<(long OldPermissionsId, string NewPermissionValue)> updatePermissions,
+            IEnumerable<string> addedPermissions)
+        {
+            // TODO: transaction
+
+            removedPermissions = updatePermissions.Select(x => x.OldPermissionsId).Union(removedPermissions).ToList();
+            await repository.RemovePermissionsFromUserAsync(userId, removedPermissions.ToList());
+            
+            
+            // TODO: update permissions
+            addedPermissions = updatePermissions.Select(x => x.NewPermissionValue).Union(addedPermissions);
+            await repository.AddPermissionsToUserAsync(userId, addedPermissions.ToList());
+            
+            return SmartHomeValidationResult.Success;
+        }
     }
 }
