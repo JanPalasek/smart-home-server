@@ -94,6 +94,7 @@ namespace SmartHome.ServiceLoaders
             services.AddScoped<IUpdatePermissionService, UpdatePermissionService>();
             services.AddScoped<IDeletePermissionService, DeletePermissionService>();
             services.AddScoped<IGetPermissionsService, GetPermissionsService>();
+            services.AddScoped<IPermissionVerificationService, PermissionVerificationService>();
 
             services.AddScoped<ICreateSensorService, CreateSensorService>();
             services.AddScoped<IUpdateSensorService, UpdateSensorService>();

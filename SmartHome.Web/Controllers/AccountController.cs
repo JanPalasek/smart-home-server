@@ -79,7 +79,7 @@ namespace SmartHome.Web.Controllers
         {
             var user = await getUsersService.GetByNameAsync(User.Identity.Name!);
             
-            return RedirectToAction("UserDetail", "User", new {id = user!.Id});
+            return RedirectToAction("Detail", "User", new {id = user!.Id});
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.ServiceLoaders;
 using SmartHome.Web.Configurations;
 using SmartHome.Web.Utils;
@@ -42,12 +44,7 @@ namespace SmartHome.Web
         public void ConfigureServices(IServiceCollection services)
         {
             new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
-            
-            services.AddAuthorization(options =>
-            {
-                // TODO: add all policies from database
-            });
-            
+
             services.AddScoped(provider =>
             {
                 var configurationProvider = provider.GetRequiredService<IConfiguration>();
@@ -58,11 +55,25 @@ namespace SmartHome.Web
                 return parsedConfiguration;
             });
             
+            services.AddAuthorization(options =>
+            {
+                var provider = services
+                    .BuildServiceProvider();
+                var permissions = provider
+                    .GetService<IGetPermissionsService>().GetAllPermissionsAsync().Result;
+                foreach(var permission in permissions) 
+                {
+                    options.AddPolicy(permission.Name!,
+                        policy => policy.Requirements.Add(new PermissionRequirement(permission.Name!)));
+                }
+            });
+            
             // set up MVC
             var mvcConfiguration = services.AddMvc(options =>
             {
-                var stringLocalizerFactory = services
-                    .BuildServiceProvider()
+                var provider = services
+                    .BuildServiceProvider();
+                var stringLocalizerFactory = provider
                     .GetService<IStringLocalizerFactory>();
 
                 var localizer =
@@ -89,6 +100,8 @@ namespace SmartHome.Web
                 options.EnableEndpointRouting = false;
             }).AddViewLocalization();
 
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+            
             if (hostingEnvironment.IsDevelopment())
             {
                 mvcConfiguration.AddRazorRuntimeCompilation();

@@ -11,6 +11,14 @@ main {
     position: relative;
 }
 
+.section {
+    background-color: white;
+    margin: 1em 0 4em;
+    padding: 1em;
+    border-style: groove;
+    border-radius: 0.5em;
+}
+
 .small-layout {
     max-width: 300px;
     margin: auto;
@@ -24,14 +32,6 @@ main {
 .large-layout {
     max-width: 800px;
     margin: auto;
-}
-
-.section {
-    background-color: white;
-    margin: 1em 0 4em;
-    padding: 1em;
-    border-style: groove;
-    border-radius: 0.5em;
 }
 
 h1, h2, h3, h4 {

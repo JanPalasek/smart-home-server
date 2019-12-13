@@ -20,5 +20,9 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
         Task<RoleModel> GetByNameAsync(string name);
         
         Task<IList<RoleModel>> GetUserRolesAsync(long userId);
+        
+        Task AddPermissionsToRoleAsync(long roleId, List<string> permissions);
+
+        Task RemovePermissionsFromRoleAsync(long roleId, List<long> permission);
     }
 }

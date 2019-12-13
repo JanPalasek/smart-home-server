@@ -8,6 +8,7 @@ using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Sensor;
 using SmartHome.DomainCore.ServiceInterfaces.SensorType;
@@ -16,7 +17,7 @@ using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Policy = "Enumeration.Sensor.View")]
     public class SensorController : Controller
     {
         private readonly IGetSensorTypesService getSensorTypesService;
@@ -26,11 +27,13 @@ namespace SmartHome.Web.Controllers
         private readonly IDeleteSensorService deleteSensorService;
         private readonly IGetPlacesService getPlacesService;
         private readonly IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService;
+        private readonly IPermissionVerificationService permissionVerificationService;
 
         public SensorController(IGetSensorTypesService getSensorTypesService,
             IGetSensorsService getSensorsService, ICreateSensorService createSensorService,
             IUpdateSensorService updateSensorService, IDeleteSensorService deleteSensorService,
-            IGetPlacesService getPlacesService, IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService)
+            IGetPlacesService getPlacesService, IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService,
+            IPermissionVerificationService permissionVerificationService)
         {
             this.getSensorTypesService = getSensorTypesService;
             this.getSensorsService = getSensorsService;
@@ -39,6 +42,7 @@ namespace SmartHome.Web.Controllers
             this.deleteSensorService = deleteSensorService;
             this.getPlacesService = getPlacesService;
             this.getBatteryPowerSourceTypesService = getBatteryPowerSourceTypesService;
+            this.permissionVerificationService = permissionVerificationService;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.Sensor.Edit")]
         public async Task<IActionResult> Detail(SensorModel model)
         {
             if (ModelState.IsValid)
@@ -71,7 +75,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.Sensor.Edit")]
         public async Task<IActionResult> Create()
         {
             var vm = await CreateAndFillViewModelAsync(new SensorModel(), true);
@@ -80,7 +84,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.Sensor.Edit")]
         public async Task<IActionResult> Create(SensorModel model)
         {
             if (ModelState.IsValid)
@@ -100,7 +104,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.Sensor.Edit")]
         public async Task<IActionResult> Delete(long id)
         {
             await deleteSensorService.DeleteSensorAsync(id);
@@ -115,7 +119,7 @@ namespace SmartHome.Web.Controllers
             
             return View("List", new SensorListViewModel(items)
             {
-                CanCreate = User.IsInRole("Admin")
+                CanCreate = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Enumeration.Sensor.Edit")
             });
         }
 
@@ -124,7 +128,7 @@ namespace SmartHome.Web.Controllers
             var viewModel = new SensorViewModel(model)
             {
                 IsCreatePage = isCreatePage,
-                CanEdit = User.IsInRole("Admin")
+                CanEdit = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Enumeration.Sensor.Edit")
             };
 
             viewModel.BatteryPowerSourceTypes = await getBatteryPowerSourceTypesService.GetAllPowerSourceTypesAsync();

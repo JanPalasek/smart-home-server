@@ -1,16 +1,18 @@
 using System;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryPowerSourceType;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.Web.Models.BatteryPowerSourceType;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Policy = "Enumeration.BatteryPowerSourceType.View")]
     public class BatteryPowerSourceTypeController : Controller
     {
         private readonly IUpdateBatteryPowerSourceTypeService updateBatteryPowerSourceTypeService;
@@ -18,16 +20,19 @@ namespace SmartHome.Web.Controllers
         private readonly IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService;
         private readonly IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService;
         private readonly IMapper mapper;
+        private readonly IPermissionVerificationService permissionVerificationService;
+        
         public BatteryPowerSourceTypeController(IUpdateBatteryPowerSourceTypeService updateBatteryPowerSourceTypeService,
             ICreateBatteryPowerSourceTypeService createBatteryPowerSourceTypeService,
             IGetBatteryPowerSourceTypesService getBatteryPowerSourceTypesService,
-            IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService, IMapper mapper)
+            IDeleteBatteryPowerSourceTypeService deleteBatteryPowerSourceTypeService, IMapper mapper, IPermissionVerificationService permissionVerificationService)
         {
             this.updateBatteryPowerSourceTypeService = updateBatteryPowerSourceTypeService;
             this.createBatteryPowerSourceTypeService = createBatteryPowerSourceTypeService;
             this.getBatteryPowerSourceTypesService = getBatteryPowerSourceTypesService;
             this.deleteBatteryPowerSourceTypeService = deleteBatteryPowerSourceTypeService;
             this.mapper = mapper;
+            this.permissionVerificationService = permissionVerificationService;
         }
 
         [HttpGet]
@@ -37,7 +42,8 @@ namespace SmartHome.Web.Controllers
 
             var vm = new BatteryPowerSourceTypeViewModel(sensorModel)
             {
-                CanEdit = User.IsInRole("Admin"),
+                CanEdit = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Enumeration.BatteryPowerSourceType.Edit"),
                 IsCreatePage = false
             };
 
@@ -45,7 +51,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.BatteryPowerSourceType.Edit")]
         public async Task<IActionResult> Detail(BatteryPowerSourceTypeModel model)
         {
             if (ModelState.IsValid)
@@ -57,18 +63,20 @@ namespace SmartHome.Web.Controllers
 
             return View("Detail", new BatteryPowerSourceTypeViewModel(model)
             {
-                CanEdit = User.IsInRole("Admin"),
+                CanEdit = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Enumeration.BatteryPowerSourceType.Edit"),
                 IsCreatePage = false
             });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Create()
+        [Authorize(Policy = "Enumeration.BatteryPowerSourceType.Edit")]
+        public async Task<IActionResult> Create()
         {
             var vm = new BatteryPowerSourceTypeViewModel(new BatteryPowerSourceTypeModel())
             {
-                CanEdit = User.IsInRole("Admin"),
+                CanEdit = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Enumeration.BatteryPowerSourceType.Edit"),
                 IsCreatePage = true
             };
 
@@ -76,7 +84,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.BatteryPowerSourceType.Edit")]
         public async Task<IActionResult> Create(BatteryPowerSourceTypeModel model)
         {
             if (ModelState.IsValid)
@@ -86,11 +94,16 @@ namespace SmartHome.Web.Controllers
                 return RedirectToAction("Detail", new {id});
             }
 
-            return View("Detail", new BatteryPowerSourceTypeViewModel(model) {CanEdit = User.IsInRole("Admin"), IsCreatePage = true});
+            return View("Detail", new BatteryPowerSourceTypeViewModel(model)
+            {
+                CanEdit = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Enumeration.BatteryPowerSourceType.Edit"),
+                IsCreatePage = true
+            });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Enumeration.BatteryPowerSourceType.Edit")]
         public async Task<IActionResult> Delete(long id)
         {
             await deleteBatteryPowerSourceTypeService.DeleteAsync(id);
@@ -104,7 +117,11 @@ namespace SmartHome.Web.Controllers
             var sensorTypes = batteryPowerSourceTypes
                 .Select(x => mapper.Map<BatteryPowerSourceTypeGridItemModel>(x))
                 .ToList();
-            return View("List", new BatteryPowerSourceTypeListViewModel(sensorTypes) { CanCreate = User.IsInRole("Admin") });
+            return View("List", new BatteryPowerSourceTypeListViewModel(sensorTypes)
+            {
+                CanCreate = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Enumeration.BatteryPowerSourceType.Edit"),
+            });
         }
     }
 }

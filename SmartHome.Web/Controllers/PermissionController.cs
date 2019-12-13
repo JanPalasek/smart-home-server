@@ -9,22 +9,25 @@ using SmartHome.Web.Utils;
 
 namespace SmartHome.Web.Controllers
 {
+    [Authorize(Policy = "Administration.Permission.View")]
     public class PermissionController : Controller
     {
         private readonly ICreatePermissionService createPermissionService;
         private readonly IUpdatePermissionService updatePermissionService;
         private readonly IGetPermissionsService getPermissionsService;
         private readonly IDeletePermissionService deletePermissionService;
+        private readonly IPermissionVerificationService permissionVerificationService;
 
         public PermissionController(ICreatePermissionService createPermissionService,
             IUpdatePermissionService updatePermissionService,
             IGetPermissionsService getPermissionsService,
-            IDeletePermissionService deletePermissionService)
+            IDeletePermissionService deletePermissionService, IPermissionVerificationService permissionVerificationService)
         {
             this.createPermissionService = createPermissionService;
             this.updatePermissionService = updatePermissionService;
             this.getPermissionsService = getPermissionsService;
             this.deletePermissionService = deletePermissionService;
+            this.permissionVerificationService = permissionVerificationService;
         }
 
         [HttpGet]
@@ -34,7 +37,7 @@ namespace SmartHome.Web.Controllers
 
             var vm = new PermissionViewModel(model)
             {
-                CanEdit = User.IsInRole("Admin"),
+                CanEdit = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.Permission.Edit"),
                 IsCreatePage = false
             };
 
@@ -42,7 +45,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.Permission.Edit")]
         public async Task<IActionResult> Detail(PermissionModel model)
         {
             if (ModelState.IsValid)
@@ -58,13 +61,13 @@ namespace SmartHome.Web.Controllers
 
             return View("Detail", new PermissionViewModel(model)
             {
-                CanEdit = User.IsInRole("Admin"),
+                CanEdit = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.Permission.Edit"),
                 IsCreatePage = false
             });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.Permission.Edit")]
         public IActionResult Create()
         {
             var vm = new PermissionViewModel(new PermissionModel())
@@ -77,7 +80,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.Permission.Edit")]
         public async Task<IActionResult> Create(PermissionModel model)
         {
             if (ModelState.IsValid)
@@ -93,11 +96,15 @@ namespace SmartHome.Web.Controllers
                 ModelState.AddValidationErrors(result.ValidationResult);
             }
 
-            return View("Detail", new PermissionViewModel(model){CanEdit = User.IsInRole("Admin"), IsCreatePage = true});
+            return View("Detail", new PermissionViewModel(model)
+            {
+                CanEdit = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.Permission.Edit"),
+                IsCreatePage = true
+            });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.Permission.Edit")]
         public async Task<IActionResult> Delete(long id)
         {
             await deletePermissionService.DeleteAsync(id);
@@ -108,7 +115,10 @@ namespace SmartHome.Web.Controllers
         public async Task<IActionResult> List()
         {
             var permissions = await getPermissionsService.GetAllPermissionsAsync();
-            return View("List", new PermissionListViewModel(permissions) { CanCreate = User.IsInRole("Admin") });
+            return View("List", new PermissionListViewModel(permissions)
+            {
+                CanCreate = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.Permission.Edit")
+            });
         }
     }
 }

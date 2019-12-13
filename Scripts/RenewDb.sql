@@ -34,15 +34,6 @@ CREATE TABLE `AspNetRoleClaims` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `AspNetRoleClaims`
---
-
-LOCK TABLES `AspNetRoleClaims` WRITE;
-/*!40000 ALTER TABLE `AspNetRoleClaims` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AspNetRoleClaims` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `AspNetRoles`
 --
 
@@ -58,16 +49,6 @@ CREATE TABLE `AspNetRoles` (
   UNIQUE KEY `RoleNameIndex` (`NormalizedName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `AspNetRoles`
---
-
-LOCK TABLES `AspNetRoles` WRITE;
-/*!40000 ALTER TABLE `AspNetRoles` DISABLE KEYS */;
-INSERT INTO `AspNetRoles` VALUES (1,'Admin','ADMIN','c1c0b684-517d-4409-bb07-72b23df0498c'),(2,'User','USER','49ed20ba-25d5-433c-be2e-af25d9b50009');
-/*!40000 ALTER TABLE `AspNetRoles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `AspNetUserClaims`
@@ -88,15 +69,6 @@ CREATE TABLE `AspNetUserClaims` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `AspNetUserClaims`
---
-
-LOCK TABLES `AspNetUserClaims` WRITE;
-/*!40000 ALTER TABLE `AspNetUserClaims` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AspNetUserClaims` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `AspNetUserLogins`
 --
 
@@ -113,15 +85,6 @@ CREATE TABLE `AspNetUserLogins` (
   CONSTRAINT `FK_AspNetUserLogins_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `AspNetUserLogins`
---
-
-LOCK TABLES `AspNetUserLogins` WRITE;
-/*!40000 ALTER TABLE `AspNetUserLogins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AspNetUserLogins` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `AspNetUserRoles`
@@ -141,16 +104,6 @@ CREATE TABLE `AspNetUserRoles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `AspNetUserRoles`
---
-
-LOCK TABLES `AspNetUserRoles` WRITE;
-/*!40000 ALTER TABLE `AspNetUserRoles` DISABLE KEYS */;
-INSERT INTO `AspNetUserRoles` VALUES (3,1),(3,2),(4,2);
-/*!40000 ALTER TABLE `AspNetUserRoles` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `AspNetUserTokens`
 --
 
@@ -166,15 +119,6 @@ CREATE TABLE `AspNetUserTokens` (
   CONSTRAINT `FK_AspNetUserTokens_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `AspNetUserTokens`
---
-
-LOCK TABLES `AspNetUserTokens` WRITE;
-/*!40000 ALTER TABLE `AspNetUserTokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AspNetUserTokens` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `AspNetUsers`
@@ -206,16 +150,6 @@ CREATE TABLE `AspNetUsers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `AspNetUsers`
---
-
-LOCK TABLES `AspNetUsers` WRITE;
-/*!40000 ALTER TABLE `AspNetUsers` DISABLE KEYS */;
-INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '\0',0),(4,'User','USER','user@janpalasek.com','USER@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAELghlHWCGXlODnXNTmp4Hzr/2NPFSvz3lRP2q3IzyxKZqIT5fTEQ+AHuJHa6Tz2S0Q==','XLMDUQC4YYW2ZGAMCERWZVWGJLJCWJFX','7374b2f6-1f7d-42ba-8eaa-409b8fd409ae',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
-/*!40000 ALTER TABLE `AspNetUsers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `BatteryMeasurement`
 --
 
@@ -241,15 +175,6 @@ CREATE TABLE `BatteryMeasurement` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `BatteryMeasurement`
---
-
-LOCK TABLES `BatteryMeasurement` WRITE;
-/*!40000 ALTER TABLE `BatteryMeasurement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `BatteryMeasurement` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `BatteryPowerSourceType`
 --
 
@@ -263,17 +188,8 @@ CREATE TABLE `BatteryPowerSourceType` (
   `MinimumVoltage` double NOT NULL,
   `MaximumVoltage` double NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `BatteryPowerSourceType`
---
-
-LOCK TABLES `BatteryPowerSourceType` WRITE;
-/*!40000 ALTER TABLE `BatteryPowerSourceType` DISABLE KEYS */;
-/*!40000 ALTER TABLE `BatteryPowerSourceType` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `HumidityMeasurement`
@@ -298,13 +214,19 @@ CREATE TABLE `HumidityMeasurement` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `HumidityMeasurement`
+-- Table structure for table `Permission`
 --
 
-LOCK TABLES `HumidityMeasurement` WRITE;
-/*!40000 ALTER TABLE `HumidityMeasurement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `HumidityMeasurement` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `Permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Permission` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_Permission_Name` (`Name`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `Place`
@@ -320,17 +242,27 @@ CREATE TABLE `Place` (
   `Note` longtext,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_Place_Name` (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Place`
+-- Table structure for table `RolePermission`
 --
 
-LOCK TABLES `Place` WRITE;
-/*!40000 ALTER TABLE `Place` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Place` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `RolePermission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RolePermission` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `PermissionId` bigint(20) NOT NULL,
+  `RoleId` bigint(20) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_RolePermission_PermissionId_RoleId` (`PermissionId`,`RoleId`),
+  KEY `IX_RolePermission_RoleId` (`RoleId`),
+  CONSTRAINT `FK_RolePermission_AspNetRoles_RoleId` FOREIGN KEY (`RoleId`) REFERENCES `AspNetRoles` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_RolePermission_Permission_PermissionId` FOREIGN KEY (`PermissionId`) REFERENCES `Permission` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `Sensor`
@@ -353,17 +285,8 @@ CREATE TABLE `Sensor` (
   CONSTRAINT `FK_Sensor_BatteryPowerSourceType_BatteryPowerSourceTypeId` FOREIGN KEY (`BatteryPowerSourceTypeId`) REFERENCES `BatteryPowerSourceType` (`Id`),
   CONSTRAINT `FK_Sensor_Place_PlaceId` FOREIGN KEY (`PlaceId`) REFERENCES `Place` (`Id`),
   CONSTRAINT `FK_Sensor_SensorType_SensorTypeId` FOREIGN KEY (`SensorTypeId`) REFERENCES `SensorType` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Sensor`
---
-
-LOCK TABLES `Sensor` WRITE;
-/*!40000 ALTER TABLE `Sensor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Sensor` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `SensorType`
@@ -378,17 +301,8 @@ CREATE TABLE `SensorType` (
   `Description` longtext,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_SensorType_Name` (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `SensorType`
---
-
-LOCK TABLES `SensorType` WRITE;
-/*!40000 ALTER TABLE `SensorType` DISABLE KEYS */;
-/*!40000 ALTER TABLE `SensorType` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `TemperatureMeasurement`
@@ -409,17 +323,27 @@ CREATE TABLE `TemperatureMeasurement` (
   KEY `IX_TemperatureMeasurement_SensorId` (`SensorId`),
   CONSTRAINT `FK_TemperatureMeasurement_Place_PlaceId` FOREIGN KEY (`PlaceId`) REFERENCES `Place` (`Id`) ON DELETE CASCADE,
   CONSTRAINT `FK_TemperatureMeasurement_Sensor_SensorId` FOREIGN KEY (`SensorId`) REFERENCES `Sensor` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TemperatureMeasurement`
+-- Table structure for table `UserPermission`
 --
 
-LOCK TABLES `TemperatureMeasurement` WRITE;
-/*!40000 ALTER TABLE `TemperatureMeasurement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TemperatureMeasurement` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `UserPermission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserPermission` (
+  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `PermissionId` bigint(20) NOT NULL,
+  `UserId` bigint(20) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_UserPermission_PermissionId_UserId` (`PermissionId`,`UserId`),
+  KEY `IX_UserPermission_UserId` (`UserId`),
+  CONSTRAINT `FK_UserPermission_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_UserPermission_Permission_PermissionId` FOREIGN KEY (`PermissionId`) REFERENCES `Permission` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `__EFMigrationsHistory`
@@ -434,16 +358,6 @@ CREATE TABLE `__EFMigrationsHistory` (
   PRIMARY KEY (`MigrationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `__EFMigrationsHistory`
---
-
-LOCK TABLES `__EFMigrationsHistory` WRITE;
-/*!40000 ALTER TABLE `__EFMigrationsHistory` DISABLE KEYS */;
-INSERT INTO `__EFMigrationsHistory` VALUES ('20191129191030_Initial','3.0.0');
-/*!40000 ALTER TABLE `__EFMigrationsHistory` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -454,4 +368,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-29 21:37:51
+-- Dump completed on 2019-12-13 22:05:40

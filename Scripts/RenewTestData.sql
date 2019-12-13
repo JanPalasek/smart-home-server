@@ -77,7 +77,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `AspNetUsers` WRITE;
 /*!40000 ALTER TABLE `AspNetUsers` DISABLE KEYS */;
-INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '\0',0),(4,'User','USER','user@janpalasek.com','USER@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAELghlHWCGXlODnXNTmp4Hzr/2NPFSvz3lRP2q3IzyxKZqIT5fTEQ+AHuJHa6Tz2S0Q==','XLMDUQC4YYW2ZGAMCERWZVWGJLJCWJFX','7374b2f6-1f7d-42ba-8eaa-409b8fd409ae',NULL,_binary '\0',_binary '\0',NULL,_binary '',0);
+INSERT INTO `AspNetUsers` VALUES (3,'Admin','ADMIN','admin@janpalasek.com','ADMIN@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAEEqs7FX6HkgwsEMGGLxsD/3Sa0OaPKXblxttwMM64JvTmdQxuUGv5VXwBndCVyh+8A==','OESB4BWEJCO3KVM77VOFY7FLSY56IGRV','b42a3ff3-1649-4409-bdcf-c8f853a58402',NULL,_binary '\0',_binary '\0',NULL,_binary '\0',0),(4,'User','USER','user@janpalasek.com','USER@JANPALASEK.COM',_binary '\0','AQAAAAEAACcQAAAAELghlHWCGXlODnXNTmp4Hzr/2NPFSvz3lRP2q3IzyxKZqIT5fTEQ+AHuJHa6Tz2S0Q==','XLMDUQC4YYW2ZGAMCERWZVWGJLJCWJFX','7374b2f6-1f7d-42ba-8eaa-409b8fd409ae',NULL,_binary '\0',_binary '\0',NULL,_binary '\0',0);
 /*!40000 ALTER TABLE `AspNetUsers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +115,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Permission` WRITE;
 /*!40000 ALTER TABLE `Permission` DISABLE KEYS */;
-INSERT INTO `Permission` VALUES (2,'Measurement.Temperature.Edit'),(1,'Measurement.Temperature.View');
+INSERT INTO `Permission` VALUES (8,'Administration.Permission.Edit'),(7,'Administration.Permission.View'),(6,'Administration.Role.Edit'),(22,'Administration.Role.View'),(4,'Administration.User.EditAll'),(3,'Administration.User.ViewAll'),(20,'Administration.View'),(10,'Enumeration.BatteryPowerSourceType.Edit'),(9,'Enumeration.BatteryPowerSourceType.View'),(12,'Enumeration.Place.Edit'),(11,'Enumeration.Place.View'),(14,'Enumeration.Sensor.Edit'),(13,'Enumeration.Sensor.View'),(16,'Enumeration.SensorType.Edit'),(15,'Enumeration.SensorType.View'),(21,'Enumeration.View'),(17,'File.Edit'),(18,'File.View'),(2,'Measurement.Temperature.Edit'),(1,'Measurement.Temperature.View'),(19,'Measurement.View');
 /*!40000 ALTER TABLE `Permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +125,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Place` WRITE;
 /*!40000 ALTER TABLE `Place` DISABLE KEYS */;
-INSERT INTO `Place` VALUES (1,'Bathroom',_binary '',NULL),(2,'Living room',_binary '',NULL);
+INSERT INTO `Place` VALUES (1,'Bathroom',_binary '\0',NULL),(2,'Living room',_binary '\0',NULL);
 /*!40000 ALTER TABLE `Place` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,6 +135,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `RolePermission` WRITE;
 /*!40000 ALTER TABLE `RolePermission` DISABLE KEYS */;
+INSERT INTO `RolePermission` VALUES (9,1,1),(26,1,2),(13,2,1),(10,3,1),(8,4,1),(11,6,1),(7,7,1),(6,8,1),(14,9,1),(22,9,2),(12,10,1),(16,11,1),(23,11,2),(15,12,1),(18,13,1),(24,13,2),(17,14,1),(20,15,1),(25,15,2),(19,16,1),(21,17,1),(30,18,1),(35,18,2),(29,19,1),(36,19,2),(27,20,1),(28,21,1),(37,21,2),(31,22,1);
 /*!40000 ALTER TABLE `RolePermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-04 14:53:14
+-- Dump completed on 2019-12-13 22:05:49

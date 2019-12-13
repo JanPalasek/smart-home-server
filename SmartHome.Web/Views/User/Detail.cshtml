@@ -10,13 +10,13 @@
 
 <div asp-validation-summary="All"></div>
 
-<form class="small-layout" method="post" asp-action="UserUpdate">
+<form class="small-layout" method="post" asp-action="Update">
     <input asp-for="Model.Id" type="hidden"/>
     <div class="form-group">
         <ejs-button id="update" content="Update" type="submit" cssClass="e-primary"></ejs-button>
         @if (Model.CanDelete)
         {
-            <a href="@Url.Action("UserDelete", new {id = Model.Model.Id})">
+            <a href="@Url.Action("Delete", new {id = Model.Model.Id})">
                 <ejs-button id="delete-button" content="Delete" type="button"></ejs-button>
             </a>
         }
@@ -42,11 +42,11 @@
     </section>
 </form>
 
-<section class="medium-layout">
+<section class="large-layout">
     <h3>Permissions</h3>
     @if (Model.CanEditRoles)
     {
-        <a asp-action="Permissions" asp-route-userId="@Model.Model.Id">
+        <a asp-action="PermissionsList" asp-route-userId="@Model.Model.Id">
             <ejs-button id="permission-button" content="Add permission" type="button"></ejs-button>
         </a>
     }

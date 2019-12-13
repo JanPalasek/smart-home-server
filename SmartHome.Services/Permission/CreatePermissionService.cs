@@ -24,7 +24,7 @@ namespace SmartHome.Services.Permission
                 throw new ArgumentException(nameof(model.Id), "Invalid model Id.");
             }
 
-            if (await repository.GetByNameAsync(model.Name) != default)
+            if (await repository.GetByNameAsync(model.Name!) != null)
             {
                 var errors = SmartHomeValidationResult.Failed(
                     new SmartHomeValidation(nameof(model.Name),

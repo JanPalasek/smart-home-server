@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartHome.Common.Extensions;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.DomainCore.ServiceInterfaces.Role;
 using SmartHome.DomainCore.ServiceInterfaces.User;
@@ -28,10 +29,12 @@ namespace SmartHome.Web.Controllers
         private readonly IChangePasswordService changePasswordService;
         private readonly IGetRolesService getRolesService;
         private readonly IGetPermissionsService getPermissionsService;
+        private readonly IPermissionVerificationService permissionVerificationService;
 
         public UserController(ICreateUserService createUserService, IGetUsersService getUsersService,
             IUpdateUserService updateUserService, IChangePasswordService changePasswordService,
-            IGetRolesService getRolesService, IDeleteUserService deleteUserService, IGetPermissionsService getPermissionsService)
+            IGetRolesService getRolesService, IDeleteUserService deleteUserService,
+            IGetPermissionsService getPermissionsService, IPermissionVerificationService permissionVerificationService)
         {
             this.createUserService = createUserService;
             this.getUsersService = getUsersService;
@@ -40,10 +43,11 @@ namespace SmartHome.Web.Controllers
             this.getRolesService = getRolesService;
             this.deleteUserService = deleteUserService;
             this.getPermissionsService = getPermissionsService;
+            this.permissionVerificationService = permissionVerificationService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserDetail(long id)
+        public async Task<IActionResult> Detail(long id)
         {
             // isn't admin and he isn't trying to change his own password
             if (!await IsAuthorizedToChangeUserSettings(id))
@@ -56,20 +60,20 @@ namespace SmartHome.Web.Controllers
             var availableRoles = await getRolesService.GetAllRolesAsync();
             var userRoles = await getRolesService.GetUserRolesAsync(id);
 
-            var permissions = await getPermissionsService.GetAllPermissionsAsync(id);
+            var permissions = await getPermissionsService.GetAllUserPermissionsWithRolesAsync(id);
             
             var viewModel = new DetailUserViewModel(model, userRoles.Select(x => x.Id).ToList(),
                 (List<RoleModel>)availableRoles, (List<PermissionRoleModel>)permissions)
             {
                 CanDelete = User.Identity.Name != model.UserName,
-                CanEditRoles = User.IsInRole("Admin")
+                CanEditRoles = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.User.EditAll")
             };
 
-            return View("UserDetail", viewModel);
+            return View("Detail", viewModel);
         }
         
         [HttpPost]
-        public async Task<IActionResult> UserUpdate(UserModel model, List<long> roles)
+        public async Task<IActionResult> Update(UserModel model, List<long> roles)
         {
             // isn't admin and he isn't trying to change his own password
             if (!await IsAuthorizedToChangeUserSettings(model.Id))
@@ -81,7 +85,7 @@ namespace SmartHome.Web.Controllers
             {
                 // if user attempts to update roles and is not admin => error
                 var storedRoles = (await getRolesService.GetUserRolesAsync(model.Id)).Select(x => x.Id).ToList();
-                if (!storedRoles.UnorderedEquals(roles) && !User.IsInRole("Admin"))
+                if (!storedRoles.UnorderedEquals(roles) && !await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.User.EditAll"))
                 {
                     return Unauthorized();
                 }
@@ -89,62 +93,62 @@ namespace SmartHome.Web.Controllers
                 var result = await updateUserService.AddToOrRemoveFromRolesAsync(model.Id, roles);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UserDetail", new {id = model.Id});
+                    return RedirectToAction("Detail", new {id = model.Id});
                 }
                 
                 ModelState.AddValidationErrors(result);
             }
             
             var availableRoles = await getRolesService.GetAllRolesAsync();
-            var permissions = await getPermissionsService.GetAllPermissionsAsync(model.Id);
+            var permissions = await getPermissionsService.GetAllUserPermissionsWithRolesAsync(model.Id);
             
-            return View("UserDetail", new DetailUserViewModel(model, roles,
+            return View("Detail", new DetailUserViewModel(model, roles,
                 (List<RoleModel>)availableRoles, (List<PermissionRoleModel>)permissions)
             {
                 CanDelete = User.Identity.Name != model.UserName,
-                CanEditRoles = User.IsInRole("Admin")
+                CanEditRoles = await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.User.EditAll")
             });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UserList()
+        [Authorize(Policy = "Administration.User.ViewAll")]
+        public async Task<IActionResult> List()
         {
             var users = await getUsersService.GetAllUsersAsync();
 
-            return View("UserList", new UserListViewModel(users));
+            return View("List", new UserListViewModel(users));
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult UserCreate()
+        [Authorize(Policy = "Administration.User.EditAll")]
+        public IActionResult Create()
         {
             var viewModel = new CreateUserViewModel(new CreateUserModel());
 
-            return View("UserCreate", viewModel);
+            return View("Create", viewModel);
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UserCreate(CreateUserModel model)
+        [Authorize(Policy = "Administration.User.EditAll")]
+        public async Task<IActionResult> Create(CreateUserModel model)
         {
             if (ModelState.IsValid)
             {
                 var result = await createUserService.CreateUserAsync(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UserDetail", new { id = (await getUsersService.GetByEmailAsync(model.Email!))!.Id });
+                    return RedirectToAction("Detail", new { id = (await getUsersService.GetByEmailAsync(model.Email!))!.Id });
                 }
                 
                 ModelState.AddValidationErrors(result);
             }
 
-            return View("UserCreate", new CreateUserViewModel(model));
+            return View("Create", new CreateUserViewModel(model));
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UserDelete(long id)
+        [Authorize(Policy = "Administration.User.EditAll")]
+        public async Task<IActionResult> Delete(long id)
         {
             // cannot delete your own account
             if ((await getUsersService.GetByNameAsync(User.Identity.Name!))?.Id == id)
@@ -156,7 +160,7 @@ namespace SmartHome.Web.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("UserList");
+                return RedirectToAction("List");
             }
             
             throw new ArgumentException("User cannot be deleted.");
@@ -192,7 +196,7 @@ namespace SmartHome.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("UserDetail", new {id = model.Id});
+                    return RedirectToAction("Detail", new {id = model.Id});
                 }
 
                 ModelState.AddValidationErrors(result);
@@ -202,25 +206,40 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Permissions(long userId)
+        public async Task<IActionResult> PermissionsList(long userId)
         {
+            if (!await IsAuthorizedToViewUserSettings(userId))
+            {
+                return Unauthorized();
+            }
+            
             var vm = new UserPermissionsViewModel(userId);
             vm.PermissionOptions = await getPermissionsService.GetAllPermissionsAsync();
-            return View("Permissions", vm);
+            return View("PermissionsList", vm);
         }
         
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.User.ViewAll")]
+        [Authorize(Policy = "Administration.Permission.View")]
         public async Task<IActionResult> PermissionsDataSource(long userId, [FromBody]DataManagerRequest dm)
         {
+            if (!await IsAuthorizedToViewUserSettings(userId))
+            {
+                return Unauthorized();
+            }
+            
             var result =
                 await getPermissionsService.GetUserOnlyPermissionsAsync(userId);
             return dm.RequiresCounts ? Json(new { result = result, count = result.Count }) : Json(result);
         }
         
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Administration.User.EditAll")]
         public async Task<IActionResult> PermissionsUpdate(long userId, [FromBody]CRUDModel batchModel)
         {
+            if (!await IsAuthorizedToChangeUserSettings(userId))
+            {
+                return Unauthorized();
+            }
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -229,11 +248,18 @@ namespace SmartHome.Web.Controllers
             var removed =  batchModel.Deleted.Count > 0 ? batchModel.Deleted.Select(x => JsonConvert.DeserializeObject<PermissionModel>(x.ToString()))
                 .Select(x => x.Id) : Enumerable.Empty<long>();
             var updated = batchModel.Changed.Count > 0 ? batchModel.Changed.Select(x => JsonConvert.DeserializeObject<PermissionModel>(x.ToString()))
-                .Select(x => (x.Id, x.Name)) : Enumerable.Empty<ValueTuple<long, string>>();
+                .Where(x => x.Name != null)
+                .Select(x => (x.Id, x.Name!)) : Enumerable.Empty<ValueTuple<long, string>>();
             var added = batchModel.Added.Select(x => JsonConvert.DeserializeObject<PermissionModel>(x.ToString()))
-                .Select(x => x.Name).ToList();
+                .Where(x => x.Name != null)
+                .Select(x => x.Name!)
+                .ToList();
 
             var result = await updateUserService.UpdatePermissionsAsync(userId, removed, updated, added);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.ToString());
+            }
             
             
             var permissions =
@@ -244,17 +270,36 @@ namespace SmartHome.Web.Controllers
             
         private async Task<bool> IsAuthorizedToChangeUserSettings(long userId)
         {
-            if (User.Identity.Name == null)
+            if (User?.Identity?.Name == null)
             {
                 return false;
             }
-            if (!User.IsInRole("Admin") &&
-                (await getUsersService.GetByNameAsync(User.Identity.Name))?.Id != userId)
+            
+            // can edit all
+            if (await permissionVerificationService.HasPermissionAsync(User.Identity.Name, "Administration.User.EditAll"))
             {
-                return false;
+                return true;
             }
 
-            return true;
+            // is user's own profile
+            if ((await getUsersService.GetByNameAsync(User.Identity.Name))?.Id == userId)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<bool> IsAuthorizedToViewUserSettings(long userId)
+        {
+            // can view all or is user's own profile
+            if (await permissionVerificationService.HasPermissionAsync(User.Identity.Name!, "Administration.User.ViewAll") || 
+                (await getUsersService.GetByNameAsync(User.Identity.Name!))?.Id == userId)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -19,7 +19,10 @@ namespace SmartHome.Infrastructure
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         
-        public UserRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager) : base(smartHomeAppDbContext, mapper)
+        public UserRepository(SmartHomeAppDbContext smartHomeAppDbContext,
+            IMapper mapper,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager) : base(smartHomeAppDbContext, mapper)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -155,6 +158,29 @@ namespace SmartHome.Infrastructure
                 .Select(x => x.Name).ToListAsync();
 
             return await userManager.RemoveFromRolesAsync(user, roleNames);
+        }
+
+        public async Task<bool> HasPermissionAsync(long userId, string permissionName)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            bool hasPermission = await SmartHomeAppDbContext.Query<UserPermission>()
+                .AnyAsync(x => x.UserId == userId && x.Permission.Name == permissionName);
+
+            if (hasPermission)
+            {
+                return true;
+            }
+            
+            // has role that has that permission
+            var roles = (List<string>)await userManager.GetRolesAsync(user);
+            hasPermission = await SmartHomeAppDbContext.Query<RolePermission>()
+                // filter only for roles that user has
+                .Where(x => roles.Contains(x.Role.Name))
+                // does the role have that permission?
+                .AnyAsync(x => x.Permission.Name == permissionName);
+
+            return hasPermission;
+
         }
 
         public async Task<IList<UserModel>> GetAllAsync()

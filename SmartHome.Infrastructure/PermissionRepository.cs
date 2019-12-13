@@ -33,13 +33,40 @@ namespace SmartHome.Infrastructure
             return userPermissions;
         }
 
+        public async Task<IList<PermissionModel>> GetAllUserPermissionsAsync(long userId)
+        {
+            var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
+            var userPermissions = await SmartHomeAppDbContext.Query<UserPermission>()
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Permission)
+                .ProjectTo<PermissionModel>(Mapper.ConfigurationProvider)
+                .ToListAsync();
+            
+            var rolesStrings = (List<string>)await userManager.GetRolesAsync(user);
+
+            var rolePermissions = await SmartHomeAppDbContext.Query<RolePermission>()
+                .Where(x => rolesStrings.Contains(x.Role.Name))
+                .Select(x => x.Permission)
+                .ProjectTo<PermissionModel>(Mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var comparer = EqualityComparerFactory.Create<PermissionModel>(
+                x => (int) x.Id,
+                (x, y) => x.Id == y.Id);
+            var resultPermissions = userPermissions.Union(rolePermissions, comparer);
+            resultPermissions = resultPermissions.OrderBy(x => x.Name);
+
+            return resultPermissions.ToList();
+        }
+
         public async Task<IList<PermissionModel>> GetRolePermissionsAsync(long roleId)
         {
             var rolePermissions = SmartHomeAppDbContext.Query<RolePermission>()
                 .Where(x => x.RoleId == roleId)
                 .Select(x => x.Permission)
                 .ProjectTo<PermissionModel>(Mapper.ConfigurationProvider);
-            return await rolePermissions.ToListAsync();
+            var result = await rolePermissions.ToListAsync();
+            return result;
         }
 
         public async Task<PermissionModel?> GetByNameAsync(string name)
@@ -49,7 +76,7 @@ namespace SmartHome.Infrastructure
             return Mapper.Map<PermissionModel>(permission);
         }
 
-        public async Task<IList<PermissionRoleModel>> GetPermissionsAsync(long userId)
+        public async Task<IList<PermissionRoleModel>> GetAllUserPermissionsWithRolesAsync(long userId)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
 
@@ -58,22 +85,20 @@ namespace SmartHome.Infrastructure
                 .ProjectTo<PermissionRoleModel>(Mapper.ConfigurationProvider)
                 .ToListAsync();
             
-            var rolesStrings = await userManager.GetRolesAsync(user);
+            var rolesStrings = (List<string>)await userManager.GetRolesAsync(user);
 
-            // TODO: fix client-side evaluation
-            var rolePermissions = SmartHomeAppDbContext.Query<RolePermission>()
-                .Include(x => x.Role)
-                .AsEnumerable()
+            var rolePermissions = await SmartHomeAppDbContext.Query<RolePermission>()
                 .Where(x => rolesStrings.Contains(x.Role.Name))
-                .Select(Mapper.Map<PermissionRoleModel>)
-                .ToList();
+                .ProjectTo<PermissionRoleModel>(Mapper.ConfigurationProvider)
+                .ToListAsync();
 
-            var intersect = userPermissions.Union(rolePermissions,
-                EqualityComparerFactory.Create<PermissionRoleModel>(
-                x => (int)x.PermissionId,
-                (x, y) => x.PermissionId == y.PermissionId && string.Equals(x.RoleName, y.RoleName)));
+            var comparer = EqualityComparerFactory.Create<PermissionRoleModel>(
+                x => (int) x.PermissionId,
+                (x, y) => x.PermissionId == y.PermissionId && string.Equals(x.RoleName, y.RoleName));
+            var resultPermissions = userPermissions.Union(rolePermissions, comparer);
+            resultPermissions = resultPermissions.OrderBy(x => x.PermissionName);
 
-            return intersect.ToList();
+            return resultPermissions.ToList();
         }
     }
 }

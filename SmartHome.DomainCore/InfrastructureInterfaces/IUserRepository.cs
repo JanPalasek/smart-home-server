@@ -39,5 +39,6 @@ namespace SmartHome.DomainCore.InfrastructureInterfaces
 
         Task<IdentityResult> AddToRolesAsync(long userId, List<long> roleIds);
         Task<IdentityResult> RemoveFromRolesAsync(long userId, List<long> roleIds);
+        Task<bool> HasPermissionAsync(long userId, string permissionName);
     }
 }

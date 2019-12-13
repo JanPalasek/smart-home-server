@@ -1,4 +1,21 @@
+@using SmartHome.DomainCore.Data.Models
 @using Syncfusion.EJ2.Navigations
+@inject SmartHome.DomainCore.ServiceInterfaces.Permission.IGetPermissionsService GetPermissionsService
+
+@{
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+    
+    HashSet<string> userPermissions = isAuthenticated ?
+        GetPermissionsService.GetAllUserPermissionsAsync(User.Identity.Name!)
+            .Result.Select(x => x.Name!).ToHashSet() : new HashSet<string>();
+}
+
+@functions{
+    private bool HasPermission(HashSet<string> userPermissions, string permissionName)
+    {
+        return userPermissions.Contains(permissionName);
+    }
+}
 
 <style>
     .menu>div:nth-child(2) {
@@ -6,10 +23,8 @@
     }
 </style>
 
+
 @{
-    bool isAdmin = User.IsInRole("Admin");
-    bool isUser = User.IsInRole("User");
-    bool isAuthenticated = User.Identity.IsAuthenticated;
     
     var leftMenuItems = new List<MenuItem>();
     leftMenuItems.Add(new MenuItem
@@ -22,7 +37,7 @@
         Text = "Statistics"
     });
 
-    if (isAdmin)
+    if (isAuthenticated && HasPermission(userPermissions, "File.View"))
     {
         leftMenuItems.Add(new MenuItem()
         {
@@ -31,44 +46,67 @@
         });
     }
 
-    if (isUser)
+    if (isAuthenticated && HasPermission(userPermissions, "Enumeration.View"))
     {
+        var enumerations = new List<MenuItem>();
+        if (HasPermission(userPermissions, "Enumeration.BatteryPowerSourceType.View"))
+        {
+            enumerations.Add(new MenuItem() {Text = "Battery power source types", Url = Url.Action("List", "BatteryPowerSourceType")});
+        }
+        if (HasPermission(userPermissions, "Enumeration.Place.View"))
+        {
+            enumerations.Add(new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") });
+        }
+        if (HasPermission(userPermissions, "Enumeration.Sensor.View"))
+        {
+            enumerations.Add(new MenuItem() { Text = "Sensors", Url = Url.Action("List", "Sensor")});
+        }
+        if (HasPermission(userPermissions, "Enumeration.SensorType.View"))
+        {
+            enumerations.Add(new MenuItem() { Text = "Sensor types", Url = Url.Action("List", "SensorType") });
+        }
+        
         leftMenuItems.Add(new MenuItem()
         {
             Text = "Enumerations",
-            Items = new List<MenuItem>()
-            {
-                new MenuItem() {Text = "Battery power source types", Url = Url.Action("List", "BatteryPowerSourceType")},
-                new MenuItem() { Text = "Places", Url = Url.Action("List", "Place") },
-                new MenuItem() { Text = "Sensors", Url = Url.Action("List", "Sensor")},
-                new MenuItem() { Text = "Sensor types", Url = Url.Action("List", "SensorType") }
-            }
+            Items = enumerations
         });
     }
 
-    if (isUser)
+    if (isAuthenticated && HasPermission(userPermissions, "Measurement.View"))
     {
+        var measurements = new List<MenuItem>();
+        if (HasPermission(userPermissions, "Measurement.Temperature.View"))
+        {
+            measurements.Add(new MenuItem() {Text = "Temperature", Url = Url.Action("List", "TemperatureMeasurement")});
+        }
+
         leftMenuItems.Add(new MenuItem()
         {
             Text = "Measurements",
-            Items = new List<MenuItem>()
-            {
-                new MenuItem() {Text = "Temperature", Url = Url.Action("List", "TemperatureMeasurement")}
-            }
+            Items = measurements
         });
     }
-
-    if (isAdmin)
+    if (isAuthenticated && HasPermission(userPermissions, "Administration.View"))
     {
+        var administration = new List<MenuItem>();
+        if (HasPermission(userPermissions, "Administration.User.ViewAll"))
+        {
+            administration.Add(new MenuItem() { Text = "Users", Url = Url.Action("List", "User") });
+        }
+        if (HasPermission(userPermissions, "Administration.Role.View"))
+        {
+            administration.Add(new MenuItem() { Text = "Roles", Url = Url.Action("List", "Role")});
+        }
+        if (HasPermission(userPermissions, "Administration.Permission.View"))
+        {
+            administration.Add(new MenuItem() { Text = "Permissions", Url = Url.Action("List", "Permission")});
+        }
+
         leftMenuItems.Add(new MenuItem()
         {
             Text = "Administration",
-            Items = new List<MenuItem>()
-            {
-                new MenuItem() { Text = "Users", Url = Url.Action("UserList", "User") },
-                new MenuItem() { Text = "Roles", Url = Url.Action("RoleList", "Role") },
-                new MenuItem() { Text = "Permissions", Url = Url.Action("List", "Permission")}
-            }
+            Items = administration
         });
     }
 

@@ -1,0 +1,28 @@
+@model SmartHome.Web.Models.Role.DetailRoleViewModel
+@{
+    ViewBag.Header = "Role";
+}
+
+<div asp-validation-summary="All"></div>
+
+<form method="post" asp-action="Update" class="small-layout">
+    <section class="section control-section">
+        <input type="hidden" asp-for="Model.Id"/>
+        <div class="form-group">
+            <ejs-textbox id="role-name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto"></ejs-textbox>
+        </div>
+        <ejs-button id="button" type="submit" content="Update" cssClass="e-primary"></ejs-button>
+    </section>
+</form>
+
+<section class="medium-layout">
+    <h3>Permissions</h3>
+    <a asp-action="PermissionsList" asp-route-roleId="@Model.Model.Id">
+        <ejs-button id="permission-button" content="Add permission" type="button"></ejs-button>
+    </a>
+    <ejs-grid id="permission-grid" dataSource="Model.Permissions">
+        <e-grid-columns>
+            <e-grid-column field="Name" headerText="Name"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</section>

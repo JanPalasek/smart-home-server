@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.Web.Configurations;
 using Syncfusion.EJ2.FileManager.Base;
 using Syncfusion.EJ2.FileManager.PhysicalFileProvider;
@@ -14,16 +15,19 @@ namespace SmartHome.Web.Controllers.ApiControllers
     /// <summary>
     /// Controller that handles accessing the disk files.
     /// </summary>
-    [Authorize]
+    [Authorize(Policy = "File.View")]
     public class FilesController : Controller
     {
         private readonly FileManagerConfiguration fileManagerConfiguration;
         private readonly PhysicalFileProvider operation;
+        private readonly IPermissionVerificationService permissionVerificationService;
         
-        public FilesController(FileManagerConfiguration fileManagerConfiguration)
+        public FilesController(FileManagerConfiguration fileManagerConfiguration,
+            IPermissionVerificationService permissionVerificationService)
         {
             this.fileManagerConfiguration = fileManagerConfiguration;
-            
+            this.permissionVerificationService = permissionVerificationService;
+
             operation = new PhysicalFileProvider();
             // Assign the mapped path as root folder
             operation.RootFolder(fileManagerConfiguration.StoragePath);
@@ -32,6 +36,20 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [Route("api/files/operations")]
         public object FileOperations([FromBody] FileManagerDirectoryContent args)
         {
+            // cannot edit files and attempts to edit => error
+            if (!permissionVerificationService.HasPermission(User.Identity.Name!, "File.Edit")
+                    && (args.Action == "delete" || args.Action == "rename" || args.Action == "copy" || args.Action == "move"
+                        || args.Action == "create"))
+            {
+                FileManagerResponse response = new FileManagerResponse();
+                response.Error = new ErrorDetails()
+                {
+                    Code = "401",
+                    Message = "Unauthorized."
+                };
+                return operation.ToCamelCase(response);
+            }
+            
             // Restricting modification of the root folder
             if ((args.Action == "delete" || args.Action == "rename") && args.TargetPath == null && args.Path == string.Empty)
             {
@@ -89,6 +107,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [Route("api/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
+        [Authorize(Policy = "File.Edit")]
         public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action)
         {
             // validate size limit

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.DomainCore.ServiceInterfaces.Place;
 using SmartHome.DomainCore.ServiceInterfaces.Sensor;
 using SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement;
@@ -15,7 +16,7 @@ using Syncfusion.EJ2.Base;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Policy = "Measurement.Temperature.View")]
     public class TemperatureMeasurementController : Controller
     {
         private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
@@ -24,13 +25,15 @@ namespace SmartHome.Web.Controllers
         private readonly IDeleteTemperatureMeasurementService deleteTemperatureMeasurementService;
         private readonly ICreateTemperatureMeasurementService createTemperatureMeasurementService;
         private readonly IUpdateTemperatureMeasurementService updateTemperatureMeasurementService;
+        private readonly IPermissionVerificationService permissionVerificationService;
 
         public TemperatureMeasurementController(
             IGetTemperatureMeasurementsService getTemperatureMeasurementsService,
             IGetSensorsService getSensorsService, IGetPlacesService getPlacesService,
             IDeleteTemperatureMeasurementService deleteTemperatureMeasurementService,
             ICreateTemperatureMeasurementService createTemperatureMeasurementService,
-            IUpdateTemperatureMeasurementService updateTemperatureMeasurementService)
+            IUpdateTemperatureMeasurementService updateTemperatureMeasurementService,
+            IPermissionVerificationService permissionVerificationService)
         {
             this.getTemperatureMeasurementsService = getTemperatureMeasurementsService;
             this.getSensorsService = getSensorsService;
@@ -38,16 +41,21 @@ namespace SmartHome.Web.Controllers
             this.deleteTemperatureMeasurementService = deleteTemperatureMeasurementService;
             this.createTemperatureMeasurementService = createTemperatureMeasurementService;
             this.updateTemperatureMeasurementService = updateTemperatureMeasurementService;
+            this.permissionVerificationService = permissionVerificationService;
         }
 
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            return View("List", new TemperatureMeasurementListViewModel() { CanCreate = User.IsInRole("Admin") });
+            return View("List", new TemperatureMeasurementListViewModel()
+            {
+                CanCreate = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Measurement.Temperature.Edit")
+            });
         }
         
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Measurement.Temperature.Edit")]
         public async Task<IActionResult> Create()
         {
             var vm = await CreateAndFillViewModelAsync(new TemperatureMeasurementModel(), true);
@@ -56,7 +64,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Measurement.Temperature.Edit")]
         public async Task<IActionResult> Create(TemperatureMeasurementModel model)
         {
             if (ModelState.IsValid)
@@ -74,7 +82,7 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Measurement.Temperature.Edit")]
         public async Task<IActionResult> Delete(long id)
         {
             await deleteTemperatureMeasurementService.DeleteAsync(id);
@@ -93,7 +101,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Measurement.Temperature.Edit")]
         public async Task<IActionResult> Detail(TemperatureMeasurementModel model)
         {
             if (ModelState.IsValid)
@@ -123,7 +131,8 @@ namespace SmartHome.Web.Controllers
             var viewModel = new TemperatureMeasurementViewModel(model)
             {
                 IsCreatePage = isCreatePage,
-                CanEdit = User.IsInRole("Admin")
+                CanEdit = await permissionVerificationService.HasPermissionAsync(
+                    User.Identity.Name!, "Measurement.Temperature.Edit")
             };
 
             viewModel.Sensors = await getSensorsService.GetAllSensorsAsync();

@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SmartHome.Common;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
@@ -66,13 +67,49 @@ namespace SmartHome.Infrastructure
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
 
-            var rolesStrings = await userManager.GetRolesAsync(user);
+            var rolesStrings = (List<string>)await userManager.GetRolesAsync(user);
 
-            // TODO: fix client-side evaluation
             return SmartHomeAppDbContext.Query<Role>()
+                .Where(x => rolesStrings.Contains(x.Name))
                 .ProjectTo<RoleModel>(Mapper.ConfigurationProvider)
-                .AsEnumerable().Where(x => rolesStrings.Contains(x.Name))
                 .ToList();
+        }
+
+        public async Task AddPermissionsToRoleAsync(long roleId, List<string> permissions)
+        {
+            var permissionIds = await SmartHomeAppDbContext.Query<Permission>()
+                .Where(x => permissions.Contains(x.Name))
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            var entities = permissionIds.Select(x => new RolePermission()
+            {
+                RoleId = roleId,
+                PermissionId = x
+            });
+
+            // get already existing user permissions from the database
+            var existingUserPermissions = await SmartHomeAppDbContext.Query<RolePermission>()
+                .Where(x => x.RoleId == roleId)
+                .Where(x => permissionIds.Contains(x.PermissionId))
+                .ToListAsync();
+            
+            // insert only those that are not in the database
+            entities = entities.Except(existingUserPermissions, EqualityComparerFactory.Create<RolePermission>(
+                x => x.PermissionId.GetHashCode(),
+                (x, y) => x.PermissionId == y.PermissionId && x.RoleId == y.RoleId));
+            
+            await SmartHomeAppDbContext.AddRangeAsync(entities);
+        }
+
+        public async Task RemovePermissionsFromRoleAsync(long roleId, List<long> permissions)
+        {
+            var permissionsToRemove = await SmartHomeAppDbContext.Query<RolePermission>()
+                .Where(x => x.RoleId == roleId)
+                .Where(x => permissions.Contains(x.Permission.Id))
+                .ToListAsync();
+            
+            await SmartHomeAppDbContext.DeleteRangeAsync(permissionsToRemove);
         }
     }
 }

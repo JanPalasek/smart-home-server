@@ -23,15 +23,15 @@ namespace SmartHome.Services.Permission
                 throw new ArgumentException(nameof(model.Id), "Invalid model Id.");
             }
 
-            var dbModel = await repository.GetByNameAsync(model.Name);
+            var dbModel = await repository.GetByNameAsync(model.Name!);
             // if we don't change anything => return success
-            if (dbModel != default && dbModel.Id == model.Id)
+            if (dbModel != null && dbModel.Id == model.Id)
             {
                 return SmartHomeValidationResult.Success;
             }
             
             // if we change something and the new name is already in the database (in different entity) => error
-            if (dbModel != default)
+            if (dbModel != null)
             {
                 return SmartHomeValidationResult.Failed(
                     new SmartHomeValidation(nameof(model.Name),

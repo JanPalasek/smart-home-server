@@ -37,7 +37,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [Route("Files")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "File.View")]
         public IActionResult Files()
         {
             return View("Files", fileManagerConfiguration);
