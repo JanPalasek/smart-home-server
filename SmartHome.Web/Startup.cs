@@ -55,6 +55,9 @@ namespace SmartHome.Web
                 return parsedConfiguration;
             });
             
+            services.AddAuthentication()
+                .AddCookie();
+            
             services.AddAuthorization(options =>
             {
                 var provider = services
@@ -67,6 +70,7 @@ namespace SmartHome.Web
                         policy => policy.Requirements.Add(new PermissionRequirement(permission.Name!)));
                 }
             });
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
             
             // set up MVC
             var mvcConfiguration = services.AddMvc(options =>
@@ -99,8 +103,6 @@ namespace SmartHome.Web
 
                 options.EnableEndpointRouting = false;
             }).AddViewLocalization();
-
-            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
             
             if (hostingEnvironment.IsDevelopment())
             {
