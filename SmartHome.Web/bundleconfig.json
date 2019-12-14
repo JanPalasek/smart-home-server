@@ -59,16 +59,16 @@
     "minify": { "enabled": true }
   },
   {
-    "outputFileName": "wwwroot/lib/css/ej2.css",
+    "outputFileName": "wwwroot/lib/css/material.css",
     "inputFiles": [
-      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+      "node_modules/@syncfusion/ej2/material.css"
     ],
     "minify": { "enabled": false }
   },
   {
-    "outputFileName": "wwwroot/lib/css/ej2.min.css",
+    "outputFileName": "wwwroot/lib/css/material.min.css",
     "inputFiles": [
-      "node_modules/@syncfusion/ej2/styles/compatibility/material.css"
+      "node_modules/@syncfusion/ej2/material.css"
     ],
     "minify": { "enabled": true }
   },
