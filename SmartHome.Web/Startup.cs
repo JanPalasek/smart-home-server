@@ -1,8 +1,11 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.ServiceLoaders;
 using SmartHome.Web.Configurations;
@@ -44,7 +47,26 @@ namespace SmartHome.Web
         public void ConfigureServices(IServiceCollection services)
         {
             new WebLoader(configuration, hostingEnvironment.IsDevelopment()).Load(services);
+            
+            // generate key
+            int keyBytesLength = configuration.GetSection("Jwt:KeyBytesLength").Get<int>();
+            var keyBytes = new byte[keyBytesLength];
+            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            rngCryptoServiceProvider.GetBytes(keyBytes);
 
+            services.AddScoped(provider =>
+            {
+                var configurationProvider = provider.GetRequiredService<IConfiguration>();
+                var parsedConfiguration = configurationProvider.GetSection("Jwt").Get<JwtConfiguration>();
+                parsedConfiguration.SecurityKey = new SymmetricSecurityKey(keyBytes);
+                
+                double validDurationMinutes = configuration.GetSection("Jwt:ValidDurationMinutes").Get<double>();
+                parsedConfiguration.ExpirationDate = DateTime.Now.AddMinutes(validDurationMinutes);
+                
+                // TODO: verify
+
+                return parsedConfiguration;
+            });
             services.AddScoped(provider =>
             {
                 var configurationProvider = provider.GetRequiredService<IConfiguration>();
@@ -56,7 +78,22 @@ namespace SmartHome.Web
             });
             
             services.AddAuthentication()
-                .AddCookie();
+                .AddCookie()
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+    
+                    var provider = services
+                        .BuildServiceProvider();
+                    var configuration = provider.GetRequiredService<JwtConfiguration>();
+                    
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = configuration.Issuer,
+                        ValidAudience = configuration.Audience,
+                        IssuerSigningKey = configuration.SecurityKey
+                    };
+                });
             
             services.AddAuthorization(options =>
             {

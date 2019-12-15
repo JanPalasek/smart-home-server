@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.InfrastructureInterfaces;
@@ -9,6 +11,7 @@ using SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement;
 
 namespace SmartHome.Web.Controllers.ApiControllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TemperaturesController : ControllerBase
     {
         private readonly ICreateBatteryMeasurementService batteryMeasurementService;
@@ -27,6 +30,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
         
         [HttpPost("api/sensors/{sensorId:int}/temperatures")]
         [HttpPost("api/temperatures")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "Measurement.Temperature.Edit")]
         public async Task<IActionResult> Temperature(int sensorId, double temperature, double? voltage)
         {
             var result =
@@ -52,6 +57,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
         
         [HttpGet("api/sensors/{sensorId:int}/temperatures")]
         [HttpGet("api/temperatures")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "Measurement.Temperature.View")]
         public async Task<IActionResult> Temperatures(int? sensorId, DateTime? from, DateTime? to)
         {
             var filter = new MeasurementFilter()
@@ -67,6 +74,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
 
         [HttpGet("api/sensors/{sensorId:int}/temperatures/last")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "Measurement.Temperature.View")]
         public async Task<IActionResult> LastSensorTemperature(int sensorId)
         {
             var temperatureMeasurement = await getTemperatureMeasurementsService.GetLastMeasurementAsync(sensorId);
