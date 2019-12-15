@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
@@ -35,39 +36,39 @@ namespace SmartHome.Services.Tests
         }
 
         [Test]
-        public void SignInHappyPathTest()
+        public async Task SignInHappyPathTest()
         {
             var loginModel = new LoginModel()
             {
                 Login = "valid",
                 Password = "validPassword"
             };
-            var result = signInService.SignInAsync(loginModel).Result;
-            Assert.That(result, Is.EqualTo(SignInResult.Success));
+            var result = await signInService.SignInAsync(loginModel);
+            Assert.That(result.Succeeded, Is.True);
         }
         
         [Test]
-        public void SignInInvalidPasswordTest()
+        public async Task SignInInvalidPasswordTest()
         {
             var loginModel = new LoginModel()
             {
                 Login = "valid",
                 Password = "invalidPassword"
             };
-            var result = signInService.SignInAsync(loginModel).Result;
-            Assert.That(result, Is.EqualTo(SignInResult.Failed));
+            var result = await signInService.SignInAsync(loginModel);
+            Assert.That(result.Succeeded, Is.False);
         }
 
         [Test]
-        public void SignInInvalidNameTest()
+        public async Task SignInInvalidNameTest()
         {
             var loginModel = new LoginModel()
             {
                 Login = "invalid",
                 Password = "validPassword"
             };
-            var result = signInService.SignInAsync(loginModel).Result;
-            Assert.That(result, Is.EqualTo(SignInResult.Failed));
+            var result = await signInService.SignInAsync(loginModel);
+            Assert.That(result.Succeeded, Is.False);
         }
     }
 }

@@ -7,31 +7,32 @@ namespace SmartHome.DomainCore.Data.Validations
 {
     public class SmartHomeValidationResult
     {
-        private SmartHomeValidationResult(IReadOnlyList<SmartHomeValidation> errors)
+        private SmartHomeValidationResult(bool succeeded, IReadOnlyList<SmartHomeValidation> errors)
         {
+            Succeeded = succeeded;
             Errors = errors;
         }
 
-        public bool Succeeded => Errors.Count == 0;
+        public bool Succeeded { get; }
         public IReadOnlyList<SmartHomeValidation> Errors { get; }
 
-        public static SmartHomeValidationResult Success { get; } = new SmartHomeValidationResult(ArraySegment<SmartHomeValidation>.Empty);
+        public static SmartHomeValidationResult Success { get; } = new SmartHomeValidationResult(true, ArraySegment<SmartHomeValidation>.Empty);
 
         public static SmartHomeValidationResult Failed(IReadOnlyList<SmartHomeValidation> errors)
         {
-            return new SmartHomeValidationResult(errors.ToList());
+            return new SmartHomeValidationResult(false, errors.ToList());
         }
         
         public static SmartHomeValidationResult Failed(params SmartHomeValidation[] errors)
         {
-            return new SmartHomeValidationResult(errors);
+            return new SmartHomeValidationResult(false, errors);
         }
 
         public static SmartHomeValidationResult FromIdentityResult(IdentityResult identityResult)
         {
             var errors = identityResult.Errors.Select(x => new SmartHomeValidation(x.Code, x.Description))
                 .ToList();
-            return new SmartHomeValidationResult(errors);
+            return new SmartHomeValidationResult(errors.Count == 0, errors);
         }
 
         public static SmartHomeValidationResult FromSignInResult(SignInResult signInResult)
@@ -47,7 +48,8 @@ namespace SmartHome.DomainCore.Data.Validations
 
         public SmartHomeValidationResult Merge(SmartHomeValidationResult result)
         {
-            return new SmartHomeValidationResult(Errors.Concat(result.Errors).ToList());
+            var mergedErrors = Errors.Concat(result.Errors).ToList();
+            return new SmartHomeValidationResult(Succeeded && result.Succeeded, mergedErrors);
         }
 
         public override string ToString()
