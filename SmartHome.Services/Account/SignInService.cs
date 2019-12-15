@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SmartHome.Common.Extensions;
+using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
+using SmartHome.DomainCore.Data.Validations;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
 
@@ -16,13 +18,13 @@ namespace SmartHome.Services.Account
             this.repository = repository;
         }
 
-        public async Task<SignInResult> SignInAsync(LoginModel model)
+        public async Task<ServiceResult<long>> SignInAsync(LoginModel model)
         {
             var user = await repository.GetUserByNameAsync(model.Login!);
 
             if (user == null && !model.Login.IsEmail())
             {
-                return SignInResult.Failed;
+                return new ServiceResult<long>(default, SmartHomeValidationResult.Failed());
             }
             
             if (user == null && model.Login.IsEmail())
@@ -32,13 +34,13 @@ namespace SmartHome.Services.Account
 
             if (user == null)
             {
-                return SignInResult.Failed;
+                return new ServiceResult<long>(default, SmartHomeValidationResult.Failed());
             }
 
             await repository.SignOutAsync();
             var result = await repository.SignInAsync(user, model.Password!, model.RememberMe);
             
-            return result;
+            return new ServiceResult<long>(user.Id, SmartHomeValidationResult.FromSignInResult(result));
         }
     }
 }

@@ -34,6 +34,17 @@ namespace SmartHome.DomainCore.Data.Validations
             return new SmartHomeValidationResult(errors);
         }
 
+        public static SmartHomeValidationResult FromSignInResult(SignInResult signInResult)
+        {
+            if (signInResult.Succeeded)
+            {
+                return Success;
+            }
+            
+            // do not map properly error by error => it is information leak for the attacker
+            return Failed(new SmartHomeValidation("Credentials", "Credentials are invalid."));
+        }
+
         public SmartHomeValidationResult Merge(SmartHomeValidationResult result)
         {
             return new SmartHomeValidationResult(Errors.Concat(result.Errors).ToList());
