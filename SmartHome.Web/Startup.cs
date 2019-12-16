@@ -60,9 +60,6 @@ namespace SmartHome.Web
                 var parsedConfiguration = configurationProvider.GetSection("Jwt").Get<JwtConfiguration>();
                 parsedConfiguration.SecurityKey = new SymmetricSecurityKey(keyBytes);
                 
-                double validDurationMinutes = configuration.GetSection("Jwt:ValidDurationMinutes").Get<double>();
-                parsedConfiguration.ExpirationDate = DateTime.Now.AddMinutes(validDurationMinutes);
-                
                 // TODO: verify
 
                 return parsedConfiguration;

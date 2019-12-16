@@ -54,7 +54,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             var token = new JwtSecurityToken(jwtConfiguration.Issuer,
                 jwtConfiguration.Audience,
                 claims,
-                expires: jwtConfiguration.ExpirationDate,
+                expires: DateTime.Now.AddMinutes(jwtConfiguration.ValidInMinutes),
                 signingCredentials: new SigningCredentials(jwtConfiguration.SecurityKey,
                     SecurityAlgorithms.HmacSha256));
 

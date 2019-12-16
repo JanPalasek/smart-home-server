@@ -8,6 +8,6 @@ namespace SmartHome.Web.Configurations
         public string Issuer { get; set; } = null!;
         public string Audience { get; set; } = null!;
         public SecurityKey SecurityKey { get; set; } = null!;
-        public DateTime ExpirationDate { get; set; }
+        public int ValidInMinutes { get; set; }
     }
 }
