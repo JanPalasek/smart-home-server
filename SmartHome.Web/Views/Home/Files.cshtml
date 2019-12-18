@@ -1,10 +1,10 @@
 @model SmartHome.Web.Configurations.FileManagerConfiguration
 
 <ejs-filemanager id="file-manager">
-    <e-filemanager-ajaxsettings url="/api/files/operations"
-                                downloadUrl="/api/files/download"
-                                uploadUrl="/api/files/upload"
-                                getImageUrl="/api/files/getImage">
+    <e-filemanager-ajaxsettings url="/api/syncfusion/files/operations"
+                                downloadUrl="/api/syncfusion/files/download"
+                                uploadUrl="/api/syncfusion/files/upload"
+                                getImageUrl="/api/syncfusion/files/getImage">
     </e-filemanager-ajaxsettings>
     <e-filemanager-uploadsettings maxFileSize="@Model.MaximumUploadSize"></e-filemanager-uploadsettings>
 </ejs-filemanager>

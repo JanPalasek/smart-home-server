@@ -34,7 +34,8 @@
     });
     leftMenuItems.Add(new MenuItem()
     {
-        Text = "Statistics"
+        Text = "Statistics",
+        Url = Url.Action("Index", "Statistics")
     });
 
     if (isAuthenticated && HasPermission(userPermissions, "File.View"))

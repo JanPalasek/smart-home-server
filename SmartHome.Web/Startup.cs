@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -157,6 +158,7 @@ namespace SmartHome.Web
 
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseAuthorization();
             
             // set up route mapping
             app.UseMvc(routes =>

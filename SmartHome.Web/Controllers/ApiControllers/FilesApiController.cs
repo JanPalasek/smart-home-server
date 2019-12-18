@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +17,17 @@ namespace SmartHome.Web.Controllers.ApiControllers
     /// <summary>
     /// Controller that handles accessing the disk files.
     /// </summary>
-    [Authorize(Policy = "File.View")]
-    public class FilesController : Controller
+    [Authorize(Policy = "File.View", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+    public class FilesApiController : Controller
     {
+        private const string FilesApiAuthenticationSchemes = "Identity.Application," +
+            JwtBearerDefaults.AuthenticationScheme;
+        
         private readonly FileManagerConfiguration fileManagerConfiguration;
         private readonly PhysicalFileProvider operation;
         private readonly IPermissionVerificationService permissionVerificationService;
         
-        public FilesController(FileManagerConfiguration fileManagerConfiguration,
+        public FilesApiController(FileManagerConfiguration fileManagerConfiguration,
             IPermissionVerificationService permissionVerificationService)
         {
             this.fileManagerConfiguration = fileManagerConfiguration;
@@ -33,7 +38,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             operation.RootFolder(fileManagerConfiguration.StoragePath);
         }
 
-        [Route("api/files/operations")]
+        [Route("api/syncfusion/files/operations")]
         public object FileOperations([FromBody] FileManagerDirectoryContent args)
         {
             // cannot edit files and attempts to edit => error
@@ -104,34 +109,63 @@ namespace SmartHome.Web.Controllers.ApiControllers
             return operation.ToCamelCase(diskResponse);
         }
 
-        [Route("api/files/upload")]
+        [HttpPost("api/syncfusion/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
-        [Authorize(Policy = "File.Edit")]
+        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
         public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action)
         {
-            // validate size limit
-            if (uploadFiles.Any(x => x.Length > fileManagerConfiguration.MaximumUploadSize))
+            var response = UploadPrivate(path, uploadFiles, action);
+            if (response == null)
             {
-                return BadRequest("Uploaded files are too large.");
+                return BadRequest();
             }
             
-            // Use below code for performing upload operation
-            // Invoking upload operation with the required parameters
-            // path - Current path where the file is to uploaded; uploadFiles - Files to be uploaded; action - name of the operation(upload)
-            operation.Upload(path, uploadFiles, action, null);
             return Content(string.Empty);
         }
+
+        [HttpPost("api/files/upload")]
+        [DisableRequestSizeLimit]
+        [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
+        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        public IActionResult Upload(string path, IList<IFormFile> files)
+        {
+            var response = UploadPrivate(path, files, "save");
+            if (response == null || response.Error != null)
+            {
+                return BadRequest();
+            }
+            
+            return Ok("Files were successfully uploaded.");
+        }
+
+        private FileManagerResponse UploadPrivate(string path, IList<IFormFile> files, string action)
+        {
+            if (files.Any(x => x.Length > fileManagerConfiguration.MaximumUploadSize))
+            {
+                return null;
+            }
+            
+            var response = operation.Upload(path, files, action, null);
+            return response;
+        }
         
-        [Route("api/files/download")]
+        [Route("api/syncfusion/files/download")]
         public IActionResult Download(string downloadInput)
         {
             FileManagerDirectoryContent args = JsonConvert.DeserializeObject<FileManagerDirectoryContent>(downloadInput);
             // Invoking download operation with the required parameters
             // path - Current path where the file is downloaded; Names - Files to be downloaded;
-            return operation.Download(args.Path, args.Names);
+            return Download(args.Path, args.Names);
         }
-        [Route("api/files/getImage")]
+        
+        [HttpGet("api/files/download")]
+        public IActionResult Download(string path, string[] fileNames)
+        {
+            return operation.Download(path, fileNames);
+        }
+        
+        [Route("api/syncfusion/files/getImage")]
         public IActionResult GetImage(FileManagerDirectoryContent args)
         {
             // Invoking GetImage operation with the required parameters
