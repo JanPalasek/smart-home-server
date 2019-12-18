@@ -19,9 +19,6 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\img\icons" />
-      <Folder Include="wwwroot\lib\css" />
-      <Folder Include="wwwroot\out\css" />
-      <Folder Include="wwwroot\out\js" />
     </ItemGroup>
 
 
@@ -38,6 +35,16 @@
       <_ContentIncludedByDefault Remove="wwwroot\out\js\ej2.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\out\js\jquery.js" />
       <_ContentIncludedByDefault Remove="wwwroot\out\js\jquery.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\css\bootstrap.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\css\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\css\material.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\css\material.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\bootstrap.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\bootstrap.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\ej2.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\ej2.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\jquery.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\lib\js\jquery.min.js" />
     </ItemGroup>
 
 

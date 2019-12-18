@@ -1,3 +1,4 @@
+@using Newtonsoft.Json
 @model SmartHome.Web.Models.Role.RolePermissionsViewModel
 
 @{
@@ -7,7 +8,8 @@
         DataSource = Model.PermissionOptions,
         Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "Name", Text = "Name" },
         Query = "new ej.data.Query()",
-        AllowFiltering = true
+        AllowFiltering = true,
+        Filtering = "onFiltering"
     };
     
     List<object> commands = new List<object>();
@@ -27,3 +29,15 @@
         </e-grid-columns>
     </ejs-grid>
 </section>
+
+
+<script>
+    function onFiltering(e) {
+        var query = new ej.data.Query();
+        query = (e.text !== '') ? query.where('Name', 'contains', e.text, true) : query;
+        e.updateData(@Html.Raw(JsonConvert.SerializeObject(Model.PermissionOptions, new JsonSerializerSettings()
+                     {
+                         StringEscapeHandling = StringEscapeHandling.EscapeHtml
+                     })), query);
+    }
+</script>

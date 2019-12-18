@@ -64,6 +64,7 @@ namespace SmartHome.Infrastructure
             var rolePermissions = SmartHomeAppDbContext.Query<RolePermission>()
                 .Where(x => x.RoleId == roleId)
                 .Select(x => x.Permission)
+                .OrderBy(x => x.Name)
                 .ProjectTo<PermissionModel>(Mapper.ConfigurationProvider);
             var result = await rolePermissions.ToListAsync();
             return result;

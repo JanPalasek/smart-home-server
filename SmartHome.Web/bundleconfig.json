@@ -25,7 +25,7 @@
     "inputFiles": [
       "node_modules/bootstrap/dist/css/bootstrap.min.css"
     ],
-    "minify": { "enabled": true }
+    "minify": { "enabled": false }
   },
   {
     "outputFileName": "wwwroot/lib/js/bootstrap.js",
@@ -73,9 +73,9 @@
     "minify": { "enabled": true }
   },
   {
-    "outputFileName": "wwwroot/lib/js/ej2.js",
+    "outputFileName": "wwwroot/lib/js/ej2.min.js.map",
     "inputFiles": [
-      "node_modules/@syncfusion/ej2/dist/ej2.min.js"
+      "node_modules/@syncfusion/ej2/dist/ej2.min.js.map"
     ],
     "minify": { "enabled": false }
   },
