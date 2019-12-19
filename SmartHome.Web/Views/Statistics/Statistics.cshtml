@@ -1,10 +1,62 @@
-@model string
+@model SmartHome.Web.Models.Statistics.StatisticsViewModel
 
 @{
     ViewBag.Header = "Statistics";
 }
 
-<section class="layout-large">
-    <h2>Temperature</h2>
-    
+<ejs-button id="btn" content="Send" cssClass="e-primary"></ejs-button>
+<h2>Temperature</h2>
+<section class="layout-large section">
+    <ejs-chart id="temperature-chart" load="load" resized="resize">
+        <e-chart-tooltipsettings enable="true">
+        </e-chart-tooltipsettings>
+        <e-chart-primaryxaxis valueType="DateTime"
+                              labelFormat="dd.MM.yyyy"
+                              intervalType="Auto"
+                              edgeLabelPlacement="Shift">
+            <e-majorgridlines width="0"></e-majorgridlines>
+        </e-chart-primaryxaxis>
+        <e-chart-primaryyaxis labelFormat="{value} °C">
+            <e-linestyle width="0"></e-linestyle>
+            <e-majorticklines width="0"></e-majorticklines>
+        </e-chart-primaryyaxis>
+        <e-chart-chartarea>
+            <e-chartarea-border width="0"></e-chartarea-border>
+        </e-chart-chartarea>
+        <e-series-collection>
+            <e-series xName="measurementDateTime" yName="temperature"
+                      width=2 type="@Syncfusion.EJ2.Charts.ChartSeriesType.Line">
+                <e-series-marker visible="true" height="10" width="10"></e-series-marker>
+            </e-series>
+        </e-series-collection>
+    </ejs-chart>
 </section>
+
+<script>
+    function sendTemperatureAjaxRequest(chart, requestUrl) {
+        let ajax = new ej.base.Ajax(requestUrl, "GET");
+                        ajax.send();
+                        ajax.onSuccess = function (data) {
+                            data = JSON.parse(data);
+                            chart.series[0].dataSource = data.result;
+                        };
+    }
+    
+    let resize = function(sender) {
+        let chart = sender.chart;
+        chart.refresh();
+    };
+    
+    let load = function(sender) {
+        let chart = sender.chart;
+        let requestUrl = "@Url.Action("TemperaturesDataSourceNoParam")";
+        
+        let button = document.getElementById('btn');
+        button.addEventListener("click", function(e){
+            sendTemperatureAjaxRequest(chart, requestUrl);
+        });
+        sendTemperatureAjaxRequest(chart, requestUrl);
+    }
+    
+    
+</script>
