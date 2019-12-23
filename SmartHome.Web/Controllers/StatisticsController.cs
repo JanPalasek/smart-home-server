@@ -30,20 +30,13 @@ namespace SmartHome.Web.Controllers
             return View("Statistics", vm);
         }
         
-        public async Task<IActionResult> TemperaturesDataSource([FromBody]DataManagerRequest dm)
+        [HttpGet]
+        public async Task<IActionResult> StatisticsDataSource([Bind(Prefix = "")]StatisticsFilter statisticsFilter)
         {
-            var result = (await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(new MeasurementFilter()))
-                .Select(x => new {  x.MeasurementDateTime, x.Temperature })
-                .ToList();
-            return dm.RequiresCounts ? Json(new { result = result, count = result.Count }) : Json(result);
-        }
-        
-        public async Task<IActionResult> TemperaturesDataSourceNoParam()
-        {
-            var result = (await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(new MeasurementFilter()))
-                .Select(x => new {  x.MeasurementDateTime, x.Temperature })
-                .ToList();
-            return Json(new {result = result, count = result.Count});
+            var filteredMeasurements = await getTemperatureMeasurementsService
+                .GetFilteredMeasurementAsync(statisticsFilter);
+
+            return Json(filteredMeasurements);
         }
     }
 }

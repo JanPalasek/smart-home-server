@@ -28,6 +28,63 @@ namespace SmartHome.Infrastructure
                 .ToListAsync();
         }
 
+        public async Task<IList<MeasurementStatisticsModel>> GetTemperatureMeasurementsAsync(StatisticsFilter filter)
+        {
+            var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>();
+
+            if (filter.DateFrom != null && filter.GroupBy != null)
+            {
+                query = query.Where(x => x.MeasurementDateTime >= filter.DateFrom);
+            }
+            if (filter.DateTo != null && filter.GroupBy != null)
+            {
+                query = query.Where(x => x.MeasurementDateTime <= filter.DateTo);
+            }
+
+            IQueryable<MeasurementStatisticsModel> modelQuery;
+            if (filter.GroupBy != null)
+            {
+                switch (filter.GroupBy)
+                {
+                    case GroupByType.Date:
+                    {
+                        modelQuery = GroupByDate(query);
+                        break;
+                    }
+                    case GroupByType.Month:
+                    {
+                        modelQuery = GroupByMonth(query);
+                        break;
+                    }
+                    case GroupByType.Year:
+                    {
+                        modelQuery = GroupByYear(query);
+                        break;
+                    }
+                    case GroupByType.Place:
+                    {
+                        modelQuery = GroupByPlace(query);
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                modelQuery = query.Select(x => new MeasurementStatisticsModel()
+                {
+                    MeasurementDateTime = x.MeasurementDateTime,
+                    Value = x.Temperature,
+                    PlaceId = x.PlaceId
+                });
+            }
+
+            var list = await modelQuery
+                .ToListAsync();
+            return list;
+        }
+
         public async Task<TemperatureMeasurementModel?> GetSensorLastTemperatureMeasurementAsync(long sensorId)
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>()
@@ -115,6 +172,111 @@ namespace SmartHome.Infrastructure
         {
             var temperatureMeasurement = await SmartHomeAppDbContext.SingleAsync<TemperatureMeasurement>(id);
             return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
+        }
+
+        private IQueryable<MeasurementStatisticsModel> GroupByDate(
+            IQueryable<TemperatureMeasurement> query)
+        {
+            var grouped = query
+                .GroupBy(x => new
+                {
+                    x.PlaceId,
+                    x.MeasurementDateTime.Date
+                });
+                        
+            var result = grouped
+                .Select(x => new
+                {
+                    PlaceId = x.Key.PlaceId,
+                    Day = x.Key.Date,
+                    Value = x.Average(y => y.Temperature)
+                })
+                .Select(x => new MeasurementStatisticsModel()
+                {
+                    MeasurementDateTime = x.Day,
+                    Value = x.Value,
+                    PlaceId = x.PlaceId
+                });
+            return result;
+        }
+        
+        private IQueryable<MeasurementStatisticsModel> GroupByMonth(
+            IQueryable<TemperatureMeasurement> query)
+        {
+            var grouped = query
+                .GroupBy(x => new
+                {
+                    x.PlaceId,
+                    x.MeasurementDateTime.Month
+                });
+                        
+            var result = grouped
+                .Select(x => new
+                {
+                    PlaceId = x.Key.PlaceId,
+                    Month = x.Key.Month,
+                    Value = x.Average(y => y.Temperature)
+                })
+                .Select(x => new MeasurementStatisticsModel()
+                {
+                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Month, 1),
+                    Value = x.Value,
+                    PlaceId = x.PlaceId
+                });
+
+            return result;
+        }
+
+        private IQueryable<MeasurementStatisticsModel> GroupByYear(
+            IQueryable<TemperatureMeasurement> query)
+        {
+            var grouped = query
+                .GroupBy(x => new
+                {
+                    x.PlaceId,
+                    x.MeasurementDateTime.Year
+                });
+                        
+            var result = grouped
+                .Select(x => new
+                {
+                    Place = x.Key.PlaceId,
+                    Year = x.Key.Year,
+                    Value = x.Average(y => y.Temperature)
+                })
+                .Select(x => new MeasurementStatisticsModel()
+                {
+                    PlaceId = x.Place,
+                    MeasurementDateTime = new DateTime(x.Year, 1, 1),
+                    Value = x.Value
+                });
+            return result;
+        }
+
+        private IQueryable<MeasurementStatisticsModel> GroupByPlace(
+            IQueryable<TemperatureMeasurement> query)
+        {
+            var grouped = query
+                .GroupBy(x => new
+                {
+                    x.PlaceId,
+                    x.MeasurementDateTime
+                });
+                        
+            var result = grouped
+                .Select(x => new
+                {
+                    Date = x.Key.MeasurementDateTime,
+                    Value = x.Average(y => y.Temperature)
+                })
+                .Select(x => new MeasurementStatisticsModel()
+                {
+                    MeasurementDateTime = x.Date,
+                    Value = x.Value,
+                    PlaceId = null
+                });
+
+            return result;
         }
     }
 }

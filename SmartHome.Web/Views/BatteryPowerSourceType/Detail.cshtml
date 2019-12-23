@@ -28,15 +28,11 @@
             <div class="form-group">
                 <ejs-textbox id="name" ejs-for="Model.Name" placeholder="Name" floatLabelType="Auto" readonly="@disableFields"></ejs-textbox>
             </div>
-            @{
-                var enumResources = EnumHelper.GetAllValues<BatteryType>()
-                    .Select(x => new EntityReference((int) x, x.ToString()))
-                    .ToArray();
-            }
-            <ejs-dropdownlist id="battery-type" ejs-for="Model.BatteryType" placeholder="Battery type" floatLabelType="Auto"
-                              dataSource="@enumResources" readonly="@disableFields">
-                <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
-            </ejs-dropdownlist>
+            <enum-dropdownlist id="battery-type" ejs-for="Model.BatteryType"
+                               placeholder="Battery type" floatLabelType="Auto"
+                               readonly="@disableFields"
+                               enum-type="@typeof(BatteryType)">
+            </enum-dropdownlist>
         </div>
         <div class="form-group">
             <ejs-numerictextbox ejs-for="Model.MinimumVoltage" id="min-voltage" placeholder="Minimum voltage"

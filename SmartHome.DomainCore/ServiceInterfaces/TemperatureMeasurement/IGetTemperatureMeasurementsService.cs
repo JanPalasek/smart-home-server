@@ -9,7 +9,8 @@ namespace SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement
     public interface IGetTemperatureMeasurementsService : IGetAllRepository<TemperatureMeasurementModel>
     {
         Task<CountedResult<TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(MeasurementFilter filter, PagingArgs pagingArgs);
-        Task<IList<Data.Models.TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(MeasurementFilter filter);
+        Task<IList<TemperatureMeasurementModel>> GetFilteredMeasurementsAsync(MeasurementFilter filter);
+        Task<IList<AggregatedStatisticsModel>> GetFilteredMeasurementAsync(StatisticsFilter filter);
         Task<TemperatureMeasurementModel?> GetLastMeasurementAsync(long sensorId);
         Task<TemperatureMeasurementModel> GetTemperatureMeasurementById(long id);
     }

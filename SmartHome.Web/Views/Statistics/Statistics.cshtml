@@ -1,13 +1,27 @@
+@using SmartHome.DomainCore.Data
 @model SmartHome.Web.Models.Statistics.StatisticsViewModel
 
 @{
     ViewBag.Header = "Statistics";
 }
 
-<ejs-button id="btn" content="Send" cssClass="e-primary"></ejs-button>
+<section class="small-layout">
+    <ejs-button id="filter-button" content="Apply filter" cssClass="e-primary"></ejs-button>
+    <div class="section">
+        <div class="form-group">
+                <ejs-datetimepicker id="measurement-date-time-from" placeholder="Date from" floatLabelType="Auto"></ejs-datetimepicker>
+                <ejs-datetimepicker id="measurement-date-time-to" placeholder="Date to" floatLabelType="Auto"></ejs-datetimepicker>
+            </div>
+            <div class="form-group">
+                <enum-dropdownlist id="group-by" enum-type="@typeof(GroupByType)" placeholder="Group By"
+                                   floatLabelType="Auto"></enum-dropdownlist>
+            </div>
+    </div>
+</section>
+
 <h2>Temperature</h2>
 <section class="layout-large section">
-    <ejs-chart id="temperature-chart" load="load" resized="resize">
+    <ejs-chart id="temperature-chart" resized="resize">
         <e-chart-tooltipsettings enable="true">
         </e-chart-tooltipsettings>
         <e-chart-primaryxaxis valueType="DateTime"
@@ -24,7 +38,7 @@
             <e-chartarea-border width="0"></e-chartarea-border>
         </e-chart-chartarea>
         <e-series-collection>
-            <e-series xName="measurementDateTime" yName="temperature"
+            <e-series xName="measurementDateTime" yName="value"
                       width=2 type="@Syncfusion.EJ2.Charts.ChartSeriesType.Line">
                 <e-series-marker visible="true" height="10" width="10"></e-series-marker>
             </e-series>
@@ -33,13 +47,41 @@
 </section>
 
 <script>
-    function sendTemperatureAjaxRequest(chart, requestUrl) {
+    function sendAjaxRequest(chart, requestUrl) {
         let ajax = new ej.base.Ajax(requestUrl, "GET");
-                        ajax.send();
-                        ajax.onSuccess = function (data) {
-                            data = JSON.parse(data);
-                            chart.series[0].dataSource = data.result;
-                        };
+        ajax.send();
+        ajax.onSuccess = function (data) {
+            data = JSON.parse(data);
+            chart.series = [];
+            for (let i = 0; i < data.length; i++) {
+                chart.addSeries([{
+                    dataSource: data[i].values,
+                    width: 2,
+                    type: "@Syncfusion.EJ2.Charts.ChartSeriesType.Line",
+                    xName: "measurementDateTime",
+                    yName: "value",
+                    name: data[i].placeName,
+                    marker: {
+                        visible: true,
+                        height: 10,
+                        width: 10
+                    }
+                }]);
+            }
+            
+            chart.refresh();
+        };
+    }
+    
+    function createAndSendAjaxRequest(chart) {
+        let dateFrom = $("#measurement-date-time-from").val();
+        let dateTo = $("#measurement-date-time-to").val();
+        let groupBy = $("#group-by").val();
+        
+        let parametrizedRequestUrl = "@Url.Action("StatisticsDataSource")" + "?dateFrom=" + dateFrom
+            + "&dateTo=" + dateTo + "&groupBy=" + groupBy;
+        
+        sendAjaxRequest(chart, parametrizedRequestUrl);
     }
     
     let resize = function(sender) {
@@ -47,16 +89,16 @@
         chart.refresh();
     };
     
-    let load = function(sender) {
-        let chart = sender.chart;
-        let requestUrl = "@Url.Action("TemperaturesDataSourceNoParam")";
+    $(document).ready(function() {
+        let chart = document.getElementById("temperature-chart").ej2_instances[0];
         
-        let button = document.getElementById('btn');
+        let button = document.getElementById("filter-button");
         button.addEventListener("click", function(e){
-            sendTemperatureAjaxRequest(chart, requestUrl);
+            createAndSendAjaxRequest(chart);
         });
-        sendTemperatureAjaxRequest(chart, requestUrl);
-    }
+        
+        createAndSendAjaxRequest(chart);
+    });
     
     
 </script>
