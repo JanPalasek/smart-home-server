@@ -5,7 +5,7 @@ namespace SmartHome.DomainCore.Data
         /// <summary>
         /// Group by every day of a year.
         /// </summary>
-        Date,
+        DayOfYear,
         /// <summary>
         /// Group by each month of a year.
         /// </summary>

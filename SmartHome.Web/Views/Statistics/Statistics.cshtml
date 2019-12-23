@@ -9,12 +9,14 @@
     <ejs-button id="filter-button" content="Apply filter" cssClass="e-primary"></ejs-button>
     <div class="section">
         <div class="form-group">
-                <ejs-datetimepicker id="measurement-date-time-from" placeholder="Date from" floatLabelType="Auto"></ejs-datetimepicker>
-                <ejs-datetimepicker id="measurement-date-time-to" placeholder="Date to" floatLabelType="Auto"></ejs-datetimepicker>
+                <ejs-datetimepicker id="measurement-date-time-from" ejs-for="Filter.DateFrom" placeholder="Date from" floatLabelType="Auto"></ejs-datetimepicker>
+                <ejs-datetimepicker id="measurement-date-time-to" ejs-for="Filter.DateTo" placeholder="Date to" floatLabelType="Auto"></ejs-datetimepicker>
             </div>
             <div class="form-group">
                 <enum-dropdownlist id="group-by" enum-type="@typeof(GroupByType)" placeholder="Group By"
-                                   floatLabelType="Auto"></enum-dropdownlist>
+                                   floatLabelType="Auto" change="changeGroupByTypeValue"
+                                   showClearButton="true" ejs-for="Filter.GroupBy">
+                </enum-dropdownlist>
             </div>
     </div>
 </section>
@@ -24,13 +26,13 @@
     <ejs-chart id="temperature-chart" resized="resize">
         <e-chart-tooltipsettings enable="true">
         </e-chart-tooltipsettings>
-        <e-chart-primaryxaxis valueType="DateTime"
+        <e-chart-primaryxaxis id="temperature-xaxis" valueType="DateTime"
                               labelFormat="dd.MM.yyyy"
                               intervalType="Auto"
                               edgeLabelPlacement="Shift">
             <e-majorgridlines width="0"></e-majorgridlines>
         </e-chart-primaryxaxis>
-        <e-chart-primaryyaxis labelFormat="{value} °C">
+        <e-chart-primaryyaxis id="temperature-yaxis" labelFormat="{value}°C">
             <e-linestyle width="0"></e-linestyle>
             <e-majorticklines width="0"></e-majorticklines>
         </e-chart-primaryyaxis>
@@ -84,6 +86,15 @@
         sendAjaxRequest(chart, parametrizedRequestUrl);
     }
     
+    function changeGroupByTypeValue(e) {
+        let newItem = e.itemData;
+        // if there is no new Item (has been changed to default) => reset to enabled true
+        // otherwise false
+        enabledMeasurementFiltering = newItem === null;
+        document.getElementById("measurement-date-time-from").ej2_instances[0].enabled = enabledMeasurementFiltering;
+        document.getElementById("measurement-date-time-to").ej2_instances[0].enabled = enabledMeasurementFiltering;
+    }
+    
     let resize = function(sender) {
         let chart = sender.chart;
         chart.refresh();
@@ -95,6 +106,8 @@
         let button = document.getElementById("filter-button");
         button.addEventListener("click", function(e){
             createAndSendAjaxRequest(chart);
+            
+            // TODO: change label format of plot according to
         });
         
         createAndSendAjaxRequest(chart);

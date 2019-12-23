@@ -25,8 +25,7 @@ namespace SmartHome.Web.Controllers
         [HttpGet("Statistics")]
         public async Task<IActionResult> Index()
         {
-            var vm = new StatisticsViewModel();
-            vm.Items = await getTemperatureMeasurementsService.GetFilteredMeasurementsAsync(new MeasurementFilter());
+            var vm = new StatisticsViewModel(new StatisticsFilter());
             return View("Statistics", vm);
         }
         

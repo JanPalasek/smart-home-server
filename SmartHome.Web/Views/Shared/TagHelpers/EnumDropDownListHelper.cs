@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using SmartHome.Common.Helpers;
@@ -17,7 +18,7 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
             get => enumType;
             set
             {
-                if (!value.IsEnum)
+                if (value == null || !value.IsEnum)
                 {
                     throw new ArgumentException($"{value?.Name} is not of type Enum.");
                 }
@@ -25,6 +26,7 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
                 enumType = value;
             }
         }
+        
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -33,17 +35,16 @@ namespace SmartHome.Web.Views.Shared.TagHelpers
             {
                 throw new ArgumentException("Enum dropdownlist helper doesn't have type set.");
             }
-            
+
             var enumResources = EnumHelper.GetAllValues(EnumType)
-                .Select(x =>  new { Value = (int) x, Text = x.ToString() })
-                .ToArray();
+                .Select(x => new {Value = (int) x, Text = x.ToString()});
             
             Fields = new DropDownListFieldSettings()
             {
                 Text = "Text",
                 Value = "Value"
             };
-            DataSource = enumResources;
+            DataSource = enumResources.ToArray();
             
             base.Process(context, output);
         }

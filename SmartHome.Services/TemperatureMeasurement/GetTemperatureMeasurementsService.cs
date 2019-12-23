@@ -35,6 +35,17 @@ namespace SmartHome.Services.TemperatureMeasurement
 
         public async Task<IList<AggregatedStatisticsModel>> GetFilteredMeasurementAsync(StatisticsFilter filter)
         {
+            // if filter group by is not set => don't filter by date
+            filter = filter.Clone();
+            if (filter.GroupBy != null)
+            {
+                filter.DateFrom = null;
+                filter.DateTo = null;
+            }
+            
+            // TODO: Issue #5 - split temperature measurements into inside and outside
+            // TODO: Issue #5 - solve many entries (reduce their number by default grouping into (day, month, year, hour)
+            // TODO: for all (grouping by hour cleans data a lot)
             var results = await temperatureMeasurementRepository
                 .GetTemperatureMeasurementsAsync(filter);
                 
@@ -66,6 +77,8 @@ namespace SmartHome.Services.TemperatureMeasurement
                 }
                 result.Add(new AggregatedStatisticsModel(placeName, item.Values));
             }
+
+            result = result.OrderBy(x => x.PlaceName).ToList();
 
             return result;
         }

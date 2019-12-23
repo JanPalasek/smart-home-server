@@ -32,11 +32,11 @@ namespace SmartHome.Infrastructure
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>();
 
-            if (filter.DateFrom != null && filter.GroupBy != null)
+            if (filter.DateFrom != null)
             {
                 query = query.Where(x => x.MeasurementDateTime >= filter.DateFrom);
             }
-            if (filter.DateTo != null && filter.GroupBy != null)
+            if (filter.DateTo != null)
             {
                 query = query.Where(x => x.MeasurementDateTime <= filter.DateTo);
             }
@@ -46,7 +46,7 @@ namespace SmartHome.Infrastructure
             {
                 switch (filter.GroupBy)
                 {
-                    case GroupByType.Date:
+                    case GroupByType.DayOfYear:
                     {
                         modelQuery = GroupByDate(query);
                         break;
@@ -181,19 +181,22 @@ namespace SmartHome.Infrastructure
                 .GroupBy(x => new
                 {
                     x.PlaceId,
-                    x.MeasurementDateTime.Date
+                    // group by day of a year (but dayofyear on datetime cannot be used, it won't translate to db call)
+                    x.MeasurementDateTime.Day,
+                    x.MeasurementDateTime.Month
                 });
                         
             var result = grouped
                 .Select(x => new
                 {
                     PlaceId = x.Key.PlaceId,
-                    Day = x.Key.Date,
+                    Month = x.Key.Month,
+                    Day = x.Key.Day,
                     Value = x.Average(y => y.Temperature)
                 })
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = x.Day,
+                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Month, x.Day),
                     Value = x.Value,
                     PlaceId = x.PlaceId
                 });
