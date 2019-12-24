@@ -1,6 +1,6 @@
 namespace SmartHome.DomainCore.Data
 {
-    public enum GroupByType
+    public enum AggregateOver
     {
         /// <summary>
         /// Group by every day of a year.

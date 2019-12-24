@@ -13,9 +13,9 @@
                 <ejs-datetimepicker id="measurement-date-time-to" ejs-for="Filter.DateTo" placeholder="Date to" floatLabelType="Auto"></ejs-datetimepicker>
             </div>
             <div class="form-group">
-                <enum-dropdownlist id="group-by" enum-type="@typeof(GroupByType)" placeholder="Group By"
-                                   floatLabelType="Auto" change="changeGroupByTypeValue"
-                                   showClearButton="true" ejs-for="Filter.GroupBy">
+                <enum-dropdownlist id="aggregate-over" enum-type="@typeof(AggregateOver)" placeholder="Aggregate over"
+                                   floatLabelType="Auto" change="changeAggregateOverValue"
+                                   showClearButton="true" ejs-for="Filter.AggregateOver">
                 </enum-dropdownlist>
             </div>
     </div>
@@ -89,13 +89,12 @@
     function createAndSendAjaxRequest(chart, isInside) {
         let dateFrom = $("#measurement-date-time-from").val();
         let dateTo = $("#measurement-date-time-to").val();
-        let groupBy = $("#group-by").val();
+        let aggregateOver = $("#aggregate-over").val();
         
         let parametrizedRequestUrl = "@Url.Action("StatisticsDataSource")";
         let parameters = "?dateFrom=" + dateFrom
-                                     + "&dateTo=" + dateTo + "&groupBy=" + groupBy;
+                                     + "&dateTo=" + dateTo + "&aggregateOver=" + aggregateOver;
         // TODO: update url
-        // window.history.pushState({ dateFrom: dateFrom, groupBy: groupBy }, "SmartHome", window.location.pathname);
         
         if (isInside !== null) {
             parameters += "&isInside=" + isInside
@@ -106,7 +105,7 @@
         sendAjaxRequest(chart, parametrizedRequestUrl);
     }
     
-    function changeGroupByTypeValue(e) {
+    function changeAggregateOverValue(e) {
         let newItem = e.itemData;
         // if there is no new Item (has been changed to default) => reset to enabled true
         // otherwise false

@@ -46,29 +46,29 @@ namespace SmartHome.Infrastructure
                 query = query.Where(x => x.MeasurementDateTime <= filter.DateTo);
             }
 
-            IQueryable<MeasurementStatisticsModel> modelQuery;
-            if (filter.GroupBy != null)
+            IEnumerable<MeasurementStatisticsModel> modelQuery;
+            if (filter.AggregateOver != null)
             {
-                switch (filter.GroupBy)
+                switch (filter.AggregateOver)
                 {
-                    case GroupByType.DayOfYear:
+                    case AggregateOver.DayOfYear:
                     {
-                        modelQuery = GroupByDate(query);
+                        modelQuery = AggregateOverDayOfYear(query);
                         break;
                     }
-                    case GroupByType.Month:
+                    case AggregateOver.Month:
                     {
-                        modelQuery = GroupByMonth(query);
+                        modelQuery = AggregateOverMonth(query);
                         break;
                     }
-                    case GroupByType.Year:
+                    case AggregateOver.Year:
                     {
-                        modelQuery = GroupByYear(query);
+                        modelQuery = AggregateOverYear(query);
                         break;
                     }
-                    case GroupByType.Place:
+                    case AggregateOver.Place:
                     {
-                        modelQuery = GroupByPlace(query);
+                        modelQuery = AggregateOverPlace(query);
                         break;
                     }
                     default:
@@ -77,16 +77,28 @@ namespace SmartHome.Infrastructure
             }
             else
             {
-                modelQuery = query.Select(x => new MeasurementStatisticsModel()
-                {
-                    MeasurementDateTime = x.MeasurementDateTime,
-                    Value = x.Temperature,
-                    PlaceId = x.PlaceId
-                });
+                // TODO: group by hour
+                modelQuery = query
+                    // make groups that have same date + hour and place and make temperature average over them
+                    .GroupBy(x => new {x.MeasurementDateTime.Date, x.MeasurementDateTime.Hour, x.PlaceId})
+                    .Select(x => new
+                    {
+                        Value = x.Average(y => y.Temperature),
+                        PlaceId = x.Key.PlaceId,
+                        Date = x.Key.Date,
+                        Hour = x.Key.Hour
+                    })
+                    .AsEnumerable()
+                    .Select(x => new MeasurementStatisticsModel()
+                    {
+                        MeasurementDateTime = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, x.Hour, 0, 0),
+                        Value = x.Value,
+                        PlaceId = x.PlaceId
+                    });
             }
 
-            var list = await modelQuery
-                .ToListAsync();
+            var list = modelQuery
+                .ToList();
             return list;
         }
 
@@ -179,7 +191,7 @@ namespace SmartHome.Infrastructure
             return Mapper.Map<TemperatureMeasurementModel>(temperatureMeasurement);
         }
 
-        private IQueryable<MeasurementStatisticsModel> GroupByDate(
+        private IEnumerable<MeasurementStatisticsModel> AggregateOverDayOfYear(
             IQueryable<TemperatureMeasurement> query)
         {
             var grouped = query
@@ -205,10 +217,10 @@ namespace SmartHome.Infrastructure
                     Value = x.Value,
                     PlaceId = x.PlaceId
                 });
-            return result;
+            return result.AsEnumerable();
         }
         
-        private IQueryable<MeasurementStatisticsModel> GroupByMonth(
+        private IEnumerable<MeasurementStatisticsModel> AggregateOverMonth(
             IQueryable<TemperatureMeasurement> query)
         {
             var grouped = query
@@ -232,10 +244,10 @@ namespace SmartHome.Infrastructure
                     PlaceId = x.PlaceId
                 });
 
-            return result;
+            return result.AsEnumerable();
         }
 
-        private IQueryable<MeasurementStatisticsModel> GroupByYear(
+        private IEnumerable<MeasurementStatisticsModel> AggregateOverYear(
             IQueryable<TemperatureMeasurement> query)
         {
             var grouped = query
@@ -258,33 +270,34 @@ namespace SmartHome.Infrastructure
                     MeasurementDateTime = new DateTime(x.Year, 1, 1),
                     Value = x.Value
                 });
-            return result;
+            return result.AsEnumerable();
         }
 
-        private IQueryable<MeasurementStatisticsModel> GroupByPlace(
+        private IEnumerable<MeasurementStatisticsModel> AggregateOverPlace(
             IQueryable<TemperatureMeasurement> query)
         {
             var grouped = query
                 .GroupBy(x => new
                 {
-                    x.PlaceId,
-                    MeasurementDateTime = x.MeasurementDateTime.Date
+                    MeasurementDateTime = x.MeasurementDateTime.Date,
+                    Hour = x.MeasurementDateTime.Hour
                 });
                         
             var result = grouped
                 .Select(x => new
                 {
                     Date = x.Key.MeasurementDateTime,
+                    Hour = x.Key.Hour,
                     Value = x.Average(y => y.Temperature)
                 })
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = x.Date,
+                    MeasurementDateTime = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, x.Hour, 0, 0),
                     Value = x.Value,
                     PlaceId = null
                 });
 
-            return result;
+            return result.AsEnumerable();
         }
     }
 }

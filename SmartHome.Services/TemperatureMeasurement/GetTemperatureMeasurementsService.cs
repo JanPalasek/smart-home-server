@@ -37,7 +37,7 @@ namespace SmartHome.Services.TemperatureMeasurement
         {
             // if filter group by is not set => don't filter by date
             filter = filter.Clone();
-            if (filter.GroupBy != null)
+            if (filter.AggregateOver != null)
             {
                 filter.DateFrom = null;
                 filter.DateTo = null;
@@ -46,7 +46,6 @@ namespace SmartHome.Services.TemperatureMeasurement
             var places = (await placeRepository.GetAllAsync())
                 .ToDictionary(x => x.Id, x => x.Name);
             
-            // TODO: Issue #5 - split temperature measurements into inside and outside
             // TODO: Issue #5 - solve many entries (reduce their number by default grouping into (day, month, year, hour)
             // TODO: for all (grouping by hour cleans data a lot)
             var result = await GetAggregatedStatisticModelAsync(places, filter);

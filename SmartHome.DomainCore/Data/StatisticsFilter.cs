@@ -8,7 +8,7 @@ namespace SmartHome.DomainCore.Data
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
         
-        public GroupByType? GroupBy { get; set; }
+        public AggregateOver? AggregateOver { get; set; }
         
         /// <summary>
         /// True, if only get inside measurement statistics. Is set by framework, not by user.
