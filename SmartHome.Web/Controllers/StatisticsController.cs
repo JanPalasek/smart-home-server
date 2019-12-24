@@ -23,19 +23,19 @@ namespace SmartHome.Web.Controllers
         }
 
         [HttpGet("Statistics")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(StatisticsFilter filter)
         {
-            var vm = new StatisticsViewModel(new StatisticsFilter());
+            var vm = new StatisticsViewModel(filter);
             return View("Statistics", vm);
         }
         
         [HttpGet]
         public async Task<IActionResult> StatisticsDataSource([Bind(Prefix = "")]StatisticsFilter statisticsFilter)
         {
-            var filteredMeasurements = await getTemperatureMeasurementsService
+            var resultMeasurementStatisticsModel = await getTemperatureMeasurementsService
                 .GetFilteredMeasurementAsync(statisticsFilter);
 
-            return Json(filteredMeasurements);
+            return Json(resultMeasurementStatisticsModel);
         }
     }
 }

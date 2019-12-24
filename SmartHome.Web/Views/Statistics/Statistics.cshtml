@@ -23,29 +23,40 @@
 
 <h2>Temperature</h2>
 <section class="layout-large section">
-    <ejs-chart id="temperature-chart" resized="resize">
+    <ejs-chart id="temperature-chart-inside" resized="resize" title="Inside">
         <e-chart-tooltipsettings enable="true">
         </e-chart-tooltipsettings>
-        <e-chart-primaryxaxis id="temperature-xaxis" valueType="DateTime"
+        <e-chart-primaryxaxis id="temperature-xaxis-inside" valueType="DateTime"
                               labelFormat="dd.MM.yyyy"
                               intervalType="Auto"
                               edgeLabelPlacement="Shift">
             <e-majorgridlines width="0"></e-majorgridlines>
         </e-chart-primaryxaxis>
-        <e-chart-primaryyaxis id="temperature-yaxis" labelFormat="{value}°C">
+        <e-chart-primaryyaxis id="temperature-yaxis-inside" labelFormat="{value}°C">
             <e-linestyle width="0"></e-linestyle>
             <e-majorticklines width="0"></e-majorticklines>
         </e-chart-primaryyaxis>
         <e-chart-chartarea>
             <e-chartarea-border width="0"></e-chartarea-border>
         </e-chart-chartarea>
-        <e-series-collection>
-            <e-series xName="measurementDateTime" yName="value"
-                      width=2 type="@Syncfusion.EJ2.Charts.ChartSeriesType.Line">
-                <e-series-marker visible="true" height="10" width="10"></e-series-marker>
-            </e-series>
-        </e-series-collection>
     </ejs-chart>
+    <ejs-chart id="temperature-chart-outside" resized="resize" title="Outside">
+            <e-chart-tooltipsettings enable="true">
+            </e-chart-tooltipsettings>
+            <e-chart-primaryxaxis id="temperature-xaxis-outside" valueType="DateTime"
+                                  labelFormat="dd.MM.yyyy"
+                                  intervalType="Auto"
+                                  edgeLabelPlacement="Shift">
+                <e-majorgridlines width="0"></e-majorgridlines>
+            </e-chart-primaryxaxis>
+            <e-chart-primaryyaxis id="temperature-yaxis-outside" labelFormat="{value}°C">
+                <e-linestyle width="0"></e-linestyle>
+                <e-majorticklines width="0"></e-majorticklines>
+            </e-chart-primaryyaxis>
+            <e-chart-chartarea>
+                <e-chartarea-border width="0"></e-chartarea-border>
+            </e-chart-chartarea>
+        </ejs-chart>
 </section>
 
 <script>
@@ -75,13 +86,22 @@
         };
     }
     
-    function createAndSendAjaxRequest(chart) {
+    function createAndSendAjaxRequest(chart, isInside) {
         let dateFrom = $("#measurement-date-time-from").val();
         let dateTo = $("#measurement-date-time-to").val();
         let groupBy = $("#group-by").val();
         
-        let parametrizedRequestUrl = "@Url.Action("StatisticsDataSource")" + "?dateFrom=" + dateFrom
-            + "&dateTo=" + dateTo + "&groupBy=" + groupBy;
+        let parametrizedRequestUrl = "@Url.Action("StatisticsDataSource")";
+        let parameters = "?dateFrom=" + dateFrom
+                                     + "&dateTo=" + dateTo + "&groupBy=" + groupBy;
+        // TODO: update url
+        // window.history.pushState({ dateFrom: dateFrom, groupBy: groupBy }, "SmartHome", window.location.pathname);
+        
+        if (isInside !== null) {
+            parameters += "&isInside=" + isInside
+        }
+        
+        parametrizedRequestUrl += parameters;
         
         sendAjaxRequest(chart, parametrizedRequestUrl);
     }
@@ -101,16 +121,19 @@
     };
     
     $(document).ready(function() {
-        let chart = document.getElementById("temperature-chart").ej2_instances[0];
+        let tempChartInside = document.getElementById("temperature-chart-inside").ej2_instances[0];
+        let tempChartOutside = document.getElementById("temperature-chart-outside").ej2_instances[0];
         
         let button = document.getElementById("filter-button");
         button.addEventListener("click", function(e){
-            createAndSendAjaxRequest(chart);
+            createAndSendAjaxRequest(tempChartInside, true);
+            createAndSendAjaxRequest(tempChartOutside, false);
             
             // TODO: change label format of plot according to
         });
         
-        createAndSendAjaxRequest(chart);
+        createAndSendAjaxRequest(tempChartInside, true);
+        createAndSendAjaxRequest(tempChartOutside, false);
     });
     
     

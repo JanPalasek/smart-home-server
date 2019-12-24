@@ -32,6 +32,11 @@ namespace SmartHome.Infrastructure
         {
             var query = SmartHomeAppDbContext.Query<TemperatureMeasurement>();
 
+            if (filter.IsInside != null)
+            {
+                query = query.Where(x => x.Place.IsInside == filter.IsInside.Value);
+            }
+
             if (filter.DateFrom != null)
             {
                 query = query.Where(x => x.MeasurementDateTime >= filter.DateFrom);
@@ -263,7 +268,7 @@ namespace SmartHome.Infrastructure
                 .GroupBy(x => new
                 {
                     x.PlaceId,
-                    x.MeasurementDateTime
+                    MeasurementDateTime = x.MeasurementDateTime.Date
                 });
                         
             var result = grouped

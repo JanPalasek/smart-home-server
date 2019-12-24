@@ -43,12 +43,20 @@ namespace SmartHome.Services.TemperatureMeasurement
                 filter.DateTo = null;
             }
             
+            var places = (await placeRepository.GetAllAsync())
+                .ToDictionary(x => x.Id, x => x.Name);
+            
             // TODO: Issue #5 - split temperature measurements into inside and outside
             // TODO: Issue #5 - solve many entries (reduce their number by default grouping into (day, month, year, hour)
             // TODO: for all (grouping by hour cleans data a lot)
+            var result = await GetAggregatedStatisticModelAsync(places, filter);
+            return result;
+        }
+
+        private async Task<IList<AggregatedStatisticsModel>> GetAggregatedStatisticModelAsync(Dictionary<long, string> places, StatisticsFilter filter)
+        {
             var results = await temperatureMeasurementRepository
                 .GetTemperatureMeasurementsAsync(filter);
-                
             var grouped = results
                 .GroupBy(x => x.PlaceId)
                 .Select(x => new
@@ -59,27 +67,14 @@ namespace SmartHome.Services.TemperatureMeasurement
                             y.Value)).ToList()
                 })
                 .ToList();
-
-            var places = (await placeRepository.GetAllAsync())
-                .ToDictionary(x => x.Id, x => x.Name);
-            
             var result = new List<AggregatedStatisticsModel>();
             foreach (var item in grouped)
             {
-                string? placeName;
-                if (item.Place == null)
-                {
-                    placeName = "All";
-                }
-                else
-                {
-                    placeName = places[item.Place.Value];
-                }
+                var placeName = item.Place == null ? "All" : places[item.Place.Value];
                 result.Add(new AggregatedStatisticsModel(placeName, item.Values));
             }
 
             result = result.OrderBy(x => x.PlaceName).ToList();
-
             return result;
         }
 

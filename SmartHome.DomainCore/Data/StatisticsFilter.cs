@@ -9,6 +9,11 @@ namespace SmartHome.DomainCore.Data
         public DateTime? DateTo { get; set; }
         
         public GroupByType? GroupBy { get; set; }
+        
+        /// <summary>
+        /// True, if only get inside measurement statistics. Is set by framework, not by user.
+        /// </summary>
+        public bool? IsInside { get; set; }
 
         public StatisticsFilter Clone()
         {
