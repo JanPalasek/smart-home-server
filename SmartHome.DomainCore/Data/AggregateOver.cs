@@ -13,10 +13,6 @@ namespace SmartHome.DomainCore.Data
         /// <summary>
         /// Group by a year.
         /// </summary>
-        Year,
-        /// <summary>
-        /// Group by a place.
-        /// </summary>
-        Place,
+        Year
     }
 }

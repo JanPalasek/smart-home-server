@@ -32,11 +32,14 @@
         Text = "Home",
         Url = Url.Action("Overview", "Home")
     });
-    leftMenuItems.Add(new MenuItem()
+    if (isAuthenticated && HasPermission(userPermissions, "Statistic.View"))
     {
-        Text = "Statistics",
-        Url = Url.Action("Index", "Statistics")
-    });
+        leftMenuItems.Add(new MenuItem()
+        {
+            Text = "Statistics",
+            Url = Url.Action("Index", "Statistics")
+        });
+    }
 
     if (isAuthenticated && HasPermission(userPermissions, "File.View"))
     {

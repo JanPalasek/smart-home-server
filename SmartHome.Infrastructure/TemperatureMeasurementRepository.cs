@@ -47,54 +47,54 @@ namespace SmartHome.Infrastructure
             }
 
             IEnumerable<MeasurementStatisticsModel> modelQuery;
-            if (filter.AggregateOver != null)
+            switch (filter.AggregateOver)
             {
-                switch (filter.AggregateOver)
+                case AggregateOver.DayOfYear:
                 {
-                    case AggregateOver.DayOfYear:
-                    {
-                        modelQuery = AggregateOverDayOfYear(query);
-                        break;
-                    }
-                    case AggregateOver.Month:
-                    {
-                        modelQuery = AggregateOverMonth(query);
-                        break;
-                    }
-                    case AggregateOver.Year:
-                    {
-                        modelQuery = AggregateOverYear(query);
-                        break;
-                    }
-                    case AggregateOver.Place:
-                    {
-                        modelQuery = AggregateOverPlace(query);
-                        break;
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    modelQuery = AggregateOverDayOfYear(query, filter.AggregateOverPlace);
+                    break;
                 }
-            }
-            else
-            {
-                // TODO: group by hour
-                modelQuery = query
-                    // make groups that have same date + hour and place and make temperature average over them
-                    .GroupBy(x => new {x.MeasurementDateTime.Date, x.MeasurementDateTime.Hour, x.PlaceId})
-                    .Select(x => new
+                case AggregateOver.Month:
+                {
+                    modelQuery = AggregateOverMonth(query, filter.AggregateOverPlace);
+                    break;
+                }
+                case AggregateOver.Year:
+                {
+                    modelQuery = AggregateOverYear(query, filter.AggregateOverPlace);
+                    break;
+                }
+                case null:
+                {
+                    IQueryable<Tuple<long?, DateTime, int, double>> groupedQuery;
+                    if (!filter.AggregateOverPlace)
                     {
-                        Value = x.Average(y => y.Temperature),
-                        PlaceId = x.Key.PlaceId,
-                        Date = x.Key.Date,
-                        Hour = x.Key.Hour
-                    })
-                    .AsEnumerable()
-                    .Select(x => new MeasurementStatisticsModel()
+                        groupedQuery = query
+                            // make groups that have same date + hour and place and make temperature average over them
+                            .GroupBy(x => new {x.MeasurementDateTime.Date, x.MeasurementDateTime.Hour, x.PlaceId})
+                            .Select(x => Tuple.Create((long?) x.Key.PlaceId, x.Key.Date, x.Key.Hour,
+                                x.Average(y => y.Temperature)));
+                    }
+                    else
                     {
-                        MeasurementDateTime = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, x.Hour, 0, 0),
-                        Value = x.Value,
-                        PlaceId = x.PlaceId
-                    });
+                        groupedQuery = query
+                            // make groups that have same date + hour and place and make temperature average over them
+                            .GroupBy(x => new {x.MeasurementDateTime.Date, x.MeasurementDateTime.Hour})
+                            .Select(x =>
+                                Tuple.Create((long?) null, x.Key.Date, x.Key.Hour, x.Average(y => y.Temperature)));
+                    }
+
+                    modelQuery = groupedQuery.AsEnumerable()
+                        .Select(x => new MeasurementStatisticsModel()
+                        {
+                            MeasurementDateTime = new DateTime(x.Item2.Year, x.Item2.Month, x.Item2.Day, x.Item3, 0, 0),
+                            Value = x.Item4,
+                            PlaceId = x.Item1
+                        });
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             var list = modelQuery
@@ -192,112 +192,115 @@ namespace SmartHome.Infrastructure
         }
 
         private IEnumerable<MeasurementStatisticsModel> AggregateOverDayOfYear(
-            IQueryable<TemperatureMeasurement> query)
+            IQueryable<TemperatureMeasurement> query, bool aggregateOverPlace)
         {
-            var grouped = query
-                .GroupBy(x => new
-                {
-                    x.PlaceId,
-                    // group by day of a year (but dayofyear on datetime cannot be used, it won't translate to db call)
-                    x.MeasurementDateTime.Day,
-                    x.MeasurementDateTime.Month
-                });
+            IQueryable<Tuple<long?, int, int, double>> groupedQuery;
+            if (!aggregateOverPlace)
+            {
+                groupedQuery = query.GroupBy(x => new
+                    {
+                        x.PlaceId,
+                        // group by day of a year (but dayofyear on datetime cannot be used, it won't translate to db call)
+                        x.MeasurementDateTime.Day,
+                        x.MeasurementDateTime.Month
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)x.Key.PlaceId, x.Key.Month, x.Key.Day, x.Average(y => y.Temperature)));
+            }
+            else
+            {
+                groupedQuery = query
+                    .GroupBy(x => new
+                    {
+                        // group by day of a year (but dayofyear on datetime cannot be used, it won't translate to db call)
+                        x.MeasurementDateTime.Day,
+                        x.MeasurementDateTime.Month
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)null, x.Key.Month, x.Key.Day, x.Average(y => y.Temperature)));
+            }
                         
-            var result = grouped
-                .Select(x => new
-                {
-                    PlaceId = x.Key.PlaceId,
-                    Month = x.Key.Month,
-                    Day = x.Key.Day,
-                    Value = x.Average(y => y.Temperature)
-                })
+            var result = groupedQuery
+                .AsEnumerable()
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Month, x.Day),
-                    Value = x.Value,
-                    PlaceId = x.PlaceId
+                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Item2, x.Item3),
+                    Value = x.Item4,
+                    PlaceId = x.Item1
                 });
-            return result.AsEnumerable();
+            return result;
         }
         
         private IEnumerable<MeasurementStatisticsModel> AggregateOverMonth(
-            IQueryable<TemperatureMeasurement> query)
+            IQueryable<TemperatureMeasurement> query, bool aggregateOverPlace)
         {
-            var grouped = query
-                .GroupBy(x => new
-                {
-                    x.PlaceId,
-                    x.MeasurementDateTime.Month
-                });
+            IQueryable<Tuple<long?, int, double>> groupedQuery;
+            if (!aggregateOverPlace)
+            {
+                groupedQuery = query.GroupBy(x => new
+                    {
+                        x.PlaceId,
+                        x.MeasurementDateTime.Month
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)x.Key.PlaceId, x.Key.Month, x.Average(y => y.Temperature)));
+            }
+            else
+            {
+                groupedQuery = query
+                    .GroupBy(x => new
+                    {
+                        x.MeasurementDateTime.Month
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)null, x.Key.Month, x.Average(y => y.Temperature)));
+            }
                         
-            var result = grouped
-                .Select(x => new
-                {
-                    PlaceId = x.Key.PlaceId,
-                    Month = x.Key.Month,
-                    Value = x.Average(y => y.Temperature)
-                })
+            var result = groupedQuery
+                .AsEnumerable()
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Month, 1),
-                    Value = x.Value,
-                    PlaceId = x.PlaceId
+                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Item2, 1),
+                    Value = x.Item3,
+                    PlaceId = x.Item1
                 });
-
-            return result.AsEnumerable();
+            return result;
         }
 
         private IEnumerable<MeasurementStatisticsModel> AggregateOverYear(
-            IQueryable<TemperatureMeasurement> query)
+            IQueryable<TemperatureMeasurement> query, bool aggregateOverPlace)
         {
-            var grouped = query
-                .GroupBy(x => new
-                {
-                    x.PlaceId,
-                    x.MeasurementDateTime.Year
-                });
+            IQueryable<Tuple<long?, int, double>> groupedQuery;
+            if (!aggregateOverPlace)
+            {
+                groupedQuery = query.GroupBy(x => new
+                    {
+                        x.PlaceId,
+                        x.MeasurementDateTime.Year
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)x.Key.PlaceId, x.Key.Year, x.Average(y => y.Temperature)));
+            }
+            else
+            {
+                groupedQuery = query
+                    .GroupBy(x => new
+                    {
+                        x.MeasurementDateTime.Year
+                    })
+                    .Select(x => Tuple.Create(
+                        (long?)null, x.Key.Year, x.Average(y => y.Temperature)));
+            }
                         
-            var result = grouped
-                .Select(x => new
-                {
-                    Place = x.Key.PlaceId,
-                    Year = x.Key.Year,
-                    Value = x.Average(y => y.Temperature)
-                })
+            var result = groupedQuery
+                .AsEnumerable()
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    PlaceId = x.Place,
-                    MeasurementDateTime = new DateTime(x.Year, 1, 1),
-                    Value = x.Value
+                    MeasurementDateTime = new DateTime(x.Item2, 1, 1),
+                    Value = x.Item3,
+                    PlaceId = x.Item1
                 });
-            return result.AsEnumerable();
-        }
-
-        private IEnumerable<MeasurementStatisticsModel> AggregateOverPlace(
-            IQueryable<TemperatureMeasurement> query)
-        {
-            var grouped = query
-                .GroupBy(x => new
-                {
-                    MeasurementDateTime = x.MeasurementDateTime.Date,
-                    Hour = x.MeasurementDateTime.Hour
-                });
-                        
-            var result = grouped
-                .Select(x => new
-                {
-                    Date = x.Key.MeasurementDateTime,
-                    Hour = x.Key.Hour,
-                    Value = x.Average(y => y.Temperature)
-                })
-                .Select(x => new MeasurementStatisticsModel()
-                {
-                    MeasurementDateTime = new DateTime(x.Date.Year, x.Date.Month, x.Date.Day, x.Hour, 0, 0),
-                    Value = x.Value,
-                    PlaceId = null
-                });
-
-            return result.AsEnumerable();
+            return result;
         }
     }
 }

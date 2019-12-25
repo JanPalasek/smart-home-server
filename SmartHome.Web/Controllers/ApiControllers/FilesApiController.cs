@@ -139,7 +139,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             return Ok("Files were successfully uploaded.");
         }
 
-        private FileManagerResponse UploadPrivate(string path, IList<IFormFile> files, string action)
+        private FileManagerResponse? UploadPrivate(string path, IList<IFormFile> files, string action)
         {
             if (files.Any(x => x.Length > fileManagerConfiguration.MaximumUploadSize))
             {

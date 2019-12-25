@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,7 +13,7 @@ using Syncfusion.EJ2.Charts;
 
 namespace SmartHome.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Identity.Application")]
+    [Authorize(Policy = "Statistic.View")]
     public class StatisticsController : Controller
     {
         private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
@@ -21,11 +22,15 @@ namespace SmartHome.Web.Controllers
         {
             this.getTemperatureMeasurementsService = getTemperatureMeasurementsService;
         }
-
+        
         [HttpGet("Statistics")]
-        public async Task<IActionResult> Index(StatisticsFilter filter)
+        public IActionResult Index()
         {
-            var vm = new StatisticsViewModel(filter);
+            var vm = new StatisticsViewModel(
+                new StatisticsFilter()
+                {
+                    DateFrom = DateTime.Today.AddYears(-1)
+                });
             return View("Statistics", vm);
         }
         

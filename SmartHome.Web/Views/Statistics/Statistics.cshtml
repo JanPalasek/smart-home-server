@@ -6,18 +6,21 @@
 }
 
 <section class="small-layout">
-    <ejs-button id="filter-button" content="Apply filter" cssClass="e-primary"></ejs-button>
     <div class="section">
         <div class="form-group">
                 <ejs-datetimepicker id="measurement-date-time-from" ejs-for="Filter.DateFrom" placeholder="Date from" floatLabelType="Auto"></ejs-datetimepicker>
                 <ejs-datetimepicker id="measurement-date-time-to" ejs-for="Filter.DateTo" placeholder="Date to" floatLabelType="Auto"></ejs-datetimepicker>
             </div>
-            <div class="form-group">
-                <enum-dropdownlist id="aggregate-over" enum-type="@typeof(AggregateOver)" placeholder="Aggregate over"
-                                   floatLabelType="Auto" change="changeAggregateOverValue"
-                                   showClearButton="true" ejs-for="Filter.AggregateOver">
-                </enum-dropdownlist>
-            </div>
+        <div class="form-group">
+            <enum-dropdownlist id="aggregate-over" enum-type="@typeof(AggregateOver)" placeholder="Aggregate over"
+                               floatLabelType="Auto" change="changeAggregateOverValue"
+                               showClearButton="true" ejs-for="Filter.AggregateOver">
+            </enum-dropdownlist>
+        </div>
+        <div class="form-group">
+            <ejs-checkbox id="aggregate-over-place" ejs-for="Filter.AggregateOverPlace" label="Aggregate over place"></ejs-checkbox>
+        </div>
+        <ejs-button id="filter-button" content="Apply filter" cssClass="e-primary"></ejs-button>
     </div>
 </section>
 
@@ -90,10 +93,12 @@
         let dateFrom = $("#measurement-date-time-from").val();
         let dateTo = $("#measurement-date-time-to").val();
         let aggregateOver = $("#aggregate-over").val();
+        let aggregateOverPlace = $("#aggregate-over-place").is(":checked");
         
         let parametrizedRequestUrl = "@Url.Action("StatisticsDataSource")";
         let parameters = "?dateFrom=" + dateFrom
-                                     + "&dateTo=" + dateTo + "&aggregateOver=" + aggregateOver;
+                                     + "&dateTo=" + dateTo + "&aggregateOver=" + aggregateOver
+                                     + "&aggregateOverPlace=" + aggregateOverPlace;
         // TODO: update url
         
         if (isInside !== null) {
