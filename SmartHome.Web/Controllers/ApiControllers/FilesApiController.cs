@@ -109,6 +109,38 @@ namespace SmartHome.Web.Controllers.ApiControllers
             return operation.ToCamelCase(diskResponse);
         }
 
+        [HttpPost("api/directories/create")]
+        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        public IActionResult CreateDirectory(string path, string name)
+        {
+            var result = operation.Create(path, name);
+
+            if (result.Error != null)
+            {
+                return BadRequest("There has appeared an error in the request.");
+            }
+
+            return Ok();
+        }
+        
+        [HttpPost("api/directories/remove")]
+        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        public IActionResult RemoveDirectory(string path, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Restricted to modify the root folder");
+            }
+            
+            var result = operation.Delete(path, new []{ name });
+            if (result.Error != null)
+            {
+                return BadRequest("There has appeared an error in the request.");
+            }
+
+            return Ok();
+        }
+            
         [HttpPost("api/syncfusion/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
