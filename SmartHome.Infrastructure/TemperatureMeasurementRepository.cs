@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using SmartHome.Common;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.Data.Models;
@@ -15,8 +17,11 @@ namespace SmartHome.Infrastructure
 {
     public class TemperatureMeasurementRepository : GenericRepository<TemperatureMeasurement>, ITemperatureMeasurementRepository
     {
-        public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext, IMapper mapper) : base(smartHomeAppDbContext, mapper)
+        private readonly IDateTimeProvider dateTimeProvider;
+        public TemperatureMeasurementRepository(SmartHomeAppDbContext smartHomeAppDbContext,
+            IMapper mapper, IDateTimeProvider dateTimeProvider) : base(smartHomeAppDbContext, mapper)
         {
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<IList<TemperatureMeasurementModel>> GetTemperatureMeasurementsAsync(MeasurementFilter filter)
@@ -224,7 +229,7 @@ namespace SmartHome.Infrastructure
                 .AsEnumerable()
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Item2, x.Item3),
+                    MeasurementDateTime = new DateTime(dateTimeProvider.Now.Year, x.Item2, x.Item3),
                     Value = x.Item4,
                     PlaceId = x.Item1
                 });
@@ -260,7 +265,7 @@ namespace SmartHome.Infrastructure
                 .AsEnumerable()
                 .Select(x => new MeasurementStatisticsModel()
                 {
-                    MeasurementDateTime = new DateTime(DateTime.Now.Year, x.Item2, 1),
+                    MeasurementDateTime = new DateTime(dateTimeProvider.Now.Year, x.Item2, 1),
                     Value = x.Item3,
                     PlaceId = x.Item1
                 });

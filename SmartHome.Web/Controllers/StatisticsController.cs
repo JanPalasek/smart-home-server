@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartHome.Common;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.ServiceInterfaces.TemperatureMeasurement;
 using SmartHome.Web.Models.Statistics;
@@ -17,10 +19,12 @@ namespace SmartHome.Web.Controllers
     public class StatisticsController : Controller
     {
         private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
+        private readonly IDateTimeProvider dateTimeProvider;
 
-        public StatisticsController(IGetTemperatureMeasurementsService getTemperatureMeasurementsService)
+        public StatisticsController(IGetTemperatureMeasurementsService getTemperatureMeasurementsService, IDateTimeProvider dateTimeProvider)
         {
             this.getTemperatureMeasurementsService = getTemperatureMeasurementsService;
+            this.dateTimeProvider = dateTimeProvider;
         }
         
         [HttpGet("Statistics")]
@@ -29,7 +33,7 @@ namespace SmartHome.Web.Controllers
             var vm = new StatisticsViewModel(
                 new StatisticsFilter()
                 {
-                    DateFrom = DateTime.Today.AddYears(-1)
+                    DateFrom = dateTimeProvider.Today.AddYears(-1)
                 });
             return View("Statistics", vm);
         }

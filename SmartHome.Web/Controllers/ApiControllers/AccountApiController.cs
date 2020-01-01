@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SmartHome.Common;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.DomainCore.Data.Models;
 using SmartHome.DomainCore.ServiceInterfaces.Account;
 using SmartHome.DomainCore.ServiceInterfaces.User;
@@ -17,15 +19,19 @@ namespace SmartHome.Web.Controllers.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountApiController : Controller
     {
+        private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISignInService signInService;
         private readonly IGetUsersService getUsersService;
         private readonly JwtConfiguration jwtConfiguration;
 
-        public AccountApiController(ISignInService signInService, IGetUsersService getUsersService, JwtConfiguration jwtConfiguration)
+        public AccountApiController(ISignInService signInService,
+            IGetUsersService getUsersService, JwtConfiguration jwtConfiguration,
+            IDateTimeProvider dateTimeProvider)
         {
             this.signInService = signInService;
             this.getUsersService = getUsersService;
             this.jwtConfiguration = jwtConfiguration;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         [AllowAnonymous]
@@ -54,7 +60,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             var token = new JwtSecurityToken(jwtConfiguration.Issuer,
                 jwtConfiguration.Audience,
                 claims,
-                expires: DateTime.Now.AddMinutes(jwtConfiguration.ValidInMinutes),
+                expires: dateTimeProvider.Now.AddMinutes(jwtConfiguration.ValidInMinutes),
                 signingCredentials: new SigningCredentials(jwtConfiguration.SecurityKey,
                     SecurityAlgorithms.HmacSha256));
 

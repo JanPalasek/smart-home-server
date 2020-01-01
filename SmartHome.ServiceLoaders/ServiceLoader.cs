@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore.InfrastructureInterfaces;
@@ -43,10 +45,10 @@ namespace SmartHome.ServiceLoaders
                 var config = new MapperConfiguration(cfg =>
                 {
                     // get all non-tests assemblies
-                    var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                        .Where(a => a.FullName!.StartsWith("SmartHome"));
+                    var infrastructureAssembly = Assembly.Load("SmartHome.Infrastructure");
+                    var webAssembly = Assembly.Load("SmartHome.Web");
                 
-                    cfg.AddMaps(assemblies);
+                    cfg.AddMaps(infrastructureAssembly, webAssembly);
                 });
                 config.AssertConfigurationIsValid();
             
@@ -61,6 +63,7 @@ namespace SmartHome.ServiceLoaders
         protected internal virtual ServiceLoader LoadRepositoriesAndServices(IServiceCollection services)
         {
             services.AddScoped<SmartHomeAppDbContext>();
+            services.AddScoped<IDateTimeProvider, DefaultDateTimeProvider>();
             
             services.AddScoped<ITemperatureMeasurementRepository, TemperatureMeasurementRepository>();
             services.AddScoped<IBatteryMeasurementRepository, BatteryMeasurementRepository>();

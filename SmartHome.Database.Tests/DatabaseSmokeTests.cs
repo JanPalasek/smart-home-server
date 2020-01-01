@@ -10,9 +10,9 @@ namespace SmartHome.Database.Tests
     public class DatabaseSmokeTests : DatabaseTests
     {
         [Test(Description = "Tests that it is possible to connect to database by obtaining a simple entry that has to be there.")]
-        public void TestConnection()
+        public async Task TestConnection()
         {
-            var user = GetAny<User>();
+            var user = await GetAnyAsync<User>();
             
             Assert.That(user, Is.Not.Null);
         }

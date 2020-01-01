@@ -19,10 +19,23 @@ namespace SmartHome.Infrastructure.Tests
     public class UserRepositoryTests : DatabaseTests
     {
         private UserRepository repository;
+        private User user;
         
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
+            user = new User()
+            {
+                Email = "repositoryTestUser@janpalasek.com",
+                UserName = "repositoryTestUser",
+                NormalizedEmail = "repositoryTestUser@janpalasek.com",
+                NormalizedUserName = "repositoryTestUser",
+                PasswordHash = "asdfghjkl",
+            };
+            DbContext.Add(user);
+
+            await DbContext.SaveChangesAsync();
+            
             var userManagerMock = new Mock<FakeUserManager>();
 
             userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
@@ -50,7 +63,6 @@ namespace SmartHome.Infrastructure.Tests
         [Test]
         public async Task AddToRolesAsyncTest()
         {
-            var user = await GetAnyAsync<User>();
             var role = await GetAnyAsync<Role>();
             
             await repository.AddToRolesAsync(user.Id, new List<long>(){ role.Id });

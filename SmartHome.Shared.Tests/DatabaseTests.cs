@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,9 +6,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using SmartHome.Common;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.Database;
 using SmartHome.Database.Entities;
 using SmartHome.DomainCore;
+using SmartHome.DomainCore.Data;
 
 namespace SmartHome.Shared.Tests
 {
@@ -20,7 +24,7 @@ namespace SmartHome.Shared.Tests
         protected SmartHomeDbContext DbContext { get; private set; }
 
         [SetUp]
-        public void SetUpDatabase()
+        public async Task SetUpDatabase()
         {
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.AddJsonFile("appsettings.testing.json");
@@ -32,42 +36,115 @@ namespace SmartHome.Shared.Tests
 
             DbContext = new SmartHomeDbContext(builder.Options);
             
-            CreateInitialData(DbContext);
+            await CreateInitialData(DbContext, DateTimeProvider);
+        }
+        
+        [TearDown]
+        public async Task TearDownDatabase()
+        {
+            await DbContext.Database.EnsureDeletedAsync();
         }
 
-        private void CreateInitialData(SmartHomeDbContext context)
+        private async Task CreateInitialData(SmartHomeDbContext context, IDateTimeProvider dateTimeProvider)
         {
-            context.Add(new User()
+            var user = new User()
             {
                 Email = "admin@janpalasek.com",
                 UserName = "admin",
                 NormalizedEmail = "admin@janpalasek.com",
                 NormalizedUserName = "admin",
                 PasswordHash = "asdfghjkl",
-            });
+            };
+            context.Add(user);
 
-            context.Add(new Place()
+            var fileView = new Permission()
+            {
+                Name = "File.View"
+            };
+            var fileEdit = new Permission()
+            {
+                Name = "File.Edit"
+            };
+            context.Add(fileView);
+            context.Add(fileEdit);
+            var bathroom = new Place()
             {
                 Name = "Bathroom",
                 Note = "Bathroom note"
-            });
-            context.Add(new Place()
+            };
+            var livingRoom = new Place()
             {
                 Name = "Living room"
-            });
-
-            context.Add(new Role()
+            };
+            context.Add(bathroom);
+            context.Add(livingRoom);
+            
+            var adminRole = new Role()
             {
                 Name = "Admin",
                 NormalizedName = "Admin"
+            };
+            context.Add(adminRole);
+            
+            context.Add(new IdentityUserRole<long>()
+            {
+                RoleId = adminRole.Id,
+                UserId = user.Id
             });
+            context.Add(new RolePermission()
+            {
+                PermissionId = fileView.Id,
+                RoleId = adminRole.Id
+            });
+            context.Add(new RolePermission()
+            {
+                PermissionId = fileEdit.Id,
+                RoleId = adminRole.Id
+            });
+            
+            // enumerations
+            var dht11SensorType = new SensorType()
+            {
+                Name = "DHT11",
+                Description = "Humidity and temperature sensor."
+            };
+            context.Add(dht11SensorType);
+            var alkalineBatteryPowerSourceType = new BatteryPowerSourceType()
+            {
+                BatteryType = BatteryType.Alkaline,
+                MaximumVoltage = 4.5,
+                MinimumVoltage = 3.3,
+                Name = "Alkaline 3x1.5"
+            };
+            context.Add(alkalineBatteryPowerSourceType);
+            var sensor = new Sensor()
+            {
+                BatteryPowerSourceTypeId = alkalineBatteryPowerSourceType.Id,
+                MinimumRequiredVoltage = 3,
+                PlaceId = bathroom.Id,
+                SensorTypeId = dht11SensorType.Id,
+                Name = "DHT11 sensor"
+            };
+            context.Add(sensor);
+            
+            var measurement = new TemperatureMeasurement()
+            {
+                MeasurementDateTime = dateTimeProvider.Now.AddYears(-3),
+                PlaceId = bathroom.Id,
+                SensorId = sensor.Id,
+                Temperature = 30
+            };
+            context.Add(measurement);
+            measurement = new TemperatureMeasurement()
+            {
+                MeasurementDateTime = dateTimeProvider.Now.AddYears(-2),
+                PlaceId = livingRoom.Id,
+                SensorId = sensor.Id,
+                Temperature = 24
+            };
+            context.Add(measurement);
 
-            context.SaveChanges();
-        }
-        
-        protected TType GetAny<TType>() where TType : class, IId<long>
-        {
-            return DbContext.Set<TType>().First();
+            await context.SaveChangesAsync();
         }
         
         protected Task<TType> GetAnyAsync<TType>() where TType : class, IId<long>

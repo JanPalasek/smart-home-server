@@ -52,7 +52,7 @@ namespace SmartHome.Services.Permission
                 throw new ArgumentException($"{nameof(userName)} is not valid user name.");
             }
             
-            return await repository.GetAllUserPermissionsAsync(user.Id);
+            return await repository.GetAllUserPermissionsDistinctAsync(user.Id);
         }
     }
 }

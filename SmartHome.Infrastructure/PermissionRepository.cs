@@ -33,7 +33,7 @@ namespace SmartHome.Infrastructure
             return userPermissions;
         }
 
-        public async Task<IList<PermissionModel>> GetAllUserPermissionsAsync(long userId)
+        public async Task<IList<PermissionModel>> GetAllUserPermissionsDistinctAsync(long userId)
         {
             var user = await SmartHomeAppDbContext.SingleAsync<User>(userId);
             var userPermissions = await SmartHomeAppDbContext.Query<UserPermission>()

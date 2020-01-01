@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SmartHome.Common;
+using SmartHome.Common.DateTimeProviders;
 using SmartHome.DomainCore.Data;
 using SmartHome.DomainCore.InfrastructureInterfaces;
 using SmartHome.DomainCore.ServiceInterfaces.BatteryMeasurement;
@@ -17,15 +19,17 @@ namespace SmartHome.Web.Controllers.ApiControllers
         private readonly ICreateBatteryMeasurementService batteryMeasurementService;
         private readonly IGetTemperatureMeasurementsService getTemperatureMeasurementsService;
         private readonly ICreateTemperatureMeasurementService createTemperatureMeasurementService;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         public TemperaturesController(
             IGetTemperatureMeasurementsService getTemperatureMeasurementsService,
             ICreateTemperatureMeasurementService createTemperatureMeasurementService,
-            ICreateBatteryMeasurementService batteryMeasurementService)
+            ICreateBatteryMeasurementService batteryMeasurementService, IDateTimeProvider dateTimeProvider)
         {
             this.getTemperatureMeasurementsService = getTemperatureMeasurementsService;
             this.createTemperatureMeasurementService = createTemperatureMeasurementService;
             this.batteryMeasurementService = batteryMeasurementService;
+            this.dateTimeProvider = dateTimeProvider;
         }
         
         [HttpPost("api/sensors/{sensorId:int}/temperatures")]
@@ -35,7 +39,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         public async Task<IActionResult> Temperature(int sensorId, double temperature, double? voltage)
         {
             var result =
-                await createTemperatureMeasurementService.CreateAsync(sensorId, temperature, DateTime.Now);
+                await createTemperatureMeasurementService.CreateAsync(sensorId, temperature, dateTimeProvider.Now);
             if (!result.Succeeded)
             {
                 return BadRequest(result.ValidationResult.ToString());
@@ -44,7 +48,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
             // if voltage has been measured 
             if (voltage != null)
             {
-                var validationResult = await batteryMeasurementService.CreateAsync(sensorId, voltage.Value, DateTime.Now);
+                var validationResult = await batteryMeasurementService.CreateAsync(sensorId, voltage.Value, dateTimeProvider.Now);
 
                 if (!validationResult.Succeeded)
                 {
