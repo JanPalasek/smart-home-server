@@ -18,30 +18,40 @@ namespace SmartHome.Infrastructure.Tests.Mocks
 
             if (allSetupDefault)
             {
-                SetupAddToRoles();
+                SetupAddToRolesAsync();
                 SetupGetRolesAsync();
+                SetupRemoveFromRolesAsync();
             }
         }
 
-        public void SetupAddToRoles()
+        public void SetupAddToRolesAsync()
         {
             Setup(x => x.AddToRolesAsync(
                     It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
                 .Returns(async (User user, IEnumerable<string> roles) =>
                 {
+                    bool error = false;
                     foreach (var role in roles)
                     {
-                        long roleId = (await context.Set<Role>().FirstAsync(x => x.Name == role)).Id;
+                        long? roleId = (await context.Set<Role>()
+                            .FirstOrDefaultAsync(x => x.Name == role))?.Id;
+
+                        if (roleId == null)
+                        {
+                            error = true;
+                            break;
+                        }
+                        
                         context.Add(new IdentityUserRole<long>()
                         {
-                            RoleId = roleId,
+                            RoleId = roleId.Value,
                             UserId = user.Id
                         });
                     }
 
                     await context.SaveChangesAsync();
 
-                    return IdentityResult.Success;
+                    return error ? IdentityResult.Failed() : IdentityResult.Success;
                 });
         }
 
@@ -59,6 +69,35 @@ namespace SmartHome.Infrastructure.Tests.Mocks
                         .Select(x => x.Name)
                         .ToListAsync();
                     return roles;
+                });
+        }
+
+        public void SetupRemoveFromRolesAsync()
+        {
+            Setup(x => x.RemoveFromRolesAsync(
+                    It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
+                .Returns(async (User user, IEnumerable<string> roles) =>
+                {
+                    bool error = false;
+                    foreach (var role in roles)
+                    {
+                        long roleId = (await context.Set<Role>().FirstAsync(x => x.Name == role)).Id;
+
+                        var item = await context.Set<IdentityUserRole<long>>()
+                            .FirstOrDefaultAsync(x => x.RoleId == roleId && x.UserId == user.Id);
+
+                        if (item == default)
+                        {
+                            error = true;
+                            break;
+                        }
+                        
+                        context.Remove(item);
+                    }
+
+                    await context.SaveChangesAsync();
+
+                    return error ? IdentityResult.Failed() : IdentityResult.Success;
                 });
         }
     }

@@ -45,14 +45,34 @@ namespace SmartHome.Infrastructure.Tests
         }
 
         [Test]
-        public async Task AddToRolesAsyncTest()
+        [TestCase("admin", "User", true)]
+        [TestCase("user", "Admin", true)]
+        public async Task AddToRolesAsyncTest(string userName, string roleName, bool success)
         {
-            var role = await GetAnyAsync<Role>();
+            var user = await DbContext.Set<User>().FirstAsync(x => x.UserName == userName);
+            var role = await DbContext.Set<Role>().FirstAsync(x => x.Name == roleName);
             
-            await repository.AddToRolesAsync(user.Id, new List<long>(){ role.Id });
+            var result = await repository.AddToRolesAsync(user.Id, new List<long>(){ role.Id });
             
-            Assert.That(DbContext.Set<IdentityUserRole<long>>().Any(x => x.RoleId == role.Id
+            Assert.That(result.Succeeded, Is.EqualTo(success));
+            Assert.That(await DbContext.Set<IdentityUserRole<long>>().AnyAsync(x => x.RoleId == role.Id
                                                                          && x.UserId == user.Id), Is.True);
+        }
+
+        [Test]
+        [TestCase("admin", "Admin", true)]
+        [TestCase("admin", "User", false)]
+        [TestCase("user", "User", true)]
+        [TestCase("user", "Admin", false)]
+        public async Task RemoveFromRolesAsyncTest(string userName, string roleName, bool success)
+        {
+            var user = await DbContext.Set<User>().FirstAsync(x => x.UserName == userName);
+            var role = await DbContext.Set<Role>().FirstAsync(x => x.Name == roleName);
+            
+            var result = await repository.RemoveFromRolesAsync(user.Id, new List<long> {role.Id});
+            Assert.That(result.Succeeded, Is.EqualTo(success));
+            Assert.That(await DbContext.Set<IdentityUserRole<long>>().AnyAsync(x => x.RoleId == role.Id
+                                                                         && x.UserId == user.Id), Is.False);
         }
 
         [Test]
@@ -66,6 +86,21 @@ namespace SmartHome.Infrastructure.Tests
 
             var actual = await repository.HasPermissionAsync(user.Id, permission);
             Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase("user", "Measurement.Temperature.Edit")]
+        [TestCase("user", "Measurement.Temperature.View")]
+        public async Task AddPermissionsToUserAsyncTest(string userName, string permissionName)
+        {
+            var user = await DbContext.Set<User>().FirstAsync(x => x.UserName == userName);
+            var permission = await DbContext.Set<Permission>().FirstAsync(x => x.Name == permissionName);
+
+            Assert.That(() => repository.AddPermissionsToUserAsync(
+                user.Id, new List<string>() { permissionName }), Throws.Nothing);
+            Assert.That(await DbContext.Set<UserPermission>()
+                    .AnyAsync(x => x.PermissionId == permission.Id && x.UserId == user.Id),
+                Is.True);
         }
     }
 }
