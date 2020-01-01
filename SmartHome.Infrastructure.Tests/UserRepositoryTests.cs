@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -20,7 +22,7 @@ namespace SmartHome.Infrastructure.Tests
     {
         private UserRepository repository;
         private User user;
-        
+
         [SetUp]
         public async Task SetUp()
         {
@@ -35,26 +37,8 @@ namespace SmartHome.Infrastructure.Tests
             DbContext.Add(user);
 
             await DbContext.SaveChangesAsync();
-            
-            var userManagerMock = new Mock<FakeUserManager>();
 
-            userManagerMock.Setup(x => x.AddToRolesAsync(It.IsAny<User>(), It.IsAny<IEnumerable<string>>()))
-                .ReturnsAsync((User user, List<string> roles) =>
-                {
-                    foreach (var role in roles)
-                    {
-                        long roleId = DbContext.Set<Role>().First(x => x.Name == role).Id;
-                        DbContext.Add(new IdentityUserRole<long>()
-                        {
-                            RoleId = roleId,
-                            UserId = user.Id
-                        });
-                    }
-
-                    DbContext.SaveChanges();
-
-                    return IdentityResult.Success;
-                });
+            var userManagerMock = new FakeUserManagerMock(DbContext, true);
             
             repository = new UserRepository(new SmartHomeAppDbContext(DbContext), Mapper,
                 userManagerMock.Object, null);
@@ -69,6 +53,19 @@ namespace SmartHome.Infrastructure.Tests
             
             Assert.That(DbContext.Set<IdentityUserRole<long>>().Any(x => x.RoleId == role.Id
                                                                          && x.UserId == user.Id), Is.True);
+        }
+
+        [Test]
+        [TestCase("user", "Measurement.Temperature.View", true)]
+        [TestCase("user", "Measurement.Temperature.Edit", true)]
+        [TestCase("user", "File.View", true)]
+        [TestCase("user", "File.Edit", false)]
+        public async Task UserHasPermissionAsyncTest(string userName, string permission, bool expected)
+        {
+            var user = await DbContext.Set<User>().FirstAsync(x => x.UserName == userName);
+
+            var actual = await repository.HasPermissionAsync(user.Id, permission);
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

@@ -47,7 +47,7 @@ namespace SmartHome.Shared.Tests
 
         private async Task CreateInitialData(SmartHomeDbContext context, IDateTimeProvider dateTimeProvider)
         {
-            var user = new User()
+            var adminUser = new User()
             {
                 Email = "admin@janpalasek.com",
                 UserName = "admin",
@@ -55,6 +55,15 @@ namespace SmartHome.Shared.Tests
                 NormalizedUserName = "admin",
                 PasswordHash = "asdfghjkl",
             };
+            var user = new User()
+            {
+                Email = "user@janpalasek.com",
+                UserName = "user",
+                NormalizedEmail = "user@janpalasek.com",
+                NormalizedUserName = "user",
+                PasswordHash = "asdfghjkl",
+            };
+            context.Add(adminUser);
             context.Add(user);
 
             var fileView = new Permission()
@@ -65,8 +74,19 @@ namespace SmartHome.Shared.Tests
             {
                 Name = "File.Edit"
             };
+            var measurementTemperatureView = new Permission()
+            {
+                Name = "Measurement.Temperature.View"
+            };
+            var measurementTemperatureEdit = new Permission()
+            {
+                Name = "Measurement.Temperature.Edit"
+            };
             context.Add(fileView);
             context.Add(fileEdit);
+            context.Add(measurementTemperatureView);
+            context.Add(measurementTemperatureEdit);
+            
             var bathroom = new Place()
             {
                 Name = "Bathroom",
@@ -84,11 +104,22 @@ namespace SmartHome.Shared.Tests
                 Name = "Admin",
                 NormalizedName = "Admin"
             };
+            var userRole = new Role()
+            {
+                Name = "User",
+                NormalizedName = "User"
+            };
             context.Add(adminRole);
+            context.Add(userRole);
             
             context.Add(new IdentityUserRole<long>()
             {
                 RoleId = adminRole.Id,
+                UserId = adminUser.Id
+            });
+            context.Add(new IdentityUserRole<long>()
+            {
+                RoleId = userRole.Id,
                 UserId = user.Id
             });
             context.Add(new RolePermission()
@@ -100,6 +131,32 @@ namespace SmartHome.Shared.Tests
             {
                 PermissionId = fileEdit.Id,
                 RoleId = adminRole.Id
+            });
+            context.Add(new RolePermission()
+            {
+                PermissionId = measurementTemperatureView.Id,
+                RoleId = adminRole.Id
+            });
+            context.Add(new RolePermission()
+            {
+                PermissionId = measurementTemperatureEdit.Id,
+                RoleId = adminRole.Id
+            });
+            context.Add(new RolePermission()
+            {
+                PermissionId = measurementTemperatureView.Id,
+                RoleId = userRole.Id
+            });
+            context.Add(new RolePermission()
+            {
+                PermissionId = fileView.Id,
+                RoleId = userRole.Id
+            });
+
+            context.Add(new UserPermission()
+            {
+                PermissionId = measurementTemperatureEdit.Id,
+                UserId = user.Id
             });
             
             // enumerations
