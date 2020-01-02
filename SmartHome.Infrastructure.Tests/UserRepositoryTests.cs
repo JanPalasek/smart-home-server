@@ -102,5 +102,19 @@ namespace SmartHome.Infrastructure.Tests
                     .AnyAsync(x => x.PermissionId == permission.Id && x.UserId == user.Id),
                 Is.True);
         }
+
+        [Test]
+        [TestCase("user", "Measurement.Temperature.Edit")]
+        [TestCase("user", "Measurement.Temperature.View")]
+        public async Task RemovePermissionsFromUserAsyncTest(string userName, string permissionName)
+        {
+            var user = await DbContext.Set<User>().FirstAsync(x => x.UserName == userName);
+            var permission = await DbContext.Set<Permission>().FirstAsync(x => x.Name == permissionName);
+
+            await repository.RemovePermissionsFromUserAsync(user.Id, new List<long>() {permission.Id});
+            Assert.That(await DbContext.Set<UserPermission>()
+                    .AnyAsync(x => x.PermissionId == permission.Id && x.UserId == user.Id),
+                Is.False);
+        }
     }
 }

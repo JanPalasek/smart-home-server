@@ -12,10 +12,12 @@ namespace SmartHome.Services.Role
     public class UpdateRoleService : IUpdateRoleService
     {
         private readonly IRoleRepository repository;
+        private readonly IPermissionRepository permissionRepository;
 
-        public UpdateRoleService(IRoleRepository repository)
+        public UpdateRoleService(IRoleRepository repository, IPermissionRepository permissionRepository)
         {
             this.repository = repository;
+            this.permissionRepository = permissionRepository;
         }
 
         public async Task<SmartHomeValidationResult> UpdateRoleAsync(RoleModel model)
@@ -32,9 +34,13 @@ namespace SmartHome.Services.Role
             removedPermissions = updatePermissions.Select(x => x.OldPermissionsId).Union(removedPermissions).ToList();
             await repository.RemovePermissionsFromRoleAsync(roleId, removedPermissions.ToList());
             
+            var permissions = await permissionRepository.GetRolePermissionsAsync(roleId);
+            var permissionNames = permissions.Select(x => x.Name);
             
             // TODO: update permissions
-            addedPermissions = updatePermissions.Select(x => x.NewPermissionValue).Union(addedPermissions);
+            addedPermissions = updatePermissions.Select(x => x.NewPermissionValue)
+                .Union(addedPermissions)
+                .Except(permissionNames);
             await repository.AddPermissionsToRoleAsync(roleId, addedPermissions.ToList());
             
             return SmartHomeValidationResult.Success;

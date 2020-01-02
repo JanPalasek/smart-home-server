@@ -88,17 +88,6 @@ namespace SmartHome.Infrastructure
                 PermissionId = x
             });
 
-            // get already existing user permissions from the database
-            var existingUserPermissions = await SmartHomeAppDbContext.Query<RolePermission>()
-                .Where(x => x.RoleId == roleId)
-                .Where(x => permissionIds.Contains(x.PermissionId))
-                .ToListAsync();
-            
-            // insert only those that are not in the database
-            entities = entities.Except(existingUserPermissions, EqualityComparerFactory.Create<RolePermission>(
-                x => x.PermissionId.GetHashCode(),
-                (x, y) => x.PermissionId == y.PermissionId && x.RoleId == y.RoleId));
-            
             await SmartHomeAppDbContext.AddRangeAsync(entities);
         }
 
