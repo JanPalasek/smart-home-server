@@ -3,11 +3,11 @@
     "SmartHomeDatabase": "Server=127.0.0.1;Database=SmartHome;User Id=HomeUser;Password=noPass1234;SSL Mode=None"
   },
   "Logs": {
-    "StoragePath": "/home/honza/smart-home-server/logs/"
+    "StoragePath": "LOGS PATH"
   },
   "FileManager": {
     "MaximumUploadSize": 10000000000,
-    "StoragePath": "/home/honza/smart-home-server/files/"
+    "StoragePath": "STORAGE PATH"
   },
   "Jwt": {
     "Issuer": "SmartHome",

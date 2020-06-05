@@ -270,3 +270,7 @@ SmartHome.Web/wwwroot/out/
 SmartHome.Web/wwwroot/lib/
 SmartHome.Web/wwwroot/**/*.min.css
 SmartHome.Web/wwwroot/**/*.min.js
+
+appsettings.json
+appsettings.development.json
+appsettings.production.json

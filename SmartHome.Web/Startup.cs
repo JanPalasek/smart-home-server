@@ -149,6 +149,11 @@ namespace SmartHome.Web
         public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env)
         {
+            string? licenseKey = configuration.GetSection("SyncfusionLicenseKey").Get<string?>();
+            if (licenseKey != null)
+            {
+                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+            }
             
             if (env.IsDevelopment())
             {
