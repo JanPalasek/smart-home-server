@@ -3,7 +3,7 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:33332",
+      "applicationUrl": "http://127.0.0.1:33332",
       "sslPort": 44349
     }
   },
@@ -18,7 +18,7 @@
     "SmartHomeServer.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000;https://localhost:5001;",
+      "applicationUrl": "http://127.0.0.1:5000;https://127.0.0.1:5001;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
