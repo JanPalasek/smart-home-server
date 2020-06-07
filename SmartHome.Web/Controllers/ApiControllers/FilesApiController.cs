@@ -17,12 +17,9 @@ namespace SmartHome.Web.Controllers.ApiControllers
     /// <summary>
     /// Controller that handles accessing the disk files.
     /// </summary>
-    [Authorize(Policy = "File.View", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+    [Authorize(Policy = "File.View")]
     public class FilesApiController : Controller
     {
-        private const string FilesApiAuthenticationSchemes = "Identity.Application," +
-            JwtBearerDefaults.AuthenticationScheme;
-        
         private readonly FileManagerConfiguration fileManagerConfiguration;
         private readonly PhysicalFileProvider operation;
         private readonly IPermissionVerificationService permissionVerificationService;
@@ -39,6 +36,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
 
         [Route("api/syncfusion/files/operations")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public object FileOperations([FromBody] FileManagerDirectoryContent args)
         {
             // cannot edit files and attempts to edit => error
@@ -110,7 +108,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
 
         [HttpPost("api/directories/create")]
-        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        [Authorize(Policy = "File.Edit")]
         public IActionResult CreateDirectory(string path, string name)
         {
             var result = operation.Create(path, name);
@@ -124,7 +122,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
         
         [HttpPost("api/directories/remove")]
-        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        [Authorize(Policy = "File.Edit")]
         public IActionResult RemoveDirectory(string path, string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -144,7 +142,8 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [HttpPost("api/syncfusion/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
-        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        [Authorize(Policy = "File.Edit")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action)
         {
             var response = UploadPrivate(path, uploadFiles, action);
@@ -159,7 +158,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [HttpPost("api/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
-        [Authorize(Policy = "File.Edit", AuthenticationSchemes = FilesApiAuthenticationSchemes)]
+        [Authorize(Policy = "File.Edit")]
         public IActionResult Upload(string path, IList<IFormFile> files)
         {
             var response = UploadPrivate(path, files, "save");
@@ -183,6 +182,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
         
         [Route("api/syncfusion/files/download")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Download(string downloadInput)
         {
             FileManagerDirectoryContent args = JsonConvert.DeserializeObject<FileManagerDirectoryContent>(downloadInput);
@@ -198,6 +198,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
         
         [Route("api/syncfusion/files/getImage")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult GetImage(FileManagerDirectoryContent args)
         {
             // Invoking GetImage operation with the required parameters

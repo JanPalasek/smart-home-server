@@ -38,6 +38,7 @@ namespace SmartHome.Web.Controllers
         
         [Route("Files")]
         [Authorize(Policy = "File.View")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Files()
         {
             return View("Files", fileManagerConfiguration);

@@ -220,6 +220,7 @@ namespace SmartHome.Web.Controllers
         
         [Authorize(Policy = "Administration.User.ViewAll")]
         [Authorize(Policy = "Administration.Permission.View")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> PermissionsDataSource(long userId, [FromBody]DataManagerRequest dm)
         {
             if (!await IsAuthorizedToViewUserSettings(userId))
@@ -233,6 +234,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [Authorize(Policy = "Administration.User.EditAll")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> PermissionsUpdate(long userId, [FromBody]CRUDModel batchModel)
         {
             if (!await IsAuthorizedToChangeUserSettings(userId))

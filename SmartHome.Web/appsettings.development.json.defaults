@@ -13,6 +13,13 @@
     "Issuer": "SmartHome",
     "Audience": "Users",
     "KeyBytesLength": 256,
-    "ValidInMinutes": 5
+    "ValidInMinutes": 10000
+  },
+  "Swagger": {
+    "EndpointUrl": "/swagger/v1/swagger.json",
+    "RoutePrefix": "api",
+    "Title": "SmartHome API",
+    "Version": "v1",
+    "Name": "v1"
   }
 }

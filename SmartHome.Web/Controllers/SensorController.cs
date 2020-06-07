@@ -112,7 +112,6 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpGet]
-
         public async Task<IActionResult> List()
         {
             var items = await getSensorsService.GetAllSensorsAsync();

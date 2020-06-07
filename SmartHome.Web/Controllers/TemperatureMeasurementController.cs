@@ -118,6 +118,7 @@ namespace SmartHome.Web.Controllers
             return View("Detail", await CreateAndFillViewModelAsync(model, false));
         }
         
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> TemperatureMeasurementsDataSource([FromBody]DataManagerRequest dm)
         {
             var result =

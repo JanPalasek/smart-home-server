@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SmartHome.DomainCore.ServiceInterfaces.Permission;
 using SmartHome.ServiceLoaders;
 using SmartHome.Web.Configurations;
@@ -143,6 +144,45 @@ namespace SmartHome.Web
             {
                 mvcConfiguration.AddRazorRuntimeCompilation();
             }
+
+            services.AddSwaggerGen(options =>
+            {
+                var provider = services
+                    .BuildServiceProvider();
+                var configurationProvider = provider.GetRequiredService<IConfiguration>();
+                var parsedConfiguration = configurationProvider.GetSection("Swagger").Get<SwaggerConfiguration>();
+                
+                options.SwaggerDoc(parsedConfiguration.Name, new OpenApiInfo()
+                {
+                    Title = parsedConfiguration.Title,
+                    Version = parsedConfiguration.Version
+                });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization using bearer scheme. E.g.: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme()
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "bearer",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                            BearerFormat = "JWT"
+                        },
+                        new List<string>()
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -164,6 +204,14 @@ namespace SmartHome.Web
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            var swaggerConfiguration = configuration.GetSection("Swagger").Get<SwaggerConfiguration>();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint(swaggerConfiguration.EndpointUrl, swaggerConfiguration.Name);
+                options.RoutePrefix = swaggerConfiguration.RoutePrefix;
+            });
             
             // set up route mapping
             app.UseMvc(routes =>

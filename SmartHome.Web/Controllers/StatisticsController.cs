@@ -39,6 +39,7 @@ namespace SmartHome.Web.Controllers
         }
         
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> StatisticsDataSource([Bind(Prefix = "")]StatisticsFilter statisticsFilter)
         {
             var resultMeasurementStatisticsModel = await getTemperatureMeasurementsService
