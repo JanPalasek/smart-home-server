@@ -108,7 +108,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
 
         [HttpPost("api/directories/create")]
-        [Authorize(Policy = "File.Edit")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "File.Edit")]
         public IActionResult CreateDirectory(string path, string name)
         {
             var result = operation.Create(path, name);
@@ -122,7 +122,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
         
         [HttpPost("api/directories/remove")]
-        [Authorize(Policy = "File.Edit")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "File.Edit")]
         public IActionResult RemoveDirectory(string path, string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -158,7 +158,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         [HttpPost("api/files/upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(MultipartBodyLengthLimit = long.MaxValue, ValueLengthLimit = int.MaxValue)]
-        [Authorize(Policy = "File.Edit")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "File.Edit")]
         public IActionResult Upload(string path, IList<IFormFile> files)
         {
             var response = UploadPrivate(path, files, "save");
@@ -192,6 +192,7 @@ namespace SmartHome.Web.Controllers.ApiControllers
         }
         
         [HttpGet("api/files/download")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "File.View")]
         public IActionResult Download(string path, string[] fileNames)
         {
             return operation.Download(path, fileNames);

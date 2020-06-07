@@ -28,7 +28,8 @@ namespace SmartHome.Infrastructure
                 BatteryPowerSourceTypeId = sensor.BatteryPowerSourceTypeId.Value,
                 MeasurementDateTime = measurementDateTime,
                 SensorId = sensor.Id,
-                Voltage = voltage
+                Voltage = voltage,
+                PlaceId = sensor.PlaceId.Value
             };
 
             return await AddOrUpdateAsync(batteryMeasurement);
