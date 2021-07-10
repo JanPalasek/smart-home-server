@@ -28,16 +28,21 @@ Server that is supposed to handle everything what smart home requires. It commun
 3. Create tables and push basic test data
     ```
    # create tables
-    mysql --user="HomeUser" --database="SmartHome" -p "noPass1234" < "Scripts/RenewDb.sql"
+    mysql --user="HomeUser" --database="SmartHome" -p"noPass1234" < "Scripts/RenewDb.sql"
     # insert test data
-    mysql --user="HomeUser" --database="SmartHome" -p "noPass1234" < "Scripts/RenewTestData.sql"
+    mysql --user="HomeUser" --database="SmartHome" -p"noPass1234" < "Scripts/RenewTestData.sql"
     ```
-4. Download all required npm packages
+4. Restore all nugget packages
+    ```
+    cd SmartHome.Web
+    dotnet restore
+    ```
+5. Download all required npm packages
    ```
-   cd SmartHome.Web
+   # expected directory: SmartHome.Web
    npm install
    ```
-5. Create configuration files from defaults, for example from *appsettings.development.json.defaults* create a valid *appsettings.development.json* replacing some placeholders.
+6. Create configuration files from defaults, for example from *appsettings.development.json.defaults* create a valid *appsettings.development.json* replacing some placeholders.
    
  ## How to run
  Go to *SmartHome.Web* directory and run
