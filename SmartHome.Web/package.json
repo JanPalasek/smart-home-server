@@ -5,6 +5,6 @@
   "dependencies": {
     "@syncfusion/ej2": "^17.3.19",
     "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   }
 }
